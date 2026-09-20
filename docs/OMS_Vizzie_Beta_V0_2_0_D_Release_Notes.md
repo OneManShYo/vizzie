@@ -1,18 +1,22 @@
-# OMS Vizzie [Beta V0.1.0] — RELEASE NOTES
+# OMS Vizzie [Beta V0.2.0] — RELEASE NOTES
 
 **Run date:** 2026-09-20
-**Unix Epoch:** 1789910858
-**App Version:** Vizzie Beta V0.1.0
+**Unix Epoch:** 1789927586
+**App Version:** Vizzie Beta V0.2.0
 **License:** GPL-3.0 (software)
 **Purpose:** The human "what shipped" for this build.
 
 ---
 
+## Vizzie V0.2.0 — second release
+
+This release adds a mobile view and a hidden experimental lab. On phones in portrait, Vizzie now shows a compact "Pocket Rave" surface. In the LEARN tab there's a new door into the Yo Lab — an experimental WebGPU/WGSL version of the visual you can watch, solo, dial with knobs, and even edit the shader code live. The main app is smoother too (no more stutter when you move the mouse or switch tabs), and the example track now loads itself on the site.
+
 ## Vizzie V0.1.0 — first release
 
 Vizzie is live. This is the first published version — the full app: a music-driven visual and a vertical Apple Music Understanding timeline, with solo, a distinct color system, waveform, loop, and a pop-out. The LEARN tab now points you to the learn section on onemanshyo.com.
 
-## Vizzie V0.1.0 — the music makes the picture
+## Vizzie V0.2.0 — the music makes the picture
 
 Vizzie is the visual side of the OMS suite. Load a track's Apple Music Understanding analysis, press play, and the picture moves in real musical time — because it's reading the actual bars, sections, and instruments of the song, not guessing from a spectrum. This build brings the visual, the timeline, and full solo control together into something that reads like an instrument.
 

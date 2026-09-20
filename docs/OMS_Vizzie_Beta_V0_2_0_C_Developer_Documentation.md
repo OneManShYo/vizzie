@@ -1,8 +1,8 @@
-# OMS VIZZIE [Beta V0.1.0] — DEVELOPER DOCUMENTATION
+# OMS VIZZIE [Beta V0.2.0] — DEVELOPER DOCUMENTATION
 
 **Run date:** 2026-09-20
-**Current Unix Epoch:** 1789910858
-**App Version:** Vizzie Beta V0.1.0
+**Current Unix Epoch:** 1789927586
+**App Version:** Vizzie Beta V0.2.0
 **License:** GPL-3.0 (software)
 
 **Purpose:** The "how it works" doc. Explains the app's architecture, the AMU musical clock, the vertical timeline, the canvas visual, the solo system, and the design system. Its companion, **Y (System Reference)**, is the "where is it" doc — it lists identifiers/shapes for lookup and points back here. They do not overlap: C teaches once; Y indexes once.

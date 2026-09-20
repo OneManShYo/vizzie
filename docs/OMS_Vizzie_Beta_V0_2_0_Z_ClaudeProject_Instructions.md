@@ -1,8 +1,8 @@
-# OMS Vizzie [Beta V0.1.0] — CLAUDE PROJECT INSTRUCTIONS
+# OMS Vizzie [Beta V0.2.0] — CLAUDE PROJECT INSTRUCTIONS
 
 **Run date:** 2026-09-20
-**Unix Epoch:** 1789910858
-**App Version:** Vizzie Beta V0.1.0
+**Unix Epoch:** 1789927586
+**App Version:** Vizzie Beta V0.2.0
 **License:** GPL-3.0 (software)
 
 How an AI (or dev) should work in the Vizzie project. Read this first. These rules were learned the hard way; follow them.

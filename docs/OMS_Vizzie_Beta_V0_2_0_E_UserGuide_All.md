@@ -1,8 +1,8 @@
-# OMS Vizzie [Beta V0.1.0] — USER GUIDE
+# OMS Vizzie [Beta V0.2.0] — USER GUIDE
 
 **Run date:** 2026-09-20
-**Unix Epoch:** 1789910858
-**App Version:** Vizzie Beta V0.1.0
+**Unix Epoch:** 1789927586
+**App Version:** Vizzie Beta V0.2.0
 **License:** GPL-3.0 (software)
 **Purpose:** How to use Vizzie.
 
@@ -14,7 +14,7 @@ Vizzie is a browser visualizer. Open the one HTML file, press play, and the pict
 
 ## 2. OPEN IT
 
-Open `OMS_Vizzie_Beta_V0.1.0.html` in any modern browser (desktop Chrome recommended; it also runs on iPad Safari). It loads with a reference track's analysis already embedded, so it works immediately.
+Open `OMS_Vizzie_Beta_V0.2.0.html` in any modern browser (desktop Chrome recommended; it also runs on iPad Safari). It loads with a reference track's analysis already embedded, so it works immediately.
 
 ## 3. THE TABS
 

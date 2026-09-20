@@ -1,16 +1,27 @@
-# OMS Vizzie [Beta V0.1.0] — COMPLETE CHANGELOG
+# OMS Vizzie [Beta V0.2.0] — COMPLETE CHANGELOG
 
 **Run date:** 2026-09-20
-**Unix Epoch:** 1789910858
-**App Version:** Vizzie Beta V0.1.0
+**Unix Epoch:** 1789927586
+**App Version:** Vizzie Beta V0.2.0
 **License:** GPL-3.0 (software)
-**Purpose:** Full version history of Vizzie, newest first. Published as V0.1.0; the third digit marks a feature, letters mark in-session working revisions.
+**Purpose:** Full version history of Vizzie, newest first. Published as V0.2.0; the third digit marks a feature, letters mark in-session working revisions.
+
+---
+
+## V0.2.0 — Second release
+
+Rolls up the V0.1.x iteration line (baseline V0_1_05v). Adds:
+- **Example audio auto-loads on the site (BLOG0025).** On the hosted page the co-located track is fetched so the waveform and audio appear with no upload; the click-to-upload affordance was removed.
+- **Performance tuning (BLOG0026).** Offscreen waveform cache + throttled timeline redraws (visual stays 60fps) killed the mouse/keyboard stall; clock delta clamp + visibility resync removed the refocus sputter.
+- **Pocket Rave — portrait mobile surface (BLOG0027).** A branded portrait-only view (connector-bay header, tap-to-play hero, dim AMU background) that replaces the desktop app on phones.
+- **The Yo Lab — hidden R&D tab (BLOG0028).** Reached from a button on LEARN; a sandboxed surface for experiments in the same file, off the public tab row.
+- **WebGPU/WGSL alpha (BLOG0029).** A WebGPU rendering of the visual driven by an AMU-native uniform contract (the 13 parameters), with a Music-tab-style layout, a vertical scrolling piano-roll, a knob row of per-parameter intensities, and a live fragment-only code editor (copy / paste / apply, hot-swap recompile). Requires HTTPS (WebGPU is secure-context only).
 
 ---
 
 ## V0.1.0 — First published release
 
-The first public release of Vizzie, published to vizzie.onemanshyo.com. Packages the entire V0.0.x development line (BLOG0001–0023): the AMU-driven visual, session-view vertical timeline, waveform, solo, full distinct color system, transport (loop + end reset), native-resolution pop-out, and the MUSIC / ABOUT / LEARN tabs. Also in this release:
+The first public release of Vizzie, published to vizzie.onemanshyo.com. Packaged the entire V0.0.x development line (BLOG0001–0023): the AMU-driven visual, session-view vertical timeline, waveform, solo, full distinct color system, transport (loop + end reset), native-resolution pop-out, and the MUSIC / ABOUT / LEARN tabs. Also in this release:
 - **LEARN tab simplified (V0_0_21a/21b).** Stripped to a single General statement pointing to the learn section on onemanshyo.com, with a clear CLICK HERE button; the inline resource lists now live on the website.
 
 Everything below is the V0.0.x development history, newest first.
@@ -21,7 +32,7 @@ Everything below is the V0.0.x development history, newest first.
 
 Vizzie's origin line, built in a single extended session and its follow-ups. Grouped by feature (the numbered iteration), newest first.
 
-### 20 — Pop-out corner icon (V0.1.0)
+### 20 — Pop-out corner icon (V0.2.0)
 - Replaced the text pop-out button overlaying the visual with a small, subtle expand icon in the top-right corner (50% opacity, brightens on hover). Same pop-out-window behavior.
 
 ### 19 — Color system (V0_0_19a → 19d)
