@@ -1,9 +1,9 @@
-# OMS Vizzie app [Beta V0.5.0] User Guide
+# OMS Vizzie app [Beta V0.6.0] User Guide
 
-**Run date:** 2026-10-05  
-**Current Unix Epoch:** 1791240441  
-**Filename:** OMS_Vizzie_Beta_V0_5_0_E_UserGuide_All.md  
-**App Version:** Vizzie Beta V0.5.0  
+**Run date:** 2026-10-30  
+**Current Unix Epoch:** 1793330419  
+**Filename:** OMS_Vizzie_Beta_V0_6_0_E_UserGuide_All.md  
+**App Version:** Vizzie Beta V0.6.0  
 **License:** GPL-3.0 (software); embed assets see ABOUT menu  
 **Purpose:** How to use Vizzie.  
 
@@ -15,7 +15,7 @@ Vizzie is a self-contained HTML application that uses the Web Audio API, WebGPU 
 
 ## 2. Where to find Vizzie
 
-Go to **vizzie.onemanshyo.com**, or open `OMS_Vizzie_Beta_V0_5_0.html` in a WebGPU-capable browser: current Chrome, Edge or Safari on desktop, or Safari on iOS/iPadOS 26+. The reference track's analysis is embedded, so it works immediately. On the website the example audio loads by itself; opened as a local file, drop an audio file on the song info box to hear it.
+Go to **vizzie.onemanshyo.com**, or open `OMS_Vizzie_Beta_V0_6_0.html` in a WebGPU-capable browser: current Chrome, Edge or Safari on desktop, or Safari on iOS/iPadOS 26+. The reference track's analysis is embedded, so it works immediately. On the website the example audio loads by itself; opened as a local file, drop an audio file on the song info box to hear it.
 
 ## 3. Navigation
 
@@ -91,11 +91,26 @@ What just happened: playing, loop on, solos cleared, a file loaded, the visual p
 ### 4.3 Errors (magenta)
 Something failed: pop-out blocked, recording not supported, a file that isn't audio, a bad file.
 
-Shader problems show in the visual itself instead: no WebGPU in the browser, or a mistake in the shader (the message gives the line number).
+Shader problems show in the visual itself instead: no WebGPU in the browser, a mistake in the shader (the message gives the line number), or a file picked in Pocket Rave that isn't `.wgsl`.
 
 ## 5. Pocket Rave (mobile devices)
 
-Phones and tablets in portrait get Pocket Rave. Tablets in landscape get the full app; phones stay in Pocket Rave in landscape too (the screen is too short for the full app). Pocket Rave shows song info, the live shader (**tap it to play/pause**; the border turns magenta while playing), and the waveform (drag on it to move the playhead). ABOUT is in the tabs at the top; LEARN opens the website. Code, pop-out, recording and the encoders are only in the full app.
+Phones and tablets in portrait get Pocket Rave. Tablets in landscape get the full app; phones stay in Pocket Rave in landscape too (the screen is too short for the full app). Code, pop-out, recording and the encoders are only in the full app.
+
+### 5.1 Song card
+Shows the cover art. **Tap** it to flip to the title, artist, label, year and copyright. **Double-tap** it to pick an MP3 from your device.
+
+### 5.2 Shader
+**Tap** to play/pause; the border turns magenta while playing. **Double-tap** to pick a `.wgsl` shader from your device.
+
+### 5.3 Waveform
+Drag on it to move the playhead.
+
+### 5.4 Expanded mode
+Tap the Yobot at the bottom: everything except the header folds away and the shader fills the frame. Tap anywhere off the shader to come back.
+
+### 5.5 Tabs and links
+ABOUT is in the tabs at the top; LEARN opens the website. The ONEMANSHYO logo at the top opens onemanshyo.com.
 
 ---
 

@@ -1,9 +1,9 @@
-# OMS Vizzie app [Beta V0.5.0] Developer Documentation
+# OMS Vizzie app [Beta V0.6.0] Developer Documentation
 
-**Run date:** 2026-10-05  
-**Current Unix Epoch:** 1791240441  
-**Filename:** OMS_Vizzie_Beta_V0_5_0_C_Developer_Documentation.md  
-**App Version:** Vizzie Beta V0.5.0  
+**Run date:** 2026-10-30  
+**Current Unix Epoch:** 1793330419  
+**Filename:** OMS_Vizzie_Beta_V0_6_0_C_Developer_Documentation.md  
+**App Version:** Vizzie Beta V0.6.0  
 **License:** GPL-3.0 (software); embed assets see ABOUT menu  
 **Purpose:** The explanatory technical spec for OMS Vizzie: how each system works and why. Uses the shared OMS **Cortex / Node / Leaf** vocabulary (Dojo, Chippy), sized to Vizzie's scope.  
 
@@ -36,6 +36,9 @@
 &emsp;5.4 Record  
 &emsp;5.5 Orientation  
 **6** Node: Pocket Rave  
+&emsp;6.1 Song card  
+&emsp;6.2 Tap and double-tap  
+&emsp;6.3 Expanded mode  
 **7** Node: Tabs  
 **8** Leaf Reference: Controls & Keyboard  
 &emsp;8.1 Music column  
@@ -99,7 +102,7 @@ At end of track: LOOP off → stop and reset to 0; LOOP on → rewind and contin
 
 ### 2.1.3 Three loops, one clock
 Three rAF loops read the same `clock`; none keeps its own time:
-- `frame()`: advances `clock`; draws Pocket Rave chrome (info mirror, waveform) at ~22 fps when Pocket Rave is visible.
+- `frame()`: advances `clock`; draws Pocket Rave chrome (song card, waveform) at ~22 fps when Pocket Rave is visible.
 - `labTick()`: packs the uniforms from `clock` **every frame, wherever the viewer is**; draws the CREATE-tab chrome (knobs, piano roll, waveform) only when that panel is on screen.
 - the GPU loop inside `initGpu()`: writes the uniform buffer and draws, **only while the viewer canvas is on screen** and the page is visible.
 
@@ -192,7 +195,7 @@ is owned by one module, `SOLO`: a set of lane ids and `grp:<bus>` keys. `SOLO.on
 
 ## 4.2 ID3
 
-`readID3()` is an inline ID3v2 parser (v2.2 to 2.4, UTF-8/UTF-16, no library): cover (APIC), title, artist, label, year, copyright. `applyTagsToInfo()` writes them into the CREATE info box: the single source of truth. Pocket Rave's info mirrors that box with ids stripped, so the ID3 writer only ever targets one copy. Default state: Yobot Squint cover + "Drag and Drop MP3 to load info". Catalog numbers, links, and exact release dates are not in ID3 and belong in the sidecar.
+`readID3()` is an inline ID3v2 parser (v2.2 to 2.4, UTF-8/UTF-16, no library): cover (APIC), title, artist, label, year, copyright. `applyTagsToInfo()` writes them into the CREATE info box: the single source of truth. Pocket Rave's song card is built from that box (C 6.1), so the ID3 writer only ever targets one copy. Default state: Yobot Squint cover + "Drag and Drop MP3 to load info". Catalog numbers, links, and exact release dates are not in ID3 and belong in the sidecar.
 
 ## 4.3 Waveform
 
@@ -230,7 +233,18 @@ capture stream of `#labGpu` at 60 fps + the audio element's track → `MediaReco
 
 # 6. Node: Pocket Rave
 
-Triggered by `@media (orientation:portrait), (max-height:500px)`: phones stay in Pocket Rave in both orientations; iPad/desktop keep the full app. Layout: header, MUSIC/ABOUT/LEARN tabs; MUSIC = song info mirror → the WGSL viewer (tap to play/pause; magenta border while playing) → waveform → version line → Yobot link (onemanshyo.com) → PLUR. ABOUT clones the desktop panel at runtime (single source of truth); LEARN opens the website via `openLearn()`. Code editor, pop-out, record, and the encoders are desktop-only.
+Triggered by `@media (orientation:portrait), (max-height:500px)`: phones stay in Pocket Rave in both orientations; iPad/desktop keep the full app. Layout: header (the ONEMANSHYO logo links to onemanshyo.com), MUSIC/ABOUT/LEARN tabs; MUSIC = song card → the WGSL viewer (magenta border while playing) → waveform → version line → Yobot → PLUR. ABOUT clones the desktop panel at runtime (single source of truth); LEARN opens the website via `openLearn()`. Code editor, pop-out, record, and the encoders are desktop-only.
+
+## 6.1 Song card
+`#prInfo` (`.pra-card`) flips with CSS `rotateY`: front = cover art, back = title + artist/label/year/copyright, one line each, ellipsis, no wrap. `frame()` builds both faces with `textContent` from the CREATE info box (`#labInfoBox`), so the ID3 writer only ever targets the CREATE copy; clearing `dataset.filled` rebuilds the card when tags change.
+
+## 6.2 Tap and double-tap
+The song card and the viewer share one pattern. The first tap starts a 300 ms timer; a second tap inside it cancels the single-tap action and calls `.click()` on a hidden file input, still inside the tap so iOS Safari allows the picker to open.
+- Song card: single = flip; double = `#prAudioIn` → `loadAudioFromBlob()` (the desktop drop path).
+- Viewer: single = `togglePlay()`; double = `#prShaderIn` → `window.__labApplyWGSL()` (the desktop `.wgsl` drop path). `#prShaderIn` has no `accept` filter because iOS greys out `.wgsl` when filtered. A file that isn't `.wgsl` shows a 2.5 s note in `#labGpuMsg`, since the message bar is hidden in Pocket Rave.
+
+## 6.3 Expanded mode
+Tapping the footer Yobot (`#prSquint`) adds `#pocketRave.pr-expanded`: tabs, song card, waveform, version line and footer animate `max-height`, opacity and margins to 0 (0.35 s), and the viewer's border, radius and glow go to 0. The viewer's height is frozen in px and animated to the frame bottom minus the header bottom; on the way back it returns to the height captured before expanding, then the inline height is cleared. A tap anywhere off the viewer or the logo link collapses it.
 
 ---
 
@@ -264,7 +278,7 @@ SPACE = play/pause (ignored while typing in an input or the code editor). Esc cl
 
 ## 8.6 Pocket Rave
 
-Tap the visual = play/pause; waveform click/drag = seek; tabs MUSIC / ABOUT, LEARN opens the website.
+Visual: tap = play/pause, double-tap = load `.wgsl` · Song card: tap = flip, double-tap = load MP3 · Yobot: tap = expanded mode; tap off the visual to return · Waveform: click/drag = seek · Tabs MUSIC / ABOUT; LEARN opens the website · ONEMANSHYO logo opens onemanshyo.com.
 
 ---
 

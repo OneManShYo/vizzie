@@ -1,11 +1,23 @@
-# OMS Vizzie app [Beta V0.5.0] Complete Changelog
+# OMS Vizzie app [Beta V0.6.0] Complete Changelog
 
-**Run date:** 2026-10-05  
-**Current Unix Epoch:** 1791240441  
-**Filename:** OMS_Vizzie_Beta_V0_5_0_B_Complete_Changelog.md  
-**App Version:** Vizzie Beta V0.5.0  
+**Run date:** 2026-10-30  
+**Current Unix Epoch:** 1793330419  
+**Filename:** OMS_Vizzie_Beta_V0_6_0_B_Complete_Changelog.md  
+**App Version:** Vizzie Beta V0.6.0  
 **License:** GPL-3.0 (software); embed assets see ABOUT menu  
 **Purpose:** The readable version of the PM backlog: every closed BLOG, grouped by the release that packaged it, newest first, with the builds that carried it. Versions are major.minor.iteration; letters are in-session working revisions.  
+
+---
+
+## V0.6.0
+
+Packages the V0.5.0 iteration line. Baseline V0.5.04a. Pocket Rave work: song card, double-tap loading, expanded mode.
+
+- **Expanded mode** (BLOG0060 · V0.5.04a): Tap the footer Yobot: the tabs, song card, waveform, version line and footer fold away and the shader fills the frame under the ONEMANSHYO header; the border fades out. Tap anywhere off the shader to come back.
+- **Header logo links to onemanshyo.com** (BLOG0059 · V0.5.04a): The link moves from the footer Yobot to the ONEMANSHYO logo in the Pocket Rave header.
+- **Double-tap the shader to load a .wgsl** (BLOG0058 · V0.5.03a): A single tap still plays and pauses; a double tap opens the device file picker for a `.wgsl` shader.
+- **Double-tap the cover to load an MP3** (BLOG0057 · V0.5.02a): Opens the device file picker; tags, cover, waveform and audio load the same way as a desktop drop.
+- **Song card** (BLOG0056 · V0.5.01a): Pocket Rave's song info is a card showing the cover art only. Tap it to flip to the title, artist, label, year and copyright, one line each, no wrapping.
 
 ---
 

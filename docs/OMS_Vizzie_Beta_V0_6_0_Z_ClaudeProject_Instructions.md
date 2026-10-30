@@ -1,9 +1,9 @@
-# OMS Vizzie app [Beta V0.5.0] Claude Project Instructions
+# OMS Vizzie app [Beta V0.6.0] Claude Project Instructions
 
-**Run date:** 2026-10-05  
-**Current Unix Epoch:** 1791240441  
-**Filename:** OMS_Vizzie_Beta_V0_5_0_Z_ClaudeProject_Instructions.md  
-**App Version:** Vizzie Beta V0.5.0  
+**Run date:** 2026-10-30  
+**Current Unix Epoch:** 1793330419  
+**Filename:** OMS_Vizzie_Beta_V0_6_0_Z_ClaudeProject_Instructions.md  
+**App Version:** Vizzie Beta V0.6.0  
 **License:** GPL-3.0 (software); embed assets see ABOUT menu  
 **Purpose:** How Claude works with Wes in the Vizzie project.  
 

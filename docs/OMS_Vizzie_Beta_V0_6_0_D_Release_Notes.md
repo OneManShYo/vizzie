@@ -1,11 +1,20 @@
-# OMS Vizzie app [Beta V0.5.0] Release Notes
+# OMS Vizzie app [Beta V0.6.0] Release Notes
 
-**Run date:** 2026-10-05  
-**Current Unix Epoch:** 1791240441  
-**Filename:** OMS_Vizzie_Beta_V0_5_0_D_Release_Notes.md  
-**App Version:** Vizzie Beta V0.5.0  
+**Run date:** 2026-10-30  
+**Current Unix Epoch:** 1793330419  
+**Filename:** OMS_Vizzie_Beta_V0_6_0_D_Release_Notes.md  
+**App Version:** Vizzie Beta V0.6.0  
 **License:** GPL-3.0 (software); embed assets see ABOUT menu  
 **Purpose:** User enhancements since V0.2.18c.  
+
+---
+
+## V0.6.0
+
+- Pocket Rave: the song info is now a card showing the cover art. Tap it to flip to the song info; double-tap it to load an MP3 from your device.
+- Pocket Rave: double-tap the shader to load a `.wgsl` file from your device. A single tap still plays and pauses.
+- Pocket Rave: tap the Yobot at the bottom to fill the frame with the shader. Tap anywhere off the shader to come back.
+- Pocket Rave: the ONEMANSHYO logo at the top opens onemanshyo.com.
 
 ---
 
