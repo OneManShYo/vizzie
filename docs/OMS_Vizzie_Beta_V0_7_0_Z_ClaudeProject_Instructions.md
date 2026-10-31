@@ -1,9 +1,9 @@
-# OMS Vizzie app [Beta V0.6.0] Claude Project Instructions
+# OMS Vizzie app [Beta V0.7.0] Claude Project Instructions
 
-**Run date:** 2026-10-30  
-**Current Unix Epoch:** 1793330419  
-**Filename:** OMS_Vizzie_Beta_V0_6_0_Z_ClaudeProject_Instructions.md  
-**App Version:** Vizzie Beta V0.6.0  
+**Run date:** 2026-10-31  
+**Current Unix Epoch:** 1793459152  
+**Filename:** OMS_Vizzie_Beta_V0_7_0_Z_ClaudeProject_Instructions.md  
+**App Version:** Vizzie Beta V0.7.0  
 **License:** GPL-3.0 (software); embed assets see ABOUT menu  
 **Purpose:** How Claude works with Wes in the Vizzie project.  
 
@@ -18,6 +18,7 @@
 **3** Working with the product owner  
 &emsp;3.1 Proposals and reviews  
 &emsp;3.2 Versioning, naming and iterations  
+&emsp;3.3 Music time first  
 
 ---
 
@@ -35,6 +36,8 @@ The PM record is `OMS#Vizzie#PM#<YYYYMMDD>#<epoch>.json`, shipped in the PM bund
 
 All work goes through the backlog as BLOGs. Write BLOGs into the PM JSON as work happens. Owner (Wes) closes items; Claude does not close on its own unless the go covered it. Every BLOG lists the builds that carried it.
 
+Each BLOG has a `type` (epic, story or task) and `linked_blogs`, a symmetric list of related BLOGs; the direction (epic → story → task) comes from the types (PM rules 1.2). Example: BLOG0064 is the PERFORM epic; its stories include BLOG0071, whose tasks were BLOG0082 to BLOG0086.
+
 ## 2.2 Packaging workflow
 
 Packaging follows the OMS suite packaging workflow, `OMS_Suite_PackagingWorkflow_20260906_1788700567.md`: versioning, iterations, filing, deliverables, PM bundles, git and deployment. It is the release process; do not re-derive it.
@@ -48,10 +51,15 @@ Go in order, one item per block: **Problem:** line, line break, **Fix/Proposal:*
 ## 3.2 Versioning, naming and iterations
 
 - major.minor.iteration. Iterations: `V0.3.01, 02 …`; letters (a/b/c) are throwaway in-session revisions; the finished item drops the letter and takes the next clean number. A full build/package ALWAYS rolls the MINOR; the iteration line becomes that release's Iterations.
+- A new iteration number only when a new change starts; every revision of that same change moves the letter (`19a` → `19b`), never the number.
 - App HTML: `OMS_Vizzie_Beta_V#_#_#.html` for a package, `OMS_Vizzie_Beta_V#_#_##[letter].html` for an iteration (e.g. `OMS_Vizzie_Beta_V0_4_01a.html`). Versions use dots in text/folders (`V0.5.0`), underscores inside underscore filenames.
 - Shaders: `OMS_Vizzie_Shader_<Name>_V##.wgsl`, made with the Vizzie shader authoring workflow (`OMS_Vizzie_ShaderTemplate`, a paired `.html` + `.wgsl`). Library: `VIZZIE/App Folder/Library/Shaders/`, one folder per shader.
 - Loose docs: underscore name + date + epoch (e.g. `OMS_Vizzie_Beta_V0_3_0_Shader_Contract_Normalization_<YYYYMMDD>_<epoch>.md`), with **Run date** and **Current Unix Epoch** lines under the title. PM bundle: `OMS#Vizzie#PM#Bundle#<YYYYMMDD>#<epoch>.zip`.
 - Fresh `date +%s` on every reissue; never reuse a stamp.
+
+## 3.3 Music time first
+
+Vizzie is music-timing core: positions, windows, cues and the shader's `vizzie.time` are in bars and beats. Seconds appear only at the edge where the computer world needs them (decoded audio, browser clocks), and the conversion lives there. New features are built in beats, not converted from seconds.
 
 ---
 

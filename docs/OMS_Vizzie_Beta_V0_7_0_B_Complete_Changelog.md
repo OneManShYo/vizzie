@@ -1,11 +1,33 @@
-# OMS Vizzie app [Beta V0.6.0] Complete Changelog
+# OMS Vizzie app [Beta V0.7.0] Complete Changelog
 
-**Run date:** 2026-10-30  
-**Current Unix Epoch:** 1793330419  
-**Filename:** OMS_Vizzie_Beta_V0_6_0_B_Complete_Changelog.md  
-**App Version:** Vizzie Beta V0.6.0  
+**Run date:** 2026-10-31  
+**Current Unix Epoch:** 1793459152  
+**Filename:** OMS_Vizzie_Beta_V0_7_0_B_Complete_Changelog.md  
+**App Version:** Vizzie Beta V0.7.0  
 **License:** GPL-3.0 (software); embed assets see ABOUT menu  
 **Purpose:** The readable version of the PM backlog: every closed BLOG, grouped by the release that packaged it, newest first, with the builds that carried it. Versions are major.minor.iteration; letters are in-session working revisions.  
+
+---
+
+## V0.7.0
+
+Packages the V0.6 iteration line (V0.6.01a to V0.6.22a). Baseline V0.6.22a. CREATE becomes one app with PUBLIC and AUTHORING modes and carries the shader authoring template; the music clock moves to bars and beats; the deck plays through Web Audio with TEMPO and KEY LOCK.
+
+- **Default scene: AMU test tunnel + Yobot Squint** (BLOG0087 · V0.6.16a): The template's default scene is the AMU test tunnel as the background, every lane drawn and gated by its knob, with Yobot Squint as seven objects on top. Its motion rates were restated per beat in V0.6.22a.
+- **`vizzie.time` in cumulative beats** (BLOG0072 · V0.6.22a): Slot 13 carries the master clock's beat count (beat 0 = the first AMU beat) instead of song seconds; uniform contract V0.4.0C → V0.4.0D, only slot 13's unit changes. No seconds slot is kept. Shaders that drive motion from `vizzie.time` restate their rates per beat (handoff: `OMS_Vizzie_Beta_V0_6_22a_VizzieTimeShaderMod.md`).
+- **Piano roll axis in beats** (BLOG0085 · V0.6.21a): The roll's window, zoom, scrub and cue-on-click work in master-grid beats: 16 beats (4 bars) in AUTHORING, 32 (8 bars) in PUBLIC. Lanes sit at their beat on the warp map, so 4 bars stay 4 bars at any TEMPO. The waveform stays a whole-song view.
+- **Warp the deck to the master grid** (BLOG0084 · V0.6.20a): Smooth warp. The master clock advances on an even grid at the TEMPO; the track is mapped onto it by its AMU beats, smoothed by a line fit over ±8 beats; the deck's audio is steered every frame (speed = the map's local tempo × TEMPO, plus a pull of at most 2 % that closes a gap over about a second; a gap over 250 ms is jumped).
+- **Web Audio deck engine with KEY LOCK** (BLOG0083 · V0.6.17a, 18a, 19a, 19b): The deck plays its decoded track through Web Audio (`makeDeckAudio`) instead of an `<audio>` element, on the audio hardware clock. TEMPO sets the playback rate (BLOG0079, built early in V0.6.18a; that BLOG stays open for PERFORM's tempo source). KEY LOCK runs a WSOLA time-stretch in an AudioWorklet, with onsets found once per track so drum attacks keep their snap.
+- **Master music clock as clock of record** (BLOG0082 · V0.6.15a): `CLOCK.beat`, a position in beats on the track's AMU beat grid, is the clock of record; seconds are read and written only through the track's beat map.
+- **Master music clock in bars and beats, AMU warp** (BLOG0071 · V0.6.15a to 22a): The story the four tasks above deliver for the single deck: AMU beats act as automatic warp markers onto one master clock in bars and beats. Two-deck sync continues in BLOG0078.
+- **Shader authoring template carried by the app** (BLOG0070 · V0.6.08a to 14a): No separate template version line: a copy of the app HTML at any build is the authoring template. The per-shader block (TECHNICAL to the overlay slots) is segmented from the app code; renderer hooks live in `AUTH_GPU`, mode values in `MODES`. Overlay guides are generic: a shader's `OV_PRELUDE` sets `ov_origin` and `ov_m`.
+- **Responsive design, host check and surface rendering** (BLOG0069 · V0.6.04a): Two checks pick the surface: the host check (public site or off-site, read once) and the compact viewport (portrait, or 500 px tall or less, re-checked live). Neither detects the device. Names in the code match (`compactMQ`, `isCompact()`, html class `compact`).
+- **AMU structure as cue points** (BLOG0068 · V0.6.07a): A click on a block in the piano roll cues to that block's start (beat, bar, section, segment, phrase, key span, pace step). Nothing is saved; the cues come from the AMU data.
+- **CREATE: double-tap loaders for parity** (BLOG0067 · V0.6.03a): Double-tap the cover or the waveform for the MP3 picker and the shader for the `.wgsl` picker, as in Pocket Rave. Drag and drop unchanged.
+- **AMU piano roll: orientation toggle and interaction** (BLOG0065 · V0.6.05a, 06a, 07a): Vertical or horizontal roll, drag to scrub, zoom with a fixed centre playhead (− / +, pinch, ctrl + wheel), zoom shown as the share of the song in view.
+- **Phone authoring layout** (BLOG0063 · V0.6.02f to 02k): Off the public site on a compact viewport, AUTHORING takes Pocket Rave's frame and header with the authoring sections in one column. It can be forced on a wide viewport, where it shows as a 430 px column.
+- **Pocket Rave: full-frame default, header cycle, combined music row** (BLOG0062 · V0.6.02a to 02k): Pocket Rave opens full frame; the ONEMANSHYO header toggles full frame and the normal view (off-site a further tap goes to compact authoring); the cover sits beside the waveform; a double tap on the shader in the normal view loads a `.wgsl`.
+- **CREATE: Public and Authoring modes in one app** (BLOG0061 · V0.6.01a to 01h, 02l, 02m): Built on ShaderTemplate V11 with the V0.6.0 parts ported in. The public site opens PUBLIC (the V0.6.0 CREATE layout); anywhere else opens AUTHORING (the template layout with the authoring sections). The same elements move between the two arrangements; the VISUAL header switches them off-site. Orientation adds 1:1.
 
 ---
 

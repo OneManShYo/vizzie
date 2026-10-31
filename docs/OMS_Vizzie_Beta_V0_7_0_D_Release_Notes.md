@@ -1,11 +1,27 @@
-# OMS Vizzie app [Beta V0.6.0] Release Notes
+# OMS Vizzie app [Beta V0.7.0] Release Notes
 
-**Run date:** 2026-10-30  
-**Current Unix Epoch:** 1793330419  
-**Filename:** OMS_Vizzie_Beta_V0_6_0_D_Release_Notes.md  
-**App Version:** Vizzie Beta V0.6.0  
+**Run date:** 2026-10-31  
+**Current Unix Epoch:** 1793459152  
+**Filename:** OMS_Vizzie_Beta_V0_7_0_D_Release_Notes.md  
+**App Version:** Vizzie Beta V0.7.0  
 **License:** GPL-3.0 (software); embed assets see ABOUT menu  
 **Purpose:** User enhancements since V0.2.18c.  
+
+---
+
+## V0.7.0
+
+- CREATE has two modes in one app. On the website it opens in PUBLIC. Opened anywhere else, it opens in AUTHORING, the shader authoring workspace that used to be a separate template. Click the VISUAL header to switch.
+- TEMPO: set the tempo with − and +, or type a value. The audio, the visual and the piano roll all follow. The % shows the change from the track's own tempo; double-click the value to reset it. The range is half to one and a half times the track's tempo.
+- KEY LOCK: keeps the pitch when you change the tempo, and keeps drum hits sharp. Off, the pitch moves with the tempo like a turntable.
+- The music clock counts bars and beats. Visuals and audio stay locked to the beat at any tempo.
+- Piano roll: switch it between vertical and horizontal. Zoom with − and + or pinch; the % shows how much of the song is in view. Drag it to scrub. Click a block to jump to its start; Music Understanding gives you cue points for beats, bars, sections, segments, phrases, key and pace. The window counts beats: 4 bars in AUTHORING, 8 bars in PUBLIC.
+- Double-click the cover or the waveform to load an MP3, or the shader to load a `.wgsl`, on desktop as well as on phones. Drag and drop still works.
+- The cover flips to the song info in every mode.
+- Orientation now cycles 16:9, 1:1 and 9:16.
+- Pocket Rave opens with the shader filling the frame. Tap the ONEMANSHYO header to switch between full frame and the normal view; a double tap on the shader in full frame does the same. In the normal view the cover sits beside the waveform.
+- The default visual is the Music Understanding test tunnel, with Yobot Squint on top.
+- For shader authors: `vizzie.time` now counts beats instead of seconds (uniform contract V0.4.0D). Shaders that move with `vizzie.time` need their speeds restated per beat.
 
 ---
 
