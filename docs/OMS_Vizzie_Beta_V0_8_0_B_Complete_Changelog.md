@@ -1,11 +1,24 @@
-# OMS Vizzie app [Beta V0.7.0] Complete Changelog
+# OMS Vizzie app [Beta V0.8.0] Complete Changelog
 
 **Run date:** 2026-10-31  
-**Current Unix Epoch:** 1793459152  
-**Filename:** OMS_Vizzie_Beta_V0_7_0_B_Complete_Changelog.md  
-**App Version:** Vizzie Beta V0.7.0  
+**Current Unix Epoch:** 1793469710  
+**Filename:** OMS_Vizzie_Beta_V0_8_0_B_Complete_Changelog.md  
+**App Version:** Vizzie Beta V0.8.0  
 **License:** GPL-3.0 (software); embed assets see ABOUT menu  
 **Purpose:** The readable version of the PM backlog: every closed BLOG, grouped by the release that packaged it, newest first, with the builds that carried it. Versions are major.minor.iteration; letters are in-session working revisions.  
+
+---
+
+## V0.8.0
+
+Packages the V0.7 iteration line (V0.7.01a to V0.7.06b). Baseline V0.7.06b. The deck becomes a component on one master clock, a track's AMU JSON can be loaded, and the authoring template gains the camera grid, the music-time rule and the authoring pack.
+
+- **Authoring pack** (BLOG0090 · V0.7.06a, 06b): The shader HTML can pack the song it is authored against: per-shader slots `TRACK_INFO`, `TRACK_MP3`, `TRACK_COVER` beside the AMU (empty in the template = Ain't No Trick). A packed MP3 and cover load on open from anywhere, so the song survives every iteration and the file can be sent as one; the `.wgsl` stays lean. RULES R12 tells the author how. The artist and year that were hard-coded in app code now come from `TRACK_INFO`.
+- **Template states music time first** (BLOG0091 · V0.7.05a): RULES R11, listed first, and a MUSIC TIME line at the top of TECHNICAL: positions are bar.beat (62.1 = bar 62, beat 1), lengths in bars or beats, never seconds; bar.beat B.N = beat (B − 1) × 4 + (N − 1) in `vizzie.time`.
+- **Load a track's AMU JSON** (BLOG0073 · V0.7.04a): Drop a Sozo Sidecar v2 `.json` on the music row, or pick it with the MP3 picker: it is converted to the compact AMU and the deck switches to that track (warp map, lanes, roll, readout; playhead to the start; TEMPO to the track's BPM). Audio and AMU load in either order; a length mismatch between them is reported. The readout's key comes from the track (it was a fixed E).
+- **Authoring grid follows the shader camera** (BLOG0089 · V0.7.03a): World units are always metres and framing is the camera's job (RULES R10). A shader declares its camera in `OV_PRELUDE` (`ov_origin`, `ov_m`), with or without guides, and the grid steps with it: major = the largest power of ten not above the frame height, minor = a tenth (2 m frame: 1 m / 10 cm; 20 cm: 10 cm / 1 cm). A corner label names the step.
+- **Two decks from one deck code** (BLOG0074 · V0.7.02a): `MASTER`, the master music clock (beat, tempo), is split from `makeDeck`, one track on that clock (its AMU, warp map, position in its own beats, audio engine, KEY LOCK, lane knobs and solos, play and loop). CREATE shows deck A; a second deck runs on the same clock and is steered the same way (tested headless). No visible change.
+- **KEY LOCK as its own button** (BLOG0088 · V0.7.01a): KEY LOCK leaves the TEMPO module and becomes a transport button in LOOP's toggle style, as on Pioneer hardware. Transport order: PLAY · LOOP · KEY LOCK · TEMPO. The TEMPO tile keeps three rows with even space above and below.
 
 ---
 

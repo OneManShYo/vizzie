@@ -1,9 +1,9 @@
-# OMS Vizzie app [Beta V0.7.0] User Guide
+# OMS Vizzie app [Beta V0.8.0] User Guide
 
 **Run date:** 2026-10-31  
-**Current Unix Epoch:** 1793459152  
-**Filename:** OMS_Vizzie_Beta_V0_7_0_E_UserGuide_All.md  
-**App Version:** Vizzie Beta V0.7.0  
+**Current Unix Epoch:** 1793469710  
+**Filename:** OMS_Vizzie_Beta_V0_8_0_E_UserGuide_All.md  
+**App Version:** Vizzie Beta V0.8.0  
 **License:** GPL-3.0 (software); embed assets see ABOUT menu  
 **Purpose:** How to use Vizzie.  
 
@@ -27,10 +27,10 @@ The working surface. It has two modes:
 #### 3.1.1 Music
 
 ##### 3.1.1.1 Cover and song info
-The cover shows the track's art. **Click** it to see the title, artist, label, year and copyright; click anywhere else or press Esc to close. **Double-click** it to pick an audio file. You can also drag an audio file onto the music row.
+The cover shows the track's art. **Click** it to see the title, artist, label, year and copyright; click anywhere else or press Esc to close. **Double-click** it to pick an audio file or the track's Music Understanding `.json`. You can also drag either onto the music row.
 
 ##### 3.1.1.2 Waveform
-The whole track with the playhead. **Click or drag** to move the playhead; the shader follows. **Double-click** to pick an audio file. Audio isn't needed to press PLAY: Vizzie runs from the embedded Apple Music Understanding analysis.
+The whole track with the playhead. **Click or drag** to move the playhead; the shader follows. **Double-click** to pick an audio file or its `.json`. Audio isn't needed to press PLAY: Vizzie runs from the embedded Apple Music Understanding analysis.
 
 ##### 3.1.1.3 PLAY / PAUSE
 Starts and stops. **Spacebar** also toggles.
@@ -39,10 +39,13 @@ Starts and stops. **Spacebar** also toggles.
 When lit, playback returns to the start and keeps going instead of stopping.
 
 ##### 3.1.1.5 TEMPO
-Sets the tempo. **−** and **+** step one BPM; click the value to type one. The audio, the visual and the piano roll all follow, locked to the beat. The % shows the change from the track's own tempo. **Double-click** the value to go back to the track's tempo. The range is half to one and a half times the track's tempo.
+The tile at the end of the transport (PLAY · LOOP · KEY LOCK · TEMPO). Sets the tempo. **−** and **+** step one BPM; click the value to type one. The audio, the visual and the piano roll all follow, locked to the beat. The % shows the change from the track's own tempo. **Double-click** the value to go back to the track's tempo. The range is half to one and a half times the track's tempo.
 
 ##### 3.1.1.6 KEY LOCK
-When lit, the pitch stays put as you change the tempo, and drum hits keep their snap. When off, the pitch moves with the tempo, like a turntable.
+The button beside LOOP. When lit, the pitch stays put as you change the tempo, and drum hits keep their snap. When off, the pitch moves with the tempo, like a turntable.
+
+##### 3.1.1.7 Another track's Music Understanding
+Each track has its own Music Understanding file, a `.json` made by the Sozo sidecar. Drop it on the music row (or double-click the cover or waveform and pick it): the piano roll, readout, cue points and visuals switch to that track, and TEMPO goes to its BPM. Load the track's MP3 the same way, before or after. If the audio and the `.json` are different lengths, the message bar tells you so you can check they belong together.
 
 #### 3.1.2 Visual
 

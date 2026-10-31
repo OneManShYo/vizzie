@@ -1,11 +1,22 @@
-# OMS Vizzie app [Beta V0.7.0] Release Notes
+# OMS Vizzie app [Beta V0.8.0] Release Notes
 
 **Run date:** 2026-10-31  
-**Current Unix Epoch:** 1793459152  
-**Filename:** OMS_Vizzie_Beta_V0_7_0_D_Release_Notes.md  
-**App Version:** Vizzie Beta V0.7.0  
+**Current Unix Epoch:** 1793469710  
+**Filename:** OMS_Vizzie_Beta_V0_8_0_D_Release_Notes.md  
+**App Version:** Vizzie Beta V0.8.0  
 **License:** GPL-3.0 (software); embed assets see ABOUT menu  
 **Purpose:** User enhancements since V0.2.18c.  
+
+---
+
+## V0.8.0
+
+- KEY LOCK is now its own button beside LOOP, as on DJ hardware. The transport reads PLAY · LOOP · KEY LOCK · TEMPO.
+- Load a track's Music Understanding file: drop its Sozo `.json` on the music row (or double-click the cover or waveform and pick it). The roll, readout, cue points and visuals switch to that track, and TEMPO goes to its BPM. Load its MP3 the same way, before or after; if the two lengths don't match, the message bar tells you.
+- The readout shows the track's real key.
+- For shader authors: the grid follows the shader's camera, in metres, stepping from 1 m / 10 cm down to 1 cm / 1 mm as the camera gets closer.
+- For shader authors: everything is written in music time, bar.beat (62.1 = bar 62, beat 1).
+- For shader authors: a shader file can pack its own song (MP3, cover, Music Understanding data), so it opens complete and can be shared as one file.
 
 ---
 

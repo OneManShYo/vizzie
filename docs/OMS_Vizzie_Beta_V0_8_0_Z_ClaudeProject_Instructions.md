@@ -1,9 +1,9 @@
-# OMS Vizzie app [Beta V0.7.0] Claude Project Instructions
+# OMS Vizzie app [Beta V0.8.0] Claude Project Instructions
 
 **Run date:** 2026-10-31  
-**Current Unix Epoch:** 1793459152  
-**Filename:** OMS_Vizzie_Beta_V0_7_0_Z_ClaudeProject_Instructions.md  
-**App Version:** Vizzie Beta V0.7.0  
+**Current Unix Epoch:** 1793469710  
+**Filename:** OMS_Vizzie_Beta_V0_8_0_Z_ClaudeProject_Instructions.md  
+**App Version:** Vizzie Beta V0.8.0  
 **License:** GPL-3.0 (software); embed assets see ABOUT menu  
 **Purpose:** How Claude works with Wes in the Vizzie project.  
 
@@ -59,7 +59,7 @@ Go in order, one item per block: **Problem:** line, line break, **Fix/Proposal:*
 
 ## 3.3 Music time first
 
-Vizzie is music-timing core: positions, windows, cues and the shader's `vizzie.time` are in bars and beats. Seconds appear only at the edge where the computer world needs them (decoded audio, browser clocks), and the conversion lives there. New features are built in beats, not converted from seconds.
+Vizzie is music-timing core: positions, windows, cues and the shader's `vizzie.time` are in bars and beats. Seconds appear only at the edge where the computer world needs them (decoded audio, browser clocks), and the conversion lives there. New features are built in beats, not converted from seconds. Positions are written bar.beat (62.1 = bar 62, beat 1); never ask whether a number is seconds (template RULES R11).
 
 ---
 
