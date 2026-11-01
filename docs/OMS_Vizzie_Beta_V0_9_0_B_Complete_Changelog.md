@@ -1,11 +1,36 @@
-# OMS Vizzie app [Beta V0.8.0] Complete Changelog
+# OMS Vizzie app [Beta V0.9.0] Complete Changelog
 
-**Run date:** 2026-10-31  
-**Current Unix Epoch:** 1793469710  
-**Filename:** OMS_Vizzie_Beta_V0_8_0_B_Complete_Changelog.md  
-**App Version:** Vizzie Beta V0.8.0  
-**License:** GPL-3.0 (software); embed assets see ABOUT menu  
-**Purpose:** The readable version of the PM backlog: every closed BLOG, grouped by the release that packaged it, newest first, with the builds that carried it. Versions are major.minor.iteration; letters are in-session working revisions.  
+**Run date:** 2026-11-01  
+**Current Unix Epoch:** 1793543222  
+**Document purpose:** The readable version of the PM backlog: the BLOGs each release packaged, grouped by release, newest first, with the builds that carried them.  
+**Filename:** OMS_Vizzie_Beta_V0_9_0_B_Complete_Changelog.md  
+
+## About this document
+
+Vizzie Beta V0.9.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
+
+Versions are major.minor.iteration; a full package rolls the minor, and the iteration line before it becomes that release's iterations. Letters are revisions of the same piece of work.
+
+---
+
+## V0.9.0
+
+Packages the V0.8 iteration line (V0.8.01a to V0.8.50a). Baseline V0.8.50a. PERFORM arrives (off-site, in development): two decks and a mixer on the one master clock, with QUANT, the tempo master and a global strip. CREATE takes the same deck controls, strip and design-system rules. The Message System core is built but parked.
+
+- **PERFORM tab** (BLOG0064 · V0.8.03a, 35a): Off-site only while in development. DECK A | MIXER | DECK B fitted to the window. Deck A is the CREATE deck; deck B is a second deck on the master clock with its own stage, shader, waveform, transport, lanes and roll. Tab order CREATE, PERFORM, ABOUT, LEARN; CREATE opens (35a).
+- **Deck controls as one code** (BLOG0075 · V0.8.06a, 07a to 07e, 08a): One deck-controls module (lanes, transport buttons and state, waveform draw and seek, drops, pickers, shader load, deck info) used by CREATE, both PERFORM decks and Pocket Rave's pickers; the per-view copies deleted (07a). The PERFORM rolls take CREATE's scrub and cue (06a). One drop zone per deck, the whole deck, each file read by its type, one to three at once (07b, 07c), with a drop layer over the deck naming what drops there (07d). Roll zoom, orientation and the double-tap loaders on every deck (07e). Every deck opens paused with LOOP off on every surface (08a).
+- **PERFORM layout** (BLOG0075 · V0.8.14a, 17a to 27a, 29a to 34a, 37a): Each deck is a thin-line module: header DECK | KEY LOCK | MASTER; the stage in the standard line; a 40 px row with the cover and waveform, the song info on one scrolling line over the waveform, which stays usable under it; a row PLAY | zoom | orientation | position .... SOLO; the Music Understanding lanes with their group buses, without labels (the coloured knob is the lane, buses are thin colour bars, solo shows on the knob); the roll below. No Code, REC, CUE or LOOP on PERFORM. Buttons hug their labels in the small-button style, PLAY / PAUSE keeps one width, MASTER is a standard toggle, one 8 px gap between controls. The roll zoom is a field in five steps, 0 to 100; rolls open at 25 %, horizontal.
+- **KEY LOCK on by default** (BLOG0075 · V0.8.28a): Every deck opens with KEY LOCK on.
+- **Cover art on PERFORM decks** (BLOG0075 · V0.8.32a): Fix: the ID3 picture is copied before decoding, which detached the buffer and left PERFORM decks without cover art.
+- **CREATE parity with PERFORM** (BLOG0075 · V0.8.39a, 41a to 43a, 47a, 49a): The one-line song info on CREATE (39a). Header "Music Understanding" with its controls moved to the row; zoom as the field; LOOP removed from every deck (41a). Buttons hug their labels, 8 px gaps throughout CREATE (42a). Row PLAY | KEY LOCK | zoom | orientation .... SOLO (43a). The position box to the global strip in both modes (47a). Zoom fields centred as standard fields (49a).
+- **CREATE public layout** (BLOG0075 · V0.8.45a, 46a, 50a): The public layout is its own layout: the static song info panel (45a); the position in the global strip (46a); the authoring controls row under the music in place of its own big transport, the cover and waveform taking the freed height (50a).
+- **Global strip** (BLOG0096 · V0.8.10a, 12a, 15a, 40a, 44a, 48a): A thin strip across the top, as Ableton's top bar, for set-and-leave settings (10a). Bare fields, no labels, no − / +, no % (12a). TEMPO ← / → for the decimals (15a). The same strip on CREATE with TEMPO and the position (40a); the public layout fixed after 40a by finding its rows by label (44a). PERFORM's master position (48a).
+- **QUANT** (BLOG0078, BLOG0094 · V0.8.09a to 09c, 13a): A per-deck SYNC / QUANT strip first (09a), then one master QUANT value in music time: each deck lands its own AMU point on the master's step; forward only; acts only where decks are mixed; a lone deck leads the master grid (09c). Values cut to None, 1/4, 1/2, 1 Bar, 2 Bars, 4 Bars, 8 Bars (13a). Fix: a seek or load on one deck no longer stalls another (09b).
+- **Tempo master** (BLOG0079, BLOG0095 · V0.8.11a): The playing deck sets the tempo, as Traktor AUTO / CDJ master; the tempo range and double-click follow the master deck; a MASTER indicator per PERFORM deck.
+- **OUT and mixer encoders** (BLOG0076, BLOG0077 · V0.8.04a, 05a, 05b, 36a, 38a): Each deck renders into its own texture; OUT blends them at the VID strengths (04a). Four encoders A VID, A AUD, B AUD, B VID; AUD = deck volume (05a). VID in the visual-domain purple #aa00ff (05b). The Pop Out placeholder removed (36a). VID encoders open at 12 o'clock (38a).
+- **Message System core** (BLOG0100 · V0.8.16a, 16b, 16c): `showMessage` as Dojo's, hover help on every control and label from one table, idle = empty bar, per-element hover binding. Parked: hover help stops showing in Chrome after switching to PERFORM.
+- **REC renders the track; arrangement position** (BLOG0092 · V0.8.01a, 01b): REC on a paused deck renders the track from its start to its end; the position box in bars.beats.sixteenths with four places for the bar.
+- **Default scene: Squint size** (BLOG0093 · V0.8.02a): Yobot Squint sized as in HalloweenBounceFeatSquint V60 at 16:9.
 
 ---
 

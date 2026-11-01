@@ -1,11 +1,41 @@
-# OMS Vizzie app [Beta V0.8.0] Release Notes
+# OMS Vizzie app [Beta V0.9.0] Release Notes
 
-**Run date:** 2026-10-31  
-**Current Unix Epoch:** 1793469710  
-**Filename:** OMS_Vizzie_Beta_V0_8_0_D_Release_Notes.md  
-**App Version:** Vizzie Beta V0.8.0  
-**License:** GPL-3.0 (software); embed assets see ABOUT menu  
-**Purpose:** User enhancements since V0.2.18c.  
+**Run date:** 2026-11-01  
+**Current Unix Epoch:** 1793543222  
+**Document purpose:** User enhancements since V0.2.18c, newest first.  
+**Filename:** OMS_Vizzie_Beta_V0_9_0_D_Release_Notes.md  
+
+## About this document
+
+Vizzie Beta V0.9.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
+
+---
+
+## V0.9.0
+
+- A PERFORM tab, when the app is opened off the website: DECK A, the MIXER and DECK B side by side, fitted to the window. Deck A is the same deck as CREATE's; deck B is a second deck with its own track, shader, waveform, lanes and piano roll.
+- PERFORM's global strip across the top: TEMPO, QUANT and the master position.
+- QUANT: PLAY and cues wait for the next step of the master grid when another deck is playing. Steps: None, 1/4, 1/2, 1 Bar, 2 Bars, 4 Bars, 8 Bars. PLAY blinks while it waits; press again to cancel.
+- The tempo follows the playing deck that started first; its MASTER indicator is lit. When it stops, another playing deck takes over. The tempo never jumps on a start, a stop or a handover.
+- Master position: the session in bars.beats.sixteenths, counting from the first PLAY and holding while every deck is stopped. Double-click to go back to 1.1.1.
+- OUT shows both decks blended at their VID levels (MIX). Four encoders: A VID, A AUD, B AUD, B VID. VID sets a deck's strength in OUT, AUD its volume. VID opens at the middle, AUD at zero.
+- Each PERFORM deck: KEY LOCK and MASTER in its header; PLAY, the roll zoom, the roll orientation, the deck position and SOLO under the waveform; the cover and waveform in a slim row; the Music Understanding knobs without labels, the coloured knob is the lane, solo shows on the knob.
+- PERFORM deck rolls open at 25 % zoom, horizontal.
+- An MP3's own cover art shows on the PERFORM deck.
+- Drop an MP3, its Music Understanding `.json` or a `.wgsl` anywhere on a deck, one to three files at once. While you drag, the deck shows where the drop goes and what it takes.
+- TEMPO is one field in the global strip at the top of CREATE and PERFORM. Click it, then ↑ / ↓ for whole BPM, ← / → for hundredths, or type a value and press Enter. Double-click goes back to the master deck's own tempo.
+- KEY LOCK is on when a deck opens.
+- Every deck opens paused.
+- The song info is one line: title · artist · BPM · key. If it is too long for its box it scrolls. The waveform still works under it: drag to seek, double-tap to load.
+- The piano roll zoom is a field: click it, then ↑ / ↓ through 0, 25, 50, 75 and 100 (0 = closest, 100 = the whole song). Pinch and ctrl + wheel still zoom freely.
+- PLAY / PAUSE keeps one width, so nothing beside it moves.
+- CREATE: the global strip holds TEMPO and the position (bars.beats.sixteenths).
+- CREATE: one controls row: PLAY, KEY LOCK, the roll zoom, the roll orientation and, at the far right, SOLO. LOOP is gone.
+- CREATE: REC on a paused track records the whole track, start to end. On a playing track it records from where it is.
+- CREATE on the website: the controls row sits under the music, and the cover and waveform are larger. The song info there stays the full panel (title, artist, label, year, copyright).
+- The default Yobot Squint is sized as in the Halloween Bounce video.
+- Known issue: hover help in the message bar can stop appearing in Chrome after switching to PERFORM. Clicking a control still shows its help.
+- Known issue: on PERFORM, SOLO lights cyan; on CREATE it lights pink.
 
 ---
 
