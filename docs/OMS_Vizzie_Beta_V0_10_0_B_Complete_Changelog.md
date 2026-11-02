@@ -1,15 +1,40 @@
-# OMS Vizzie app [Beta V0.9.0] Complete Changelog
+# OMS Vizzie app [Beta V0.10.0] Complete Changelog
 
-**Run date:** 2026-11-01  
-**Current Unix Epoch:** 1793543222  
+**Run date:** 2026-11-02  
+**Current Unix Epoch:** 1793632322  
 **Document purpose:** The readable version of the PM backlog: the BLOGs each release packaged, grouped by release, newest first, with the builds that carried them.  
-**Filename:** OMS_Vizzie_Beta_V0_9_0_B_Complete_Changelog.md  
+**Filename:** OMS_Vizzie_Beta_V0_10_0_B_Complete_Changelog.md  
 
 ## About this document
 
-Vizzie Beta V0.9.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
+Vizzie Beta V0.10.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
 
 Versions are major.minor.iteration; a full package rolls the minor, and the iteration line before it becomes that release's iterations. Letters are revisions of the same piece of work.
+
+---
+
+## V0.10.0
+
+Packages the V0.9 iteration line (V0.9.01a to V0.9.24a). Baseline V0.9.24a. QUANT governs every cue and PLAY on both tabs, LOOP returns as a musical loop, REC renders from the playhead or a picked chip, and PERFORM (off-site) gains master PLAY, the LIBRARY with playlist QUEUE, and the FX panel with music and visual effects. The Message System is closed: its every message and every key are documented as tables.
+
+- **PUBLIC CREATE: slim music row and mini Music Understanding** (BLOG0118 · V0.9.01a, 02a, 03a): The music row fixed at 40 px (cover 40 × 40) and a mini Music Understanding (lanes and a roll on deck A, opening at 25 %, horizontal) in the left column, without scrolling (01a). Order as the PERFORM deck: music row, controls row, mini; two rolls share CREATE's zoom field and orientation button, the active one by mode, each keeping its own zoom (02a). The PUBLIC cover no longer flips; the static song info panel is retired in PUBLIC for the one-line ticker (03a).
+- **QUANT on every cue and PLAY, every tab** (BLOG0119, BLOG0120, BLOG0121 · V0.9.04a): A cue waits for QUANT whenever its deck plays and QUANT is not None, one deck or two; PLAY waits whenever another deck plays. A waveform click is a cue on QUANT; a drag of 4 px or more scrubs. CREATE's global strip reads TEMPO · QUANT · position, with the one shared QUANT value.
+- **Cover and waveform: one behaviour** (BLOG0123 · V0.9.05a): The song info line always scrolls, on every deck and both CREATE modes. A cover tap toggles it and it stays until tapped again: the click-elsewhere and Esc closes are removed, and mode switches and track loads leave it as set. Pocket Rave's song card follows the same rule.
+- **Musical LOOP** (BLOG0124 · V0.9.06a, 08a): LOOP back on every deck view, after PLAY. On, the whole track loops; a chip click (on QUANT) loops that chip's span; the lit chip again returns to the whole track; LOOP off lets play run past the chip. With LOOP on and the deck stopped, a chip click moves the playhead to it and it becomes the loop on PLAY (06a). The looped or picked chip is lit solid cyan (08a).
+- **REC from the playhead; picked chip** (BLOG0125 · V0.9.07a): REC starts at the playhead, no jump to the start. A chip clicked while stopped is picked: REC records exactly that chip and stops (LOOP off), or loops it until REC is pressed (LOOP on). No pick: to the track end (LOOP off) or across the wraps (LOOP on).
+- **Library and loading to decks** (BLOG0080 · V0.9.09a, 11a, 12a, 18a to 21a): The MIXER column is a drop zone for files and folders; tracks pair each audio file with its AMU JSON (audio or JSON alone left out), shaders keep the highest `_V##`, one summary message (09a). Folders read through File System Access handles first, which work on `file://` (11a). Entries: click = select and focus, ↑ / ↓ select, ← Deck A, → Deck B, Delete removes; drag onto a deck loads (12a). The QUEUE placeholder removed; the LIBRARY fills the column (18a). No text inside the empty list (19a). Help = name + keys only (20a). Filters ALL · MUSIC · SHADERS (21a).
+- **Deck drop: one file of each type** (BLOG0126 · V0.9.10a): A deck takes the first file of each type in a drop and ignores the rest, counted in the message.
+- **Master PLAY / PAUSE** (BLOG0128 · V0.9.13a): A master transport in PERFORM's strip, as Ableton's Space: pauses every playing deck and resumes them from the same spot with the master grid restored; no QUANT wait. Space on PERFORM calls it.
+- **Drop-zone hint: one standard** (BLOG0129 · V0.9.14a, 15a): One small centred hint on every drop zone, the types one per line (14a); one text, "Drop files", and folders accepted on every drop zone, decks included (15a).
+- **Cover image, the fourth drop type** (BLOG0130 · V0.9.16a): A square image dropped on a deck becomes its cover, over the packed and ID3 art, until another track loads. In the LIBRARY an image pairs with the track of the same name.
+- **Mini players: lane chips** (BLOG0131 · V0.9.17a): PERFORM decks and PUBLIC CREATE show each lane as a chip (click = solo) instead of an encoder; lane gains stay at full, so shaders get the same values. AUTHORING keeps the full section.
+- **PERFORM FX panel and music FX** (BLOG0135 · V0.9.22a to 22d, 22f, 22g): Per deck AFX1 / AFX2 on PERFORM: Filter, Washout, Dubby, Delay, Reverb, Flanger, Phaser, Bitcrush; tempo-timed on TEMPO and QUANT; kills on QUANT; session only (22a). A panel strip MODE · FX · EQ under the MIXER; the panel slides down out of the strip as a drawer over the LIBRARY, which is left as it is (22b to 22d). The MIXER column as three bordered modules of one width: MIXER, panel strip, LIBRARY (22f, 22g). (22e was a test, undone.)
+- **Visual FX** (BLOG0136 · V0.9.22h): VFX1 / VFX2 per deck as a WGSL post pass on the deck's picture, seen on its stage and in OUT: RGB Split, Feedback, Glitch, Pixelate, Scanlines, Mirror, Kaleidoscope, VHS, Shake, Tone, Tile, Rotate, Zoom; defaults RGB Split and Feedback.
+- **Playlist QUEUE** (BLOG0138 · V0.9.23a, 23b): An `.m3u8` dropped with the music, in either order: QUEUE shows the library in the playlist's order, combined with the filters; matched by path, then file name; a second playlist replaces the first; held for the session (23a). An `.m3u8` typed `audio/x-mpegurl` on macOS is no longer read as audio (23b).
+- **Branding** (BLOG0140 · V0.9.24a): Tagline "Music drives the vision ;)". The Yobot icon is removed from the header and Pocket Rave (its embedded image had been corrupt since V0.6.01a); Squint stays in the shaders.
+- **Message System closed** (BLOG0100, BLOG0141, BLOG0142): Hover help stopping after a click in Chrome was traced to a Chrome extension in one profile; no code change. Every message and its wording documented as a table (E 9).
+- **Keyboard table** (BLOG0127): Every key documented as a table (E 10, C 11).
+- **Song switching** (BLOG0066): A new track dropped on a playing deck switches to it.
 
 ---
 

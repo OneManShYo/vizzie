@@ -1,13 +1,38 @@
-# OMS Vizzie app [Beta V0.9.0] Release Notes
+# OMS Vizzie app [Beta V0.10.0] Release Notes
 
-**Run date:** 2026-11-01  
-**Current Unix Epoch:** 1793543222  
+**Run date:** 2026-11-02  
+**Current Unix Epoch:** 1793632322  
 **Document purpose:** User enhancements since V0.2.18c, newest first.  
-**Filename:** OMS_Vizzie_Beta_V0_9_0_D_Release_Notes.md  
+**Filename:** OMS_Vizzie_Beta_V0_10_0_D_Release_Notes.md  
 
 ## About this document
 
-Vizzie Beta V0.9.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
+Vizzie Beta V0.10.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
+
+---
+
+## V0.10.0
+
+- QUANT is on CREATE's global strip too, next to TEMPO: one value shared with PERFORM.
+- Cues wait for QUANT whenever the track is playing: a click on a piano roll block or on the waveform lands on the next step. With QUANT at None it jumps at once.
+- Click the waveform to cue; drag it to scrub.
+- LOOP is back, right after PLAY, on CREATE and on every PERFORM deck. On, the whole track loops. Click a piano roll block and that block loops instead; click it again to go back to the whole track.
+- REC records from the playhead. Click a block while stopped, then REC: it records exactly that block and stops. With LOOP on, the block loops and the recording runs until you press REC again.
+- The block that is looping or picked lights up on the piano roll.
+- The song info line scrolls on every deck, in both CREATE modes, and stays until you click the cover again.
+- CREATE on the website: a slim music row, the controls row, and the Music Understanding lanes as chips with their own piano roll, all beside the visual without scrolling.
+- Drop files or whole folders on a deck: it takes the first MP3, Music Understanding `.json`, `.wgsl` and square cover image, and tells you what it ignored. Every drop zone shows the same simple "Drop files" hint.
+- Drop a square cover image on a deck to use it as the track's cover.
+- PERFORM: a master PLAY in the global strip pauses the whole mix and starts it again from the same spot. Spacebar does the same.
+- PERFORM: each deck's Music Understanding lanes are chips: click to solo.
+- PERFORM: the LIBRARY. Drop your gig folder on the MIXER column: every MP3 with its Music Understanding `.json`, every shader at its latest version, covers that share a track's name. Filter by ALL, MUSIC or SHADERS. Click an entry, then ← for Deck A or → for Deck B, ↑ / ↓ to move, Delete to remove; or drag it onto a deck.
+- PERFORM: playlist QUEUE. Drop an `.m3u8` exported from your music player (Swinsian, for example) with the music, in either order, and QUEUE shows the library in the playlist's order.
+- PERFORM: MODE · FX · EQ under the MIXER. MODE and FX slide a panel down over the LIBRARY.
+- PERFORM: FX. Each deck has two music effects (Filter, Washout, Dubby, Delay, Reverb, Flanger, Phaser, Bitcrush) and two visual effects (RGB Split, Feedback, Glitch, Pixelate, Scanlines, Mirror, Kaleidoscope, VHS, Shake, Tone, Tile, Rotate, Zoom). Drag a knob for the amount; click it to kill or restore on QUANT; click the box under it and use the arrows to change the effect.
+- New tagline: Music drives the vision ;)
+- The Yobot icon is gone from the header and Pocket Rave.
+- The user guide lists every message the bar shows and every keyboard shortcut.
+- The V0.9.0 known issue with hover help came from a Chrome extension, not Vizzie. If hover help stops after a click in Chrome, check your browser extensions.
 
 ---
 
