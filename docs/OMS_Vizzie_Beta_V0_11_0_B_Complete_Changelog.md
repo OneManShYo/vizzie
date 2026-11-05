@@ -1,15 +1,38 @@
-# OMS Vizzie app [Beta V0.10.0] Complete Changelog
+# OMS Vizzie app [Beta V0.11.0] Complete Changelog
 
-**Run date:** 2026-11-02  
-**Current Unix Epoch:** 1793632322  
+**Run date:** 2026-11-05  
+**Current Unix Epoch:** 1793912480  
 **Document purpose:** The readable version of the PM backlog: the BLOGs each release packaged, grouped by release, newest first, with the builds that carried them.  
-**Filename:** OMS_Vizzie_Beta_V0_10_0_B_Complete_Changelog.md  
+**Filename:** OMS_Vizzie_Beta_V0_11_0_B_Complete_Changelog.md  
 
 ## About this document
 
-Vizzie Beta V0.10.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
+Vizzie Beta V0.11.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
 
 Versions are major.minor.iteration; a full package rolls the minor, and the iteration line before it becomes that release's iterations. Letters are revisions of the same piece of work.
+
+---
+
+## V0.11.0
+
+Packages the V0.10 iteration line (V0.10.01a to V0.10.12b). Baseline V0.10.12b. CREATE becomes the music-and-visuals surface: the LIBRARY always open with the website's demo playlists, FX with music and visual effects, PLAY NEXT, CONTINUOUS PLAY and SHUFFLE, and a full-width Music Understanding. Authoring moves to its own tab and LET'S DO THIS to a HELP tab. The music plays on iPhone and iPad. The Moogerfooger strip frames the main app, and the app takes Wes's key colours.
+
+- **CREATE: music FX** (BLOG0144 · V0.10.01a, 01b, 07b, 07c): An FX button in the controls row opens a drawer that slides down out of the row; AFX1 over AFX2 as on the mixer (01b); deck A's slots, shared with PERFORM; the music FX play on CREATE, AUTHORING plays dry; a mode or surface switch closes the drawer (01a). Hover help on the drawer's knobs and labels (07b). Click = kill, double-click = reset to the default, on CREATE and PERFORM (07c).
+- **CREATE: visual FX** (BLOG0145 · V0.10.02a, 07b, 07c): VFX1 / VFX2 to the right of AFX1 / AFX2; the effect shows on CREATE's stage, in Pop Out and in REC; one visual FX chain shared with PERFORM.
+- **CREATE: LIBRARY** (BLOG0146 · V0.10.03a, 06a, 07a, 07g): The same LIBRARY as PERFORM's on CREATE, its own drop zone; on the website the published set is listed on open and an MP3 is fetched only when loaded (03a). Double-click a row to load it (06a); a track double-clicked loads and plays from the top (07a); timed per row so a double tap works on iPad (07g).
+- **Demo Playlists** (BLOG0147 · V0.10.04a, 05b, 07g): `./examples/library.json` lists the website's playlists; each is a filter button after SHADERS in capitals (BIG WHEEL ENERGY), showing its tracks in its order and naming them from its `#EXTINF` lines (04a); 'Title · Artist', title first (05b). The website's AMU files are fetched only when their track loads, which fixed the slow page on iPad (07g). The Big Wheel Energy set (12 tracks with AMU) is published in `examples/`.
+- **CREATE headers: MUSIC and VISUALS** (BLOG0148 · V0.10.05a): The left header reads MUSIC; a VISUALS header over the stage holds Code, Pop Out, orientation and REC; the large piano roll is gone from CREATE; the word PUBLIC is gone.
+- **CREATE: PLAY NEXT, CONTINUOUS PLAY and SHUFFLE** (BLOG0149 · V0.10.06a, 06b): Three icons after the roll orientation button, help on hover. PLAY NEXT plays the next track in the LIBRARY list now; CONTINUOUS PLAY plays the next at a track's end; SHUFFLE puts the list in a random order, the playing track first, and play follows it (06b).
+- **LET'S DO THIS** (BLOG0150 · V0.10.07a, 07e, 07f): The large Music Understanding section is gone from CREATE (07a); Wes's lines in two outlined modules, 15px (07e, 07f); moved to the HELP tab in V0.10.10a (BLOG0154).
+- **iPhone and iPad: music plays on tap** (BLOG0151 · V0.10.07d): Safari's audio session set to playback, so silent mode does not mute it; the first tap plays a silent sample, which unlocks the audio.
+- **AUTHORING tab; GLOBAL header** (BLOG0152 · V0.10.08a, 08b): Tabs CREATE, PERFORM, AUTHORING, ABOUT, LEARN (08b); AUTHORING is the authoring surface, off-site only, opening first off-site; the header over the global strip reads GLOBAL and switches nothing (08a).
+- **CREATE: LIBRARY always open; Music Understanding full width** (BLOG0153 · V0.10.09a, 09b, 10a, 10b): The LIBRARY is its own module under the controls row with a 'Library' header (09b); Music Understanding (chips and roll) is a full-width section (09a) filling the page down to the bottom, at least 160 px, with no page scroll (10a); the LIBRARY's surround matches PERFORM's (10b).
+- **HELP tab** (BLOG0154 · V0.10.10a): LET'S DO THIS on its own tab before ABOUT.
+- **SOLO and the roll zoom on the Music Understanding header** (BLOG0155 · V0.10.10c, 10d): On CREATE both sit at the far right of the header, zoom just left of SOLO; AUTHORING keeps them in the controls row.
+- **Code review loose ends** (BLOG0156 · V0.10.10e): A drop on CREATE's LIBRARY adds to the LIBRARY (the deck's drop zone had taken it since 09b); the hidden LIBRARY button and drawer removed; CREATE no longer paints the hidden large Music Understanding; stale header-switch CSS and comments removed.
+- **The Moogerfooger strip on the main app** (BLOG0157 · V0.10.11a): The strip (red power light, five jacks) frames the main app on every tab, on the website and off it; a tap on it does nothing there.
+- **Power light: rename the header** (BLOG0158 · V0.10.11b, 11c): A tap on the power light retypes the ONEMANSHYO header for the session: Enter keeps, Esc cancels, empty restores, 24 characters (11b was a long press; 11c a tap).
+- **Design System colours** (BLOG0159 · V0.10.12a, 12b): Wes's key colours: Purple People Eater, Barbie Pink, Green Slime, Yellow Man, Orange Julius, Goblin White, Red Hots; one shade of each in the app (12a). Buses RHYTHM Red Hots, STRUCTURE Orange Julius, KEY Yellow Man, PACE Green Slime, INSTRUMENTS Purple People Eater; every lane takes its bus colour, beat Goblin White (12b).
 
 ---
 

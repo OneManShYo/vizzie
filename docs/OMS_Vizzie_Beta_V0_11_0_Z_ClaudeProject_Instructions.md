@@ -1,13 +1,13 @@
-# OMS Vizzie app [Beta V0.10.0] Claude Project Instructions
+# OMS Vizzie app [Beta V0.11.0] Claude Project Instructions
 
-**Run date:** 2026-11-02  
-**Current Unix Epoch:** 1793632322  
+**Run date:** 2026-11-05  
+**Current Unix Epoch:** 1793912480  
 **Document purpose:** Instructions to Claude for working on the Vizzie project.  
-**Filename:** OMS_Vizzie_Beta_V0_10_0_Z_ClaudeProject_Instructions.md  
+**Filename:** OMS_Vizzie_Beta_V0_11_0_Z_ClaudeProject_Instructions.md  
 
 ## About this document
 
-Vizzie Beta V0.10.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
+Vizzie Beta V0.11.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
 
 ---
 
@@ -63,7 +63,8 @@ You are working on Vizzie, a single self-contained HTML app (Web Audio, WebGPU, 
 - Change nothing that was not asked for: no new features, values, fills, colours, sizes, spacing, wording or styles. Colours have reasons.
 - A fix touches only what it names. End every build's notes with "Nothing else changed", and make it true.
 - If you had to make a technical call to finish a requested change, say so in the notes.
-- Use the design system (C 12, values in Y 11), never a one-off style: buttons hug their labels and never change size with state; 8 px between neighbouring controls; one field style; one standard line; domain colours visual `#aa00ff`, audio `#00d4ff`; same gesture, same result everywhere.
+- Use the design system (C 12, values in Y 11), never a one-off style: buttons hug their labels and never change size with state; 8 px between neighbouring controls; one field style; one standard line; domain colours visual Purple People Eater `#B24DFF`, audio `#00d4ff`; same gesture, same result everywhere.
+- Colours: Wes's key colours first (C 12.7): Purple People Eater `#B24DFF`, Barbie Pink `#E0218A`, Green Slime `#65FF00`, Yellow Man `#FFF000`, Orange Julius `#FFA500`, Goblin White `#FFFFFF`, Red Hots `#FF006E`. One shade of each colour in the app: never add a second pink, green, purple or yellow; a dim form is the same colour at lower opacity. Use Wes's names for them. Shader WGSL colours are not part of the app's colours.
 
 # 6. PM
 
@@ -71,7 +72,7 @@ You are working on Vizzie, a single self-contained HTML app (Web Audio, WebGPU, 
 - Only Wes closes a BLOG. Status words are open, closed and parked; nothing else (no 'later', no 'optional').
 - Show backlog work as a hierarchy grouped by module, and always write a BLOG as its number followed by its name.
 - The PM JSON is the record of the product. Never delete a version of it: every rebuild writes a new file beside the old one, the old one stays, and the new bundle is handed to Wes as soon as it is written. Chain commands with `set -o pipefail` so a failed step stops the chain.
-- Every release follows the OMS suite packaging workflow, `OMS#Suite#PackagingWorkflow#20261101#1793543671.md` (in the Claude project): versioning, filing, deliverables, PM bundles, git and deployment. Follow it as written; do not re-derive it.
+- Every release follows the OMS suite packaging workflow, `OMS#Suite#PackagingWorkflow#20261102#1793640251.md` (in the Claude project; the newest one there): versioning, filing, deliverables, PM bundles, git and deployment. Follow it as written; do not re-derive it.
 - The packaging workflow and the PM bundle are never published or pushed.
 
 # 7. Talking to Wes
@@ -85,9 +86,11 @@ You are working on Vizzie, a single self-contained HTML app (Web Audio, WebGPU, 
 
 # 8. Commands, files and git
 
-- Wes runs every command himself. Give one pasteable block that starts with `printf '\033[3J\033[H\033[2J';`. Never offer to reach his local files.
+- Wes runs every command himself. Give one pasteable block that starts with `clear && printf '\e[3J'`. Files for Wes go in `~/Downloads` itself, no subfolders, or straight into the build tree. Helper scripts go in the project folder under `VIZZIE/Claude/`, never in Downloads. Never the Desktop. Never offer to reach his local files.
 - Commands never open files, apps or browsers (no `open`); testing a build is his step, in Chrome.
-- File into the build tree only when he asks for a cleanup.
+- File into the build tree only when he asks for a cleanup. A cleanup moves only this roll's own files (its `OMS_Vizzie_Beta_*` iterations and `OMS_Vizzie_PM_JSON_Bundle_*` bundles): copy, compare, then remove the Downloads copy only when identical. General PM docs, other apps' files and anything else in Downloads stay where they are.
+- A push block ends at `git push`. Checking the deploy is a separate command.
+- Song names: title first, then artist.
 - Never push on your own. The PM bundle, workflow docs and blueprints are never pushed.
 
 ---

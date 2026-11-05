@@ -1,13 +1,13 @@
-# OMS Vizzie app [Beta V0.10.0] Developer Documentation
+# OMS Vizzie app [Beta V0.11.0] Developer Documentation
 
-**Run date:** 2026-11-02  
-**Current Unix Epoch:** 1793632322  
+**Run date:** 2026-11-05  
+**Current Unix Epoch:** 1793912480  
 **Document purpose:** The explanatory technical spec for OMS Vizzie: how each system works and why. Uses the shared OMS **Cortex / Node / Leaf** vocabulary (Dojo, Chippy), sized to Vizzie's scope.  
-**Filename:** OMS_Vizzie_Beta_V0_10_0_C_Developer_Documentation.md  
+**Filename:** OMS_Vizzie_Beta_V0_11_0_C_Developer_Documentation.md  
 
 ## About this document
 
-Vizzie Beta V0.10.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
+Vizzie Beta V0.11.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
 
 ---
 
@@ -46,10 +46,12 @@ Vizzie Beta V0.10.0. License: GPL-3.0 (software); embedded assets, see the ABOUT
 &emsp;6.6 Arrangement position  
 **7** Node: Surfaces and Modes  
 &emsp;7.1 Host check and compact viewport  
-&emsp;7.2 MODES and LAYOUT: AUTHORING and PUBLIC  
+&emsp;7.2 MODES and LAYOUT: CREATE and AUTHORING  
 &emsp;7.3 Global strips  
 &emsp;7.4 Pocket Rave  
 &emsp;7.5 Compact authoring  
+&emsp;7.6 CREATE: LIBRARY, FX and the playlist controls  
+&emsp;7.7 The Moogerfooger strip and the header rename  
 **8** Node: PERFORM  
 &emsp;8.1 Two decks on one clock  
 &emsp;8.2 The deck view  
@@ -61,6 +63,7 @@ Vizzie Beta V0.10.0. License: GPL-3.0 (software); embedded assets, see the ABOUT
 &emsp;8.8 FX  
 &emsp;8.9 LIBRARY  
 &emsp;8.10 Playlist QUEUE  
+&emsp;8.11 Demo playlists (the website set)  
 **9** Node: Authoring (the template the app carries)  
 **10** Node: Tabs  
 **11** Leaf Reference: Controls and Keyboard  
@@ -179,7 +182,7 @@ Built and working on CREATE and PERFORM. Every message and its wording is listed
 The **single channel for transient user feedback** is the bar at the bottom of the app (`#messageBar`). Every module speaks through `showMessage(text, type, onClick)`; no module rolls its own feedback, and browser tooltips are not used (`bindHelp` moves every `title` into the bar's help and removes it).
 - **`info` (cyan `#00d4ff`)**: help on hover or focus, "Name (keys)". Leaving a control clears the bar.
 - **`state` (orange `#ffa500`)**: the value or confirmation after a change (Playing, TEMPO 129.01 BPM, QUANT 1 Bar, Cue …).
-- **`error` (magenta `#ff006e`)**: failures (bad drop, decode failure, pop-out blocked, recording unsupported).
+- **`error` (Red Hots `#ff006e`)**: failures (bad drop, decode failure, pop-out blocked, recording unsupported).
 - An empty `info` never overwrites a `state` message (Dojo V5_0_17), so action feedback survives the pointer moving off.
 - `onClick` makes a message clickable (pointer cursor).
 - Idle = an empty bar, as Dojo.
@@ -192,7 +195,7 @@ Help lives in one table, `HELP` (selector → text or function), plus the shared
 # 3. Node: Deck Audio, Tempo, Key Lock
 
 ## 3.1 Deck audio engine
-`makeDeckAudio(ctx,buf,canStretch,keyLock)` plays the decoded track through Web Audio: an `AudioBufferSourceNode` (or the KEY LOCK worklet) into a `pre` node, then the deck gain node, into the output. On PERFORM the FX rack sits between them: `pre` → AFX1 → AFX2 → gain (8.8); on CREATE `pre` connects straight to the gain. Position = the offset played from + AudioContext time since the start × rate (the audio hardware clock, sample-accurate). It keeps the interface the app used with an `<audio>` element (`currentTime`, `duration`, `paused`, `ended`, `play`, `pause`, `captureStream`) plus `rate` and `keyLock`. One engine per deck (`d.audio`), all on the app's one AudioContext. `audioContext()` creates the AudioContext inside the drop or pick gesture; any pointer or key event resumes it if the browser suspended it. Web Audio only, no browser-specific APIs.
+`makeDeckAudio(ctx,buf,canStretch,keyLock)` plays the decoded track through Web Audio: an `AudioBufferSourceNode` (or the KEY LOCK worklet) into a `pre` node, then the deck gain node, into the output. The FX rack sits between them where the deck's FX are live (`FX_LIVE`, 8.8): PERFORM, and deck A on CREATE: `pre` → AFX1 → AFX2 → gain; in AUTHORING and Pocket Rave `pre` connects straight to the gain. Position = the offset played from + AudioContext time since the start × rate (the audio hardware clock, sample-accurate). It keeps the interface the app used with an `<audio>` element (`currentTime`, `duration`, `paused`, `ended`, `play`, `pause`, `captureStream`) plus `rate` and `keyLock`. One engine per deck (`d.audio`), all on the app's one AudioContext. `audioContext()` creates the AudioContext inside the drop or pick gesture; any pointer, key, touchend or click event resumes it if the browser suspended it. Web Audio only, no browser-specific APIs, with two iOS / iPadOS Safari provisions (V0.10.07d): `navigator.audioSession.type = 'playback'` where the browser has it, so silent mode does not mute the music, and the first touchend or click plays one silent sample (`audioUnlocked`), which unlocks the AudioContext for the session.
 
 Deck volume: on PERFORM each deck's gain follows its AUD encoder (8.5); on CREATE deck A plays at full.
 
@@ -227,7 +230,7 @@ PLAY goes through `deckPlayPress(d)`: a start waits for QUANT when another deck 
 
 Encoders: endless-encoder model. Drag up / down = intensity 0 to 1 (`d.knob`, per deck), a press without dragging = solo, double-click = back to 1. Bus header click = group solo.
 
-**Mini players** (PERFORM decks and PUBLIC CREATE's `#labMini`, V0.9.17a): each lane is a chip (click = solo), no encoder; the bus headers are thin colour bars without text; the solo shows on the chip. The lane gain (`d.knob`) stays at its value (1) in the deck model, so shaders get the same gates. AUTHORING CREATE keeps the full section: chips, encoders and named bus headers.
+**Mini players** (PERFORM decks and CREATE's `#labMini`, V0.9.17a): each lane is a chip (click = solo), no encoder; the bus headers are thin colour bars without text; the solo shows on the chip. The lane gain (`d.knob`) stays at its value (1) in the deck model, so shaders get the same gates. AUTHORING keeps the full section: chips, encoders and named bus headers. On CREATE the large section is hidden and not painted (`paintLanes` runs on it in AUTHORING only).
 
 ## 4.3 Solo
 Owned per deck by `makeSolo()` (`d.solo`): a set of lane ids and `grp:<bus>` keys. `d.solo.on(id)` is true when nothing is soloed, the lane is soloed, or its bus is. Solos are additive. The deck's SOLO button lights when any solo is active and clears all on click. One canonical id per parameter (the lane id) is used by the chips, the encoders, the gates and SOLO.
@@ -235,15 +238,15 @@ Owned per deck by `makeSolo()` (`d.solo`): a set of lane ids and `grp:<bus>` key
 ## 4.4 Piano roll
 `deckRoll(cv,d,o)` is one roll component for every deck: draw, scrub, cue, zoom and orientation. **Its axis is master-grid beats**: the window starts at `R.view(t).b0` and is `R.win()` beats long; lanes come from the deck and are placed by `d.timeToBeat`, so bars stay bars at any TEMPO. The playhead is fixed at the centre (`ROLL_PH` = 0.5) at every zoom; the content scrolls under it.
 
-- **Window:** `o.base()` beats at zoom 1 × `R.zoom`, up to twice the song (`R.maxZoom()`), so the whole song is in view from the centre playhead wherever it is. Base: CREATE `ROLL_WIN` from `MODES` (16 beats = 4 bars in AUTHORING, 32 = 8 bars in PUBLIC); PERFORM 16 beats.
+- **Window:** `o.base()` beats at zoom 1 × `R.zoom`, up to twice the song (`R.maxZoom()`), so the whole song is in view from the centre playhead wherever it is. Base: AUTHORING's roll `ROLL_WIN` from `MODES` (16 beats = 4 bars); CREATE's mini roll and PERFORM 16 beats.
 - **Zoom field:** one data field (`ui.field`), the standard field (12.4). Click in, ↑ / ↓ move through five steps, 0, 25, 50, 75, 100. `R.step()` maps the zoom to that scale: 0 = the closest view (zoom 1), 100 = the whole song, evenly spaced between. Ctrl + wheel and two-finger pinch on the roll still zoom freely; the field shows where that lands on the same scale.
-- **Opening view:** `o.step` and `o.horiz`. PERFORM rolls and PUBLIC CREATE's mini roll open at 25 %, horizontal. AUTHORING CREATE's roll opens vertical at 0 %.
-- **Two rolls on CREATE** (`o.active`): the full roll is active in AUTHORING, the mini in PUBLIC; each keeps its own zoom and orientation, and `R.syncUI()` puts the active roll's values on the shared zoom field and orientation button at every mode switch.
+- **Opening view:** `o.step` and `o.horiz`. PERFORM rolls and CREATE's mini roll open at 25 %, horizontal. AUTHORING's roll opens vertical at 0 %.
+- **Two rolls on the CREATE panel** (`o.active`): the full roll is active in AUTHORING, the mini on CREATE (the full roll is hidden there, V0.10.05a); each keeps its own zoom and orientation, and `R.syncUI()` puts the active roll's values on the shared zoom field and orientation button at every switch. The zoom field sits in AUTHORING's controls row and on CREATE's Music Understanding header (7.2).
 - **Orientation:** vertical (lanes as columns) or horizontal (lanes as rows), toggled by the deck's orientation button.
 - **Input** (`rollInput`): drag = scrub in beats; click without dragging = cue to that block's start (`amuStart` / `amuCue`: beat, bar, section, segment, phrase, key span, pace step; loudness and the instruments are not cue targets). A cue goes through `deckCue(d,sec,landed)` and waits for QUANT whenever the deck is playing and QUANT is not None (8.3). With LOOP on the cued chip becomes the loop span; clicking the lit chip again releases it to the whole track. On a stopped deck the chip is **picked** (`d.pick`): the playhead goes to its start and REC renders it (6.4); any other playhead move, or PLAY, clears it. The looped or picked chip is lit solid cyan (Dojo 'selected').
 
 ## 4.5 Drops and double-tap loaders
-**One drop zone per deck, the whole deck** (`bindDrop(el,d)`), on CREATE and both PERFORM decks. `readDrop()` reads files and folders (File System Access handles first, which work on `file://`; then the older entries; then plain files) and records each file's path inside the drop (`f._rel`). The deck takes the **first file of each type** in drop order: `.wgsl`, AMU `.json`, audio, square cover image (`isImage`, `coverSize`); every other file is ignored and counted in the message. They load shader, AMU, audio, then the cover (after the track, so its message is last). While dragging, a layer covers the deck: dashed cyan edge, translucent blur, and one hint built by `dropHint(main,types)`: "Drop files" with the types one per line (the same standard on every drop zone).
+**One drop zone per deck, the whole deck** (`bindDrop(el,d)`), on CREATE and both PERFORM decks. `readDrop()` reads files and folders (File System Access handles first, which work on `file://`; then the older entries; then plain files) and records each file's path inside the drop (`f._rel`). The deck takes the **first file of each type** in drop order: `.wgsl`, AMU `.json`, audio, square cover image (`isImage`, `coverSize`); every other file is ignored and counted in the message. They load shader, AMU, audio, then the cover (after the track, so its message is last). While dragging, a layer covers the deck: dashed cyan edge, translucent blur, and one hint built by `dropHint(main,types)`: "Drop files" with the types one per line (the same standard on every drop zone). CREATE's LIBRARY module (`#labLibSec`, class `lib-drop`) sits inside the deck's drop zone but is the LIBRARY's own: `bindDrop` leaves drags over it alone, and a drop there goes to the LIBRARY (7.6), not the deck (V0.10.10e).
 
 **Double-tap loaders** (`bindLoaders`, `bindCover`): two taps within 300 ms. Cover = MP3 / AMU picker, waveform = MP3 / AMU picker, stage = `.wgsl` picker (not inside CREATE's Code view). The `.wgsl` picker has no `accept` filter because iOS greys out `.wgsl` when filtered; the name is checked instead. Single taps keep their own job.
 
@@ -261,12 +264,12 @@ Owned per deck by `makeSolo()` (`d.solo`): a set of lane ids and `grp:<bus>` key
 
 A cover tap shows or hides the info over the waveform (`bindCover`: single tap = toggle, double tap = picker); it stays until the cover is tapped again: no click-elsewhere or Esc close, mode switches and track loads leave it as set. The info lets the pointer through (`pointer-events:none`), so the waveform keeps working under it.
 
-PUBLIC uses the same line since V0.9.03a (the static panel is retired there and the cover no longer flips; the flip stays in AUTHORING). The panel's fields stay in the page, hidden: Pocket Rave reads them.
+CREATE uses the same line since V0.9.03a (the static panel is retired there and the cover no longer flips; the flip stays in AUTHORING). The panel's fields stay in the page, hidden: Pocket Rave reads them.
 
 **Dropped cover** (V0.9.16a): a square image dropped on a deck (`setDeckCover`) sets `d.coverURL`, which wins in `deckCover(d)` over `TRACK_COVER` and the ID3 art; loading another track clears it (`clearDeckCover`).
 
 ## 5.3 Waveform
-`computeLevels(buffer,600)` → normalised RMS peaks per deck (`d.peaks`). `waveView(cv,d,hold)` draws a deck's whole-song waveform with its own cache, rebuilt when the audio, the track or the size changes, and its own playhead. A click without drag is a cue through `deckCue()` (on QUANT while playing, message 'Cue · bar x.y · QUANT n'); a drag of 4 px or more scrubs (V0.9.04a). Before audio: in PUBLIC a dim placeholder envelope, in AUTHORING the sidecar's momentary loudness. The waveform is a whole-song view.
+`computeLevels(buffer,600)` → normalised RMS peaks per deck (`d.peaks`). `waveView(cv,d,hold)` draws a deck's whole-song waveform with its own cache, rebuilt when the audio, the track or the size changes, and its own playhead. A click without drag is a cue through `deckCue()` (on QUANT while playing, message 'Cue · bar x.y · QUANT n'); a drag of 4 px or more scrubs (V0.9.04a). Before audio: on CREATE a dim placeholder envelope, in AUTHORING the sidecar's momentary loudness. The waveform is a whole-song view.
 
 ## 5.4 Loading a track's AMU JSON
 A Sozo Sidecar v2 `.json` dropped on a deck, or picked with the MP3 picker (CREATE, PERFORM decks and Pocket Rave), is recognised by its file type (`isAMU`). `amuFromSozo(j)` converts it to the compact AMU (`rhythm`, `structure`, `key`, `pace`, `loudness.momentary`, `instrumentActivity`; tonic names to 0 to 11 via `TONICS`; the instruments' ranges are not carried, as in the embedded AMU) and refuses a file that does not match, naming the missing field. `loadAMUFromFile(f,d)` puts it on the deck with `d.setTrack()`: new warp map and lanes, playhead to the start, the song title from the JSON's `file` field until ID3 tags fill it. Audio and AMU load in either order; `checkPair(d)` reports a loaded MP3 more than 2 s longer or shorter than the AMU. The key name comes from the track (`TONIC_NAMES`).
@@ -275,7 +278,7 @@ A Sozo Sidecar v2 `.json` dropped on a deck, or picked with the MP3 picker (CREA
 
 # 6. Node: Viewer Surfaces
 
-These are CREATE's. PERFORM has no Code, REC or Pop Out (8.2).
+These are on the CREATE panel (CREATE and AUTHORING). PERFORM has no Code, REC or Pop Out (8.2). On CREATE the stage shows deck A's visual FX when a VFX slot is live (7.6), so Pop Out and REC carry them too.
 
 ## 6.1 Code view
 `</> Code` shows the current shader source; **Apply** compiles it as the preview (`window.__applyWGSL`); **Copy** copies it.
@@ -301,49 +304,72 @@ Cycles 16:9 → 1:1 → 9:16 (`ASPECTS`); `fitStage()` keeps the stage 16:9 of i
 
 ## 7.1 Host check and compact viewport
 Two checks pick what opens; neither detects the device.
-- **Host check** (`PUBLIC_HOST`, read once): onemanshyo.github.io, or onemanshyo.com and its subdomains = the public site; anywhere else (Claude preview, file://, localhost) = off-site (`AUTHOR_MODE`).
+- **Host check** (`PUBLIC_HOST`, read once): onemanshyo.github.io, or onemanshyo.com and its subdomains = the website; anywhere else (Claude preview, file://, localhost) = off-site (`AUTHOR_MODE`).
 - **Compact viewport** (`compactMQ`, re-checked live): `(orientation:portrait), (max-height:500px)`.
 
 | | Not compact | Compact |
 |---|---|---|
-| Public site | CREATE · PUBLIC (VISUAL header plain); no PERFORM tab | Pocket Rave, switching by itself with the viewport |
-| Off-site | CREATE · AUTHORING; VISUAL cycles AUTHORING → PUBLIC → POCKET RAVE; PERFORM tab shown | compact AUTHORING; VISUAL cycles AUTHORING → POCKET RAVE |
+| Website | Tabs CREATE · HELP · ABOUT · LEARN; opens on CREATE | Pocket Rave, switching by itself with the viewport |
+| Off-site | Tabs CREATE · PERFORM · AUTHORING · HELP · ABOUT · LEARN; opens on AUTHORING | compact authoring; its header goes to Pocket Rave |
 
-**PERFORM is off-site only**: on the public site its tab and panel are removed from the page.
+**PERFORM and AUTHORING are off-site only**: on the website their tabs (and PERFORM's panel) are removed from the page. Off-site on a wide viewport, Pocket Rave is reached through compact authoring (a compact viewport, 7.5); the section headers switch nothing since V0.10.08a.
 
-## 7.2 MODES and LAYOUT: AUTHORING and PUBLIC
-Every value that differs between the two modes lives in one table, `MODES`; app code reads `mode()` instead of testing the mode flag. A new feature that differs by mode adds a key there.
+## 7.2 MODES and LAYOUT: CREATE and AUTHORING
+CREATE and AUTHORING are two tabs over one panel, `#panelLab`, in two modes (V0.10.08a). `switchPanel('author')` shows `#panelLab` and calls `setMode(true)`; `switchPanel('lab')` shows it and calls `setMode(false)`. Every value that differs between the two modes lives in one table, `MODES` (keys `authoring` and `public`; `public` is CREATE); app code reads `mode()` instead of testing the mode flag (`authorOn`, html class `author-on`). A new feature that differs by mode adds a key there.
 
-| Key | AUTHORING | PUBLIC |
+| Key | AUTHORING | CREATE (`public`) |
 |---|---|---|
 | autoplay / loop | off / off | off / off |
-| roll height / window | 75 px / 16 beats | 150 px / 32 beats |
+| roll height / window | 75 px / 16 beats | (the large roll is hidden) |
 | readout line | yes | no |
 | placeholder waveform before audio | no (sidecar loudness) | yes |
 | song info from the sidecar | yes | no |
 
-`LAYOUT.render()` / `LAYOUT.author()` move the same elements between the two arrangements; nothing is duplicated. The Visual header row is found by its Visual label (`#labVisTxt`), not by position (V0.8.44a: the global strip is now the first row). PUBLIC builds a left column (`#labLeftCol`) in the PERFORM deck view's order: the music row (`#labMusic`, fixed 40 px: cover 40 × 40 and the waveform, V0.9.01a), **the same controls row as AUTHORING** (`#labTransportHold`), then the mini Music Understanding (`#labMini`: `buildLanes` with chips and bus bars, and its own `deckRoll` on deck A); the stage is on the right. `#labMini` is drawn in `chrome()` only in PUBLIC. `setMode(on)` switches mode, layout, roll and messages.
+`LAYOUT.render()` / `LAYOUT.author()` move the same elements between the two arrangements; nothing is duplicated. The Visual header row is found by its label (`#labVisTxt`), not by position.
 
-The CREATE controls row, in both modes: **PLAY | LOOP | KEY LOCK | zoom | orientation ........ SOLO** (SOLO pushed to the far right).
+**CREATE** (`LAYOUT.render()`), top to bottom:
+1. **GLOBAL** section header (`#labModeHdr`, text `Global`) over the global strip (7.3).
+2. A row of two columns. Left, under a **Music** header (`#labVisTxt` reads Music): `#labLeftCol` holding the music row (`#labMusic`, 40 px: cover 40 × 40 and the waveform), the controls row (`#labTransportHold`) and the LIBRARY module (`#labLibSec`, 7.6) down to the stage's bottom. Right, under a **Visuals** header holding Code, Pop Out, orientation and REC: the stage.
+3. **Music Understanding** (`#labMuSec`), full width: the mini (`#labMini`: `buildLanes` with chips and bus bars, and its own `deckRoll` on deck A). Its header carries the roll zoom field and SOLO at the far right (V0.10.10d), at the header buttons' height. `LAYOUT.fitMu()` sizes the mini down to the bottom of the page (at least 160 px), trimming any overflow so the page does not scroll; it runs on render, on window resize and from a ResizeObserver on the left column and `.body`.
+
+The large Music Understanding (`#labAMU`, its header) and the large roll (`#labRollWrap`) are hidden on CREATE. Because the controls row is off the page while the layouts swap, `LAYOUT` holds SOLO and the zoom field as references (`soloEl`, `zoomEl`) and moves them back in `author()`.
+
+CREATE controls row: **PLAY | LOOP | KEY LOCK | roll orientation | PLAY NEXT | CONTINUOUS PLAY | SHUFFLE ........ FX** (FX pushed to the far right).
+
+**AUTHORING** (`LAYOUT.author()`): the GLOBAL header and strip, the Visual header (`Visual : Authoring`) over the stage, the music, the controls row **PLAY | LOOP | KEY LOCK | zoom | roll orientation ........ SOLO**, the large Music Understanding (chips, encoders, named bus headers), the large roll and the authoring sections. FX, PLAY NEXT, CONTINUOUS PLAY and SHUFFLE are hidden; the deck plays dry.
+
+`setMode(on)` switches mode, layout, roll and messages, and closes the FX drawer.
 
 ## 7.3 Global strips
-A thin strip across the top of the tab, as Ableton's top bar: global settings you set and leave. No label. One look on both tabs (`.pf-global`; CREATE adds `.cr-global` for its margins). A global setting belongs here; a deck setting belongs on the deck.
+A thin strip across the top of the tab, as Ableton's top bar: global settings you set and leave. One look on both panels (`.pf-global`; the CREATE panel adds `.cr-global` for its margins). On the CREATE panel it sits under a **GLOBAL** section header, which switches nothing (V0.10.08a). A global setting belongs here; a deck setting belongs on the deck.
 
 | Tab | Strip |
 |---|---|
-| CREATE | TEMPO · QUANT · arrangement position (CREATE's one deck = the master) |
+| CREATE, AUTHORING | TEMPO · QUANT · arrangement position (one deck = the master) |
 | PERFORM | TEMPO · QUANT · PLAY · master position |
 
-QUANT is one value on both tabs: `bindQuantField()` binds every QUANT field (`QUANT_FIELDS`), and a change updates all of them (V0.9.04a).
+QUANT is one value on every tab: `bindQuantField()` binds every QUANT field (`QUANT_FIELDS`), and a change updates all of them (V0.9.04a).
 
 ## 7.4 Pocket Rave
-The public site's compact surface. Opens full frame (`.pr-expanded`); the ONEMANSHYO header toggles full frame and the normal view (off-site a further tap goes to compact authoring); the top strip (power light, jacks) returns off-site to AUTHORING. Normal view: MUSIC / ABOUT / LEARN tabs, the shader, the music row (cover beside the waveform), version line, PLUR. The Yobot image (`#prSquint`) was removed in V0.9.24a. Shader: tap = play / pause; double tap in full frame = normal view, in the normal view = `.wgsl` picker. Cover: tap = song info over the waveform, on / off (the card follows the 5.2 rule); double tap = MP3 picker. Chrome redraws at about 22 fps only while Pocket Rave is on screen.
+The website's compact surface. Opens full frame (`.pr-expanded`); the ONEMANSHYO header toggles full frame and the normal view (off-site a further tap goes to compact authoring); the top strip (power light, jacks) returns off-site to AUTHORING. Normal view: MUSIC / ABOUT / LEARN tabs, the shader, the music row (cover beside the waveform), version line, PLUR. Shader: tap = play / pause; double tap in full frame = normal view, in the normal view = `.wgsl` picker. Cover: tap = song info over the waveform, on / off (the card follows the 5.2 rule); double tap = MP3 picker. Chrome redraws at about 22 fps only while Pocket Rave is on screen. Pocket Rave draws without FX.
 
 ## 7.5 Compact authoring
-Off-site on a compact viewport: Pocket Rave's frame and header with the authoring sections in one column (one row of 12 lanes, colour bars for chips, knobs up to 40 px). It can be forced on a wide viewport (Pocket Rave header, third tap), where it shows as a 430 px column. The arrangement position box, Pop Out and REC are hidden there.
+Off-site on a compact viewport: Pocket Rave's frame and header with the authoring sections in one column (one row of 12 lanes, colour bars for chips, knobs up to 40 px). Its header goes to Pocket Rave. It can be forced on a wide viewport (Pocket Rave header, third tap), where it shows as a 430 px column. The arrangement position box, Pop Out and REC are hidden there.
+
+## 7.6 CREATE: LIBRARY, FX and the playlist controls
+Built once when the app opens (V0.10.03a to 10e). CREATE only: AUTHORING hides FX and the three icons (`html.author-on`), and a mode or surface switch closes the FX drawer (`window.__crFx.show(false)`).
+
+- **LIBRARY module** (`#labLibSec`, `.pf-mod.pf-libmod.lib-drop`): a `Library` section header, the filter row and the list (`.cr-libin` > `.pf-list`), the same LIBRARY as PERFORM's (8.9) through a second view (`crView = libView(box,{decks:[DK]})`). It is placed in the left column under the controls row and fills it to the stage's bottom; its surround is the page gradient (V0.10.10b). It is the LIBRARY's own drop zone (4.5): files and folders dropped on it go through `readDrop` → `libImport`. A one-deck view: ← and → both load deck A; a **double-click or double tap** on a row (the same row twice within 400 ms, timed by the list: `box._tapId`, `box._tapT`, because the first click redraws the row and iOS reports no second click) loads a track and plays it from the top, or loads a shader. LIBRARY lists take `touch-action:manipulation` (no double-tap zoom).
+- **FX** (`#labFxBtn`, `.btn.loop`): opens a drawer (`#labFxPanel`, `.pf-fxpanel` > `.pf-fxslide` > `.pf-fxin`) that slides down out of the controls row over the LIBRARY module: the row's width, from its bottom to the column's bottom (`place()`, re-run on resize and from a ResizeObserver on the left column). The drawer's grid (`.cr-fxgrid`) is AFX1 over AFX2, VFX1 over VFX2 to the right: deck A's slots, the same as PERFORM's deck A (`fxCell(DK,dom,i,true)`, no deck name). Its hover help is bound when it is first placed.
+- **Music and visual FX on CREATE**: deck A's rack is live on CREATE (`FX_LIVE`: deck A, CREATE mode, not Pocket Rave, the CREATE panel shown). With a live VFX slot the renderer draws the shader into a texture (`ctex`), runs the shared visual FX chain (`vfxRun`, state `cvst`) and blits the result to the stage, so Pop Out and REC carry it.
+- **PLAY NEXT** (`#labNextBtn`, `.bgtoggle.cr-pnext`, a press), **CONTINUOUS PLAY** (`#labContBtn`) and **SHUFFLE** (`#labShufBtn`) (both `.bgtoggle.cr-ptog`, toggles lit cyan as LOOP): icons, no text, after the roll orientation button (V0.10.06a, 06b). State `CP {cont, shuf}`. `window.__crNext(now)` takes the next track in the LIBRARY list as shown (`crView.rows`; an empty list falls back to every track by name), after the one on the deck, wrapping: `now` (PLAY NEXT) stops the playing track and plays the next from the top; at a track's end (LOOP off) the end-of-track handler calls it, and it acts only while CONTINUOUS PLAY is on. SHUFFLE gives each track in CREATE's view a random sort key (`crView.shuf`), the track on the deck first, kept until SHUFFLE is off: the list is put in a random order and play follows it, as streaming players do.
+
+## 7.7 The Moogerfooger strip and the header rename
+The strip (`#prSafeTop`: red power light `.pr-pwr` and five jacks) shows on the main app on every tab, on the website and off it, inside the wood frame above the header (`html:not(.pr-on) #prSafeTop`; `.app` padding-top 26 px under the safe area), as on Pocket Rave (V0.10.11a). A tap on the strip acts only on Pocket Rave and compact authoring (off-site: back to AUTHORING); on the main app it does nothing.
+
+**Header rename** (V0.10.11c): on the main app a tap on the power light makes the header text (`#brandTxt`) editable, selected, with a dashed cyan outline. Enter or a blur keeps it, Esc restores it, empty restores ONEMANSHYO; whitespace is collapsed and the text cut to 24 characters; pasted text is plain. Keys typed there stop at the header (Space does not play). It lasts for the session: nothing is saved.
 
 ---
-
 # 8. Node: PERFORM
 
 Two decks and a mixer, for playing visuals live to music. Shown off-site only (7.1). The ADD / SCREEN / CUT mix modes and EQ are shown but inactive.
@@ -378,33 +404,36 @@ The PERFORM global strip's position box (`#pfMasterPos`) is the session on the m
 
 ## 8.5 Mixer, OUT and encoders
 - **OUT** (`#pfOut`): the mix of the two deck pictures (after their visual FX) at their VID strengths, MIX = weighted blend. ADD, SCREEN and CUT are shown, inactive, in the MODE panel (8.7).
-- **Encoders**, in a row: A VID, A AUD, B AUD, B VID. VID = the deck's strength in OUT (`d.outGain`); AUD = the deck's volume (`d.audGain`). Drag up / down, double-click = 0. VID encoders open at 12 o'clock (0.5), so OUT shows both decks on open; AUD encoders open at 0. VID encoders take the visual-domain purple `#aa00ff`, AUD the audio-domain cyan `#00d4ff`.
+- **Encoders**, in a row: A VID, A AUD, B AUD, B VID. VID = the deck's strength in OUT (`d.outGain`); AUD = the deck's volume (`d.audGain`). Drag up / down, double-click = 0. VID encoders open at 12 o'clock (0.5), so OUT shows both decks on open; AUD encoders open at 0. VID encoders take the visual-domain Purple People Eater `#B24DFF`, AUD the audio-domain cyan `#00d4ff`.
 
 ## 8.6 Layout fit
 PERFORM is three columns side by side, DECK A | MIXER column | DECK B (`.pf`, grid `1fr / 0.563fr / 1fr`, 24 px apart), under the global strip. Each deck is a module in the standard line (12.6). The MIXER column has no line of its own: it holds three modules of the same width, each in the standard line, 6 px apart: the MIXER (`.pf-mixmod`: header, OUT and encoders), the panel strip (`.pf-pwrap`, 8.7) and the LIBRARY (`.pf-libmod`, 8.9), which takes the remaining height. The page fits the window without scrolling. Per deck, `fit(v)` sizes the stage 16:9 from the column width, smaller on short windows, after reserving the fixed rows, the gaps, the lanes and 40 px of roll, so the Music Understanding panel always keeps room for chips and roll.
 
-## 8.7 Panel strip: MODE · FX · EQ
+## 8.7 Panel strip: MODE · FX · EQ (PERFORM)
 `.pf-panelrow`: three equal buttons in the toggle style, MODE, FX and EQ (EQ is a placeholder, `.ph`). MODE and FX open a **drawer** (`.pf-fxslide`, V0.9.22d to 22g) that slides out of the strip's bottom edge, `transform: translateY(-100%)` → 0 in 0.26 s, inside a clipping window (`.pf-fxpanel`, `overflow:hidden`). The window is the strip's width, tucked 6 px under it, and reaches the bottom of the LIBRARY module (`fxPlace()`, re-run on resize); it covers the LIBRARY, which is left as it is underneath. One panel at a time (`fxShow`); the open button is lit; clicking it again slides the drawer back up. MODE holds the video mode row (`.pf-modes`: MIX on; ADD, SCREEN, CUT placeholders). FX holds the deck effects (8.8).
 
 ## 8.8 FX
-Per deck `d.fx = {a:[2 slots], v:[2 slots]}`, slot `{name, amt, killed, node}`; session only. The FX panel is a 4 × 2 grid: DECK A VFX | DECK A AFX | DECK B AFX | DECK B VFX, rows 1 and 2. Each cell (`fxCell`) is a knob (`.pf-enc.pf-fxk`, drag = amount; click or Enter = kill / restore; ↑ / ↓ ±0.01, ← / → ±0.05) and an effect box under it (`.pf-fxsel`: click, then the arrows step the bank; a new effect starts at its neutral value). AFX cells are cyan `#00d4ff`, VFX purple `#aa00ff`.
+One FX engine for PERFORM and CREATE (V0.10.01a): `fxInit(d)` gives a deck `d.fx = {a:[2 slots], v:[2 slots]}`, slot `{name, amt, killed, node}`; session only. Deck A's slots are shared by PERFORM's deck A and CREATE (7.6). PERFORM's FX panel is a 4 × 2 grid: DECK A VFX | DECK A AFX | DECK B AFX | DECK B VFX, rows 1 and 2. Each cell (`fxCell`) is a knob (`.pf-enc.pf-fxk`, drag = amount; click or Enter = kill / restore; a second click within 300 ms = reset to the effect's default, unmuted, dropping a kill the first click armed (`s.gen`, V0.10.07c); ↑ / ↓ ±0.01, ← / → ±0.05) and an effect box under it (`.pf-fxsel`: click, then the arrows step the bank; a new effect starts at its neutral value). AFX cells are cyan `#00d4ff`, VFX Purple People Eater `#B24DFF`.
 
-**Music FX** (`AFX`), PERFORM only. `fxWire(d)` rewires when the slots change: PERFORM = `pre` → AFX1 → AFX2 → gain (killed slots bypassed); otherwise `pre` → gain. Each effect is a `mixer()` (dry / wet). Filter (bipolar, neutral at 0.5: left low-pass 20 kHz → 150 Hz, right high-pass 20 Hz → 6 kHz, Q 1.1), Washout (high-pass 20 Hz → 2 kHz), Dubby (band-passed feedback echo, dotted 1/8), Delay (the QUANT division, None = 1/4), Reverb (2.8 s noise impulse), Flanger and Phaser (LFO = 1 / (4 × QUANT division)), Bitcrush (16 → 3 bits, curve of 65 536 points). Defaults AFX1 Filter, AFX2 Dubby. Tempo-timed effects follow TEMPO and QUANT every frame (`tick`).
+**Music FX** (`AFX`), where `FX_LIVE` says the deck's rack plays (PERFORM; deck A on CREATE). `fxWire(d)` rewires when the slots or that answer change: live = `pre` → AFX1 → AFX2 → gain (killed slots bypassed); otherwise `pre` → gain. Each effect is a `mixer()` (dry / wet). Filter (bipolar, neutral at 0.5: left low-pass 20 kHz → 150 Hz, right high-pass 20 Hz → 6 kHz, Q 1.1), Washout (high-pass 20 Hz → 2 kHz), Dubby (band-passed feedback echo, dotted 1/8), Delay (the QUANT division, None = 1/4), Reverb (2.8 s noise impulse), Flanger and Phaser (LFO = 1 / (4 × QUANT division)), Bitcrush (16 → 3 bits, curve of 65 536 points). Defaults AFX1 Filter, AFX2 Dubby. Tempo-timed effects follow TEMPO and QUANT every frame (`tick`).
 
-**Visual FX** (`VFX`, V0.9.22h). One WGSL post pass, `PERF_VFX`, with a uniform of kind, amount, deck beat, beat phase, size, QUANT division, time, Feedback decay, QUANT step, beat kick and bar phase. `makeDeckGpu` renders the deck's shader into its texture, then each live slot (not killed, not at its neutral value) as a pass ping-ponging two textures (`fxA` / `fxB`), Feedback reading `prev` (a copy of the last final picture). The final picture is the deck's stage view and what OUT mixes. Bank: RGB Split, Feedback, Glitch, Pixelate, Scanlines, Mirror, Kaleidoscope, VHS, Shake (Dojo's nine), Tone (bipolar: left darker / softer, right brighter / sharper), Tile (1 to 8), Rotate (at tempo; a mirrored repeat at the edges), Zoom (pulses on the beat). Defaults VFX1 RGB Split, VFX2 Feedback.
+**Visual FX** (`VFX`, V0.9.22h; one shared chain `vfxRun` since V0.10.02a). One WGSL post pass, `PERF_VFX`, with a uniform of kind, amount, deck beat, beat phase, size, QUANT division, time, Feedback decay, QUANT step, beat kick and bar phase. `makeDeckGpu` (PERFORM) and CREATE's renderer render the shader into a texture, then `vfxRun` runs each live slot (`vfxLive(d)`: not killed, not at its neutral value) as a pass ping-ponging two textures (`fxA` / `fxB`, in the chain's state `vfxState`), Feedback reading `prev` (a copy of the last final picture). On PERFORM the final picture is the deck's stage view and what OUT mixes; on CREATE it is the stage. Bank: RGB Split, Feedback, Glitch, Pixelate, Scanlines, Mirror, Kaleidoscope, VHS, Shake (Dojo's nine), Tone (bipolar: left darker / softer, right brighter / sharper), Tile (1 to 8), Rotate (at tempo; a mirrored repeat at the edges), Zoom (pulses on the beat). Defaults VFX1 RGB Split, VFX2 Feedback.
 
-**Kills on QUANT:** `fxLater(run,armed)` queues the kill or restore in `FXQ` for the master's next step (`nextMaster`) while any deck plays, else at once; `fxTick()` fires due entries every frame (called from `__perfDraw`).
+**Kills on QUANT:** `fxLater(run,armed)` queues the kill or restore in `FXQ` for the master's next step (`nextMaster`) while any deck plays, else at once; `fxTick()` fires due entries every frame (called from `chrome()` through `window.__fxTick`).
 
 ## 8.9 LIBRARY
-The whole MIXER column is a drop zone for files and folders, subfolders included (`readDrop()`, 4.5). `libImport()` sorts by type and reports one message:
+One LIBRARY (`LIB`, shared since V0.10.03a) shown in any number of views (`libView(box,o)`, `LIB.views`): PERFORM's MIXER column and CREATE's LIBRARY module (7.6). Every view has the same filter row and list, and a change in one redraws all. On PERFORM the whole MIXER column is a drop zone for files and folders, subfolders included (`readDrop()`, 4.5); on CREATE the LIBRARY module is. `libImport()` sorts by type and reports one message:
 - **Tracks:** each audio file paired with its AMU `.json` by the JSON's `file` field, or its name minus `_sozo_v2_AMU`; audio without its JSON and a JSON without its audio are left out and counted. The JSON is attached data, never an entry. A square image with the track's name is its cover (`entry.cover`).
 - **Shaders:** grouped by name stem without `_V##`, the highest `_V##` kept; names without a version fall back to the newest file date.
 - A re-drop of the same name replaces its entry.
 
-The list (`.pf-lib`) is sorted by name; filters ALL · MUSIC · SHADERS and QUEUE (`.pf-libfrow`, their own row). Entry = name + dot (audio cyan, shader purple). Click = select (cyan border) and keyboard focus on the list (Dojo focus ring): ↑ / ↓ move the selection, ← loads it on Deck A, → on Deck B (`__libLoad`), Delete or Backspace removes it (a deck keeps what it has). Drag an entry onto a deck = load it (track: its AMU, audio and cover; shader: the `.wgsl`). An entry on a deck is tinted yellow (Dojo 'loaded'). The LIBRARY is session only: Vizzie saves nothing (13).
+The list (`.pf-lib`) is sorted by name; filters ALL · QUEUE · MUSIC · SHADERS, then the demo playlists (8.11) (`.pf-libfrow`, their own row). Entry = name + dot (audio cyan, shader Purple People Eater). Click = select (cyan border) and keyboard focus on the list (Dojo focus ring): ↑ / ↓ move the selection, ← loads it on Deck A, → on Deck B (`__libLoad`), Delete or Backspace removes it (a deck keeps what it has). Drag an entry onto a deck = load it (track: its AMU, audio and cover; shader: the `.wgsl`). An entry on a deck is tinted Yellow Man (Dojo 'loaded'); `window.__libTick` redraws the views when a deck's track or shader changes. The LIBRARY is session only: Vizzie saves nothing (13).
 
 ## 8.10 Playlist QUEUE
-An `.m3u8` dropped on the MIXER column, before or after the music (V0.9.23a), is held in memory (`LIB.queue`). Its paths are tail-matched against each library file's path inside the drop (`f._rel`), with a file-name fallback (`queueResolve()`). QUEUE is a toggle that combines with the ALL / MUSIC / SHADERS filters; on, the list shows the matched tracks in the playlist's order. A second playlist replaces the first; a library drop re-matches. The message counts queued, no AMU and not found. An `.m3u8` typed `audio/x-mpegurl` (macOS) is not taken as audio (`isAudio`, V0.9.23b). Vizzie writes no playlist.
+An `.m3u8` dropped on the MIXER column or CREATE's LIBRARY module, before or after the music (V0.9.23a), is held in memory (`LIB.queue`). Its paths are tail-matched against each library file's path inside the drop (`f._rel`), with a file-name fallback (`queueResolve()`). QUEUE is a toggle that combines with the ALL / MUSIC / SHADERS filters; on, the list shows the matched tracks in the playlist's order. A second playlist replaces the first; a library drop re-matches. The message counts queued, no AMU and not found. An `.m3u8` typed `audio/x-mpegurl` (macOS) is not taken as audio (`isAudio`, V0.9.23b). Vizzie writes no playlist.
+
+## 8.11 Demo playlists (the website set)
+On http / https, `libWebSet()` reads `./examples/library.json` on open: `{"files":[file names in ./examples/], "playlists":[{"name","file"}]}` (V0.10.04a). Audio files and AMU `.json` files are listed as stand-ins: an audio entry keeps its URL (`_url`) and is fetched when its track is loaded; an AMU entry (`_lazy`, its `text()` fetches) pairs with its MP3 by name and is fetched when its track loads (V0.10.07g), so opening the page fetches no music or analysis. Other files are fetched on open. They are imported quietly (no message). Each playlist (`LIB.lists`) becomes a filter button after SHADERS, its name in capitals (`.pf-libpl`), listing its tracks in its order; its `#EXTINF:sec, Artist - Title` lines name those tracks 'Title · Artist' (V0.10.05b). Tracks match by path, then file name. The LIBRARY opens on the first playlist. Loading a website track fetches its MP3 and AMU, with the message 'Loading NAME …'.
 
 ---
 
@@ -436,7 +465,7 @@ GRID, GUIDES and POINTS draw on a 2D canvas over the stage, never in the shader 
 
 # 10. Node: Tabs
 
-**CREATE · PERFORM · ABOUT · LEARN**, in that order (V0.8.35a), via `switchPanel()`. CREATE opens. PERFORM is shown off-site only (7.1). ABOUT carries the description, credits, licenses and technical notes. LEARN is not a panel: the tab calls `openLearn()`, which opens `https://onemanshyo.com/#learn` in a new tab.
+**CREATE · PERFORM · AUTHORING · HELP · ABOUT · LEARN**, in that order (V0.10.10a), via `switchPanel()`. On the website: CREATE · HELP · ABOUT · LEARN, opening on CREATE. Off-site it opens on AUTHORING. PERFORM and AUTHORING are off-site only (7.1). CREATE and AUTHORING share `#panelLab` in two modes (7.2). HELP (`#panelHelp`) holds LET'S DO THIS: a section header and two outlined modules of four lines each (`#labLetsDo` > `ul.cr-tips`, 15px Courier New, `#0a0a0a`, 1px `#2a2a2a`, radius 6px). ABOUT carries the description, credits, licenses and technical notes. LEARN is not a panel: the tab calls `openLearn()`, which opens `https://onemanshyo.com/#learn` in a new tab.
 
 ---
 
@@ -444,20 +473,22 @@ GRID, GUIDES and POINTS draw on a 2D canvas over the stage, never in the shader 
 
 The full keyboard table is E 10 (Keyboard index); every control's help, with its pointer actions, is E 9 (Message index).
 
-- **Global strip (CREATE):** TEMPO field · QUANT field · arrangement position.
+- **Global strip (CREATE, AUTHORING):** TEMPO field · QUANT field · arrangement position, under the GLOBAL header.
 - **Global strip (PERFORM):** TEMPO field · QUANT field (click in, ↑ / ↓, scroll; double-click = 1/4) · master PLAY / PAUSE · master position (double-click = 1.1.1).
 - **TEMPO field:** ↑ / ↓ ±1 BPM · ← / → ±0.01 BPM · type + Enter · Escape leaves · double-click = the master deck's BPM.
 - **Music (every deck):** cover (tap = song info on / off, double tap = MP3 / AMU picker) · waveform (click = cue on QUANT, drag = scrub, double tap = MP3 / AMU picker) · drop files or folders anywhere on the deck (first MP3, AMU `.json`, `.wgsl`, square cover image).
-- **CREATE controls row:** PLAY / PAUSE · LOOP · KEY LOCK · zoom field · roll orientation ........ SOLO.
+- **CREATE controls row:** PLAY / PAUSE · LOOP · KEY LOCK · roll orientation · PLAY NEXT · CONTINUOUS PLAY · SHUFFLE ........ FX. **Music Understanding header (CREATE):** zoom field · SOLO, far right.
+- **AUTHORING controls row:** PLAY / PAUSE · LOOP · KEY LOCK · zoom field · roll orientation ........ SOLO.
 - **PERFORM deck:** header KEY LOCK · MASTER (indicator); row PLAY / PAUSE · LOOP · zoom field · orientation · position ........ SOLO.
-- **FX panel:** knob drag = amount · ↑ / ↓ ±1 % · ← / → ±5 % · click / Enter = kill / restore on QUANT; effect box: click, then the arrows = previous / next effect.
-- **LIBRARY:** click = select · ↑ / ↓ select · ← = Deck A · → = Deck B · Delete = remove · drag onto a deck = load; filters ALL · MUSIC · SHADERS · QUEUE.
-- **Visual header (CREATE):** VISUAL label (off-site: switch mode / surface) · `</> Code` · Pop Out · orientation · REC. Stage: drop or double tap = `.wgsl`.
+- **FX (PERFORM panel, CREATE drawer):** knob drag = amount · ↑ / ↓ ±1 % · ← / → ±5 % · click / Enter = kill / restore on QUANT · double-click = reset to the default; effect box: click, then the arrows = previous / next effect.
+- **LIBRARY:** click = select · ↑ / ↓ select · ← = Deck A · → = Deck B (CREATE: both = deck A) · Delete = remove · drag onto a deck = load · CREATE: double-click or double tap = load and play; filters ALL · QUEUE · MUSIC · SHADERS · demo playlists.
+- **Visuals header (CREATE) / Visual header (AUTHORING):** `</> Code` · Pop Out · orientation · REC. Stage: drop or double tap = `.wgsl`.
+- **Power light (main app):** tap = retype the header for the session (Enter = keep · Esc = cancel · empty = ONEMANSHYO).
 - **Zoom field:** click in, ↑ / ↓ = 0 / 25 / 50 / 75 / 100.
 - **Encoders (AUTHORING):** drag = intensity · press = solo · double-click = reset to full. Chips: click = solo. Bus headers and bars: click = group solo.
 - **Mixer encoders:** drag = level · double-click = 0.
 - **Piano roll:** drag = scrub · click = cue to block start (on QUANT while playing; LOOP on = loop it; stopped = pick it) · pinch / ctrl + wheel = zoom.
-- **Keyboard:** SPACE = play / pause deck A on CREATE, the master PLAY / PAUSE on PERFORM (ignored while typing). Esc no longer closes the song info (V0.9.05a).
+- **Keyboard:** SPACE = play / pause deck A on CREATE and AUTHORING, the master PLAY / PAUSE on PERFORM (ignored while typing). Esc no longer closes the song info (V0.9.05a).
 - **Pocket Rave:** see 7.4.
 
 ---
@@ -474,17 +505,17 @@ The shared OMS tokens and component language: the `.app` shell, `.header` (gradi
 - **One small-button standard:** 11px Courier New, padding 3px 10px, 1px border, radius 4px. SOLO and Pop Out set it; PLAY, KEY LOCK and MASTER follow it on PERFORM and CREATE.
 - **A button hugs its label.** It never stretches to fill a row (`flex:0 0 auto`). A row aligns its buttons; it does not size them.
 - **A button never changes size with its state.** PLAY / PAUSE is fixed at the width of its longest word (PAUSE, 5 characters of the mono font) in both states, text centred, so the row never shifts.
-- **Toggle** (`.btn.loop`): grey off (`#7a7a7a` on `#3a3a3a`), cyan on (`#00d4ff` border and text, cyan glow). LOOP, KEY LOCK, MASTER, the LIBRARY filters, MODE / FX / EQ.
-- **SOLO** on CREATE (`.btn.solo`): grey off, pink on (`#ff2d95`, glow). PERFORM's SOLO uses the toggle style (cyan on); see 12.10.
+- **Toggle** (`.btn.loop`): grey off (`#7a7a7a` on `#3a3a3a`), cyan on (`#00d4ff` border and text, cyan glow). LOOP, KEY LOCK, MASTER, the LIBRARY filters, MODE / FX / EQ, CREATE's FX.
+- **SOLO** on the CREATE panel (`.btn.solo`): grey off, Barbie Pink on (`#E0218A`, glow). PERFORM's SOLO uses the toggle style (cyan on); see 12.10.
 - **Primary** (`.btn.primary`): cyan (PLAY). While a QUANT start waits, PLAY blinks (`.btn.armed`).
 - **Indicator in button form** (MASTER): the toggle style with the plain arrow cursor.
-- **Icon toggle** (`.bgtoggle`, roll orientation): 26 × 24.
+- **Icon toggle** (`.bgtoggle`, roll orientation): 26 × 24. CREATE's CONTINUOUS PLAY and SHUFFLE are icon toggles lit as LOOP (`.cr-ptog.on`); PLAY NEXT is an icon press styled as PERFORM's orientation button (`.cr-pnext`: cyan on a `#1e4a55` border).
 - **Disabled:** opacity 0.4 on PERFORM; CREATE's KEY LOCK 0.35 (12.10).
 
 ## 12.4 Fields
 **One standard field** (`.pf-gf`) for every data field: TEMPO and QUANT on both tabs and the roll zoom fields. 72 × 24 px, 13px Courier New, line height 18px, text centred, cyan `#00d4ff` on `#060606`, 1px `#333` border, radius 4px. Hover = border `#4a4a4a`; focus = cyan border and glow. No label, no − / + buttons, no unit text beside it: the hover help says what it is and its keys. Click in, then the arrow keys.
 
-**Position box** (`#labRecTime`, `.pf-pos`): 11px Courier New 600, `#888`, 1px `#333` border, radius 4px, fixed width (8 characters + padding), so it never moves. Red while REC records.
+**Position box** (`#labRecTime`, `.pf-pos`): 11px Courier New 600, `#888`, 1px `#333` border, radius 4px, fixed width (8 characters + padding), so it never moves. Barbie Pink while REC records.
 
 ## 12.5 Spacing
 **One gap between neighbouring controls everywhere: 8 px** (buttons, fields, toggles, mixer mode chips), set by the row's or strip's `gap`, never by per-control margins. A control pushed to the end of a row (SOLO) uses `margin-left:auto`. The Music Understanding grid has its own tighter spacing: lane cells 4 px apart on CREATE and 2 px on PERFORM, bus modules 6 px apart on CREATE.
@@ -493,11 +524,17 @@ The shared OMS tokens and component language: the `.app` shell, `.header` (gradi
 **The standard line:** 1px `#2a2a2a`, radius 6px. Modules (DECK A, MIXER, DECK B), stages, the waveform, the cover, the AMU box and the global strip use it. A module is a line only: no fill (`#0a0a0a` belongs to the inner boxes that had it), 8 px inside so content does not touch the line. Section headers keep `.sec-hdr` (3 × 13 bar, 11px uppercase label, 1px `#262626` rule).
 
 ## 12.7 Colour semantics
-- **Domain colours:** visual `#aa00ff` (purple), audio `#00d4ff` (cyan), as OMS App V5.9.0. The mixer's VID and AUD encoders carry them.
-- Chrome and section headers cyan `#00d4ff`; authoring sections orange `#ffa500`.
-- Messages: info cyan `#00d4ff`, state orange `#ffa500`, error magenta `#ff006e`.
-- Bus colours, a rainbow: RHYTHM red, STRUCTURE orange, KEY yellow, PACE green, LOUDNESS blue, INSTRUMENTS violet. Lane colours: 11 pairwise-distinct hues + white for beat, one colour per parameter everywhere.
-- Active state = border colour + tint + glow (toggle cyan, SOLO pink, REC pink pulse).
+
+**Key colours.** Wes's own colours: Purple People Eater `#B24DFF`, Barbie Pink `#E0218A`, Green Slime `#65FF00`, Yellow Man `#FFF000`, Orange Julius `#FFA500` (brand), Goblin White `#FFFFFF` and Red Hots `#FF006E` (key). Where the UI needs a colour these fill the role first. **One shade of each colour in the app:** any purple, pink, green or yellow is the key colour; a dim form is the same colour at lower opacity, never a second shade (V0.10.12a, 12b). Shader WGSL colours are the shader's own and are not part of the design system.
+
+- **Domain colours:** visual Purple People Eater `#B24DFF`, audio cyan `#00d4ff`. The mixer's VID and AUD encoders, the FX knobs and boxes and the LIBRARY dots carry them.
+- Chrome and section headers cyan `#00d4ff`; authoring sections Orange Julius `#ffa500`.
+- Messages: info cyan `#00d4ff`, state Orange Julius `#ffa500`, error Red Hots `#ff006e`. Red Hots also: the danger button (`.btn.mag`), GPU errors on a stage, the ONEMANSHYO gradient (cyan to Red Hots) and Pocket Rave's stage border while playing.
+- Active and recording: Barbie Pink `#E0218A` (SOLO on the CREATE panel, the roll and waveform playheads, all of REC).
+- Picked or rendered chip on the roll: Yellow Man; LIBRARY entry loaded on a deck: Yellow Man tint.
+- Bus colours: RHYTHM Red Hots, STRUCTURE Orange Julius, KEY Yellow Man, PACE Green Slime, LOUDNESS blue `#00a8ff`, INSTRUMENTS Purple People Eater. **Every lane takes its bus colour**; beat is Goblin White.
+- Credits and PLUR (ABOUT, Pocket Rave) and the authoring overlay's anchor points: Purple People Eater.
+- Active state = border colour + tint + glow (toggle cyan, SOLO Barbie Pink, REC Barbie Pink pulse).
 
 ## 12.8 Interaction pattern matrix
 Same gesture = same result everywhere (Dojo's matrix, with Vizzie's values).
@@ -548,6 +585,7 @@ Same gesture = same result everywhere (Dojo's matrix, with Vizzie's values).
 | Drag waveform | Scrub |
 | Double-tap stage | `.wgsl` picker |
 | Drop on a deck | Load by file type |
+| Drop on a LIBRARY | Add to the LIBRARY |
 
 **Piano roll:** drag = scrub · click a block = cue to its start · pinch / ctrl + wheel = zoom.
 
@@ -559,13 +597,16 @@ Same gesture = same result everywhere (Dojo's matrix, with Vizzie's values).
 | Drag vertical | Amount | orange value |
 | ↑ / ↓, ← / → | Amount ±1 % / ±5 % | orange value |
 | Click or Enter | Kill / restore on QUANT | orange message |
+| Double-click | Reset to the effect's default, unmuted | orange value |
 
 **Drop zones:** one hint everywhere, "Drop files" and the types one per line (`dropHint`); files and folders on every drop zone.
 
-Keys act only in the focused field, knob, box or list; the only app-wide key is SPACE (CREATE: deck A; PERFORM: master PLAY).
+**LIBRARY list:** click = select · double-click or double tap = load and play (CREATE) · drag onto a deck = load.
+
+Keys act only in the focused field, knob, box or list; the only app-wide key is SPACE (CREATE and AUTHORING: deck A; PERFORM: master PLAY).
 
 ## 12.9 The module hierarchy
-**section → bus module → lane cell → chip + encoder** (`.amu-mod` → `.amu-cell` → `.lab-lane` + `.amu-knob`); mini players: chip only. The piano roll sits in its own module perimeter aligned with the bus modules above. PERFORM: **tab → global strip + DECK A | MIXER column | DECK B → deck view rows** (8.2); the MIXER column → MIXER, panel strip, LIBRARY modules, the drawer over the LIBRARY (8.6, 8.7). Module per function.
+**section → bus module → lane cell → chip + encoder** (`.amu-mod` → `.amu-cell` → `.lab-lane` + `.amu-knob`); mini players: chip only. The piano roll sits in its own module perimeter aligned with the bus modules above. PERFORM: **tab → global strip + DECK A | MIXER column | DECK B → deck view rows** (8.2); the MIXER column → MIXER, panel strip, LIBRARY modules, the drawer over the LIBRARY (8.6, 8.7). CREATE: **tab → GLOBAL + MUSIC column | VISUALS stage → Music Understanding**; the MUSIC column → music row, controls row, LIBRARY module, the FX drawer over the LIBRARY (7.2, 7.6). Module per function.
 
 ## 12.10 Known design debt
 Where the build does not follow the standard.
@@ -573,7 +614,9 @@ Where the build does not follow the standard.
 - Disabled opacity differs: 0.4 on PERFORM buttons, 0.35 on CREATE's KEY LOCK.
 - SOLO lights pink on CREATE (`.btn.solo`) and cyan on PERFORM (`.btn.loop`): two looks for one function.
 - The Dojo button spec (34 px high, 600 weight, uppercase, 0.5 letter spacing, no border) and Vizzie's small button differ; Vizzie's is the one in use.
-- Some code comments describe earlier layouts (CREATE "render" mode stacking PLAY / LOOP, PERFORM placeholders); `MODES.idle` and `IDLE_MSG` are set but no longer shown (idle = empty bar).
+- Some code comments describe earlier layouts (CREATE "render" mode stacking PLAY / LOOP, PERFORM placeholders, CREATE's LIBRARY as a drawer opened by a LIBRARY button, "CREATE PUBLIC"); `MODES.idle` and `IDLE_MSG` are set but no longer shown (idle = empty bar).
+- The mode key for CREATE is still `public` in `MODES` and `mode()`; the word PUBLIC is gone from the UI.
+- HELP's line "Press LIBRARY to see more music and visuals" names a button CREATE no longer has (the LIBRARY is always open since V0.10.09a); the wording is Wes's, kept as is.
 
 ---
 

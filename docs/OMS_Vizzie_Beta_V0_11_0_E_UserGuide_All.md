@@ -1,13 +1,13 @@
-# OMS Vizzie app [Beta V0.10.0] User Guide
+# OMS Vizzie app [Beta V0.11.0] User Guide
 
-**Run date:** 2026-11-02  
-**Current Unix Epoch:** 1793632322  
+**Run date:** 2026-11-05  
+**Current Unix Epoch:** 1793912480  
 **Document purpose:** How to use Vizzie.  
-**Filename:** OMS_Vizzie_Beta_V0_10_0_E_UserGuide_All.md  
+**Filename:** OMS_Vizzie_Beta_V0_11_0_E_UserGuide_All.md  
 
 ## About this document
 
-Vizzie Beta V0.10.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
+Vizzie Beta V0.11.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
 
 ---
 
@@ -17,13 +17,16 @@ Vizzie Beta V0.10.0. License: GPL-3.0 (software); embedded assets, see the ABOUT
 **2** Where to find Vizzie  
 **3** Tabs  
 **4** CREATE  
-&emsp;4.1 Two modes  
+&emsp;4.1 Layout  
 &emsp;4.2 Global strip  
 &emsp;4.3 Music  
 &emsp;4.4 Controls row  
-&emsp;4.5 Visual  
-&emsp;4.6 Music Understanding  
-&emsp;4.7 Another track's Music Understanding  
+&emsp;4.5 LIBRARY  
+&emsp;4.6 FX  
+&emsp;4.7 Visuals  
+&emsp;4.8 Music Understanding  
+&emsp;4.9 Another track's Music Understanding  
+&emsp;4.10 AUTHORING  
 **5** PERFORM  
 &emsp;5.1 Layout  
 &emsp;5.2 Global strip  
@@ -36,7 +39,7 @@ Vizzie Beta V0.10.0. License: GPL-3.0 (software); embedded assets, see the ABOUT
 &emsp;5.9 FX  
 &emsp;5.10 LIBRARY  
 &emsp;5.11 Playlist QUEUE  
-**6** ABOUT and LEARN  
+**6** HELP, ABOUT and LEARN  
 **7** Messages  
 **8** Pocket Rave (phones and tablets)  
 **9** Message index  
@@ -57,25 +60,31 @@ Vizzie saves nothing. Your gig folder is the set: the MP3s, their Music Understa
 
 ## 2. Where to find Vizzie
 
-Go to **vizzie.onemanshyo.com**, or open `OMS_Vizzie_Beta_V0_10_0.html` in a WebGPU-capable browser: current Chrome, Edge or Safari on desktop, or Safari on iOS / iPadOS 26 or later. The reference track's analysis is embedded, so it works immediately. On the website the example audio loads by itself; opened as a local file, load an audio file to hear it (drop it on the deck, or double-click the cover or the waveform).
+Go to **vizzie.onemanshyo.com**, or open `OMS_Vizzie_Beta_V0_11_0.html` in a WebGPU-capable browser: current Chrome, Edge or Safari on desktop, or Safari on iOS / iPadOS 26 or later. The reference track's analysis is embedded, so it works immediately. On the website the example audio loads by itself and the LIBRARY lists the demo playlists; opened as a local file, load an audio file to hear it (drop it on the deck, or double-click the cover or the waveform).
+
+On iPhone and iPad, Safari plays the music when you tap PLAY, with the silent switch on or off.
 
 ## 3. Tabs
 
-**CREATE · PERFORM · ABOUT · LEARN.** CREATE opens. PERFORM shows only when the app is opened off the website (as a local file, for example).
+**CREATE · PERFORM · AUTHORING · HELP · ABOUT · LEARN.** On the website: **CREATE · HELP · ABOUT · LEARN**, and CREATE opens. PERFORM and AUTHORING show only when the app is opened off the website (as a local file, for example), and then AUTHORING opens.
+
+Above the header is the strip with the red power light and five jacks, on every tab. **Tap the power light** to type your own name in place of ONEMANSHYO: Enter keeps it, Esc cancels, an empty name puts ONEMANSHYO back. Up to 24 characters. It lasts until you reload the page.
 
 ## 4. CREATE
 
-The working surface: one deck, its shader on the stage, and the Music Understanding controls that drive it.
+Music and visuals: one deck, its shader on the stage, the LIBRARY, effects, and the Music Understanding that drives it all.
 
-### 4.1 Two modes
-- **PUBLIC**, on the website: on the left the music row, the controls row and a compact Music Understanding (lane chips and a piano roll); the Visual on the right.
-- **AUTHORING**, when the file is opened anywhere else: the Visual on top, then the music, the controls row, the full Music Understanding controls, the piano roll and the authoring sections for building shaders. Click the VISUAL header to switch between AUTHORING and PUBLIC (and on to Pocket Rave).
+### 4.1 Layout
+- **GLOBAL** on top: the global strip (4.2).
+- **MUSIC** on the left: the cover and waveform, the controls row, and the LIBRARY below them.
+- **VISUALS** on the right: the stage, with Code, Pop Out, orientation and REC on its header.
+- **Music Understanding** across the bottom, full width, filling the window down to the message bar.
 
 ### 4.2 Global strip
-The thin strip across the top: settings you set and leave. **TEMPO · QUANT · position.**
+The thin strip under the GLOBAL header: settings you set and leave. **TEMPO · QUANT · position.**
 - **TEMPO.** Click it, then ↑ / ↓ for one BPM, ← / → for a hundredth of a BPM, or type a value and press Enter. Double-click goes back to the track's own tempo (or, if PERFORM's deck B is playing and has become MASTER, to deck B's). The audio, the visual and the piano roll all follow, locked to the beat. The range is half to one and a half times the track's tempo.
 - **QUANT.** The same value as on PERFORM (5.6): cues and PLAY wait for the next step. Click it, then ↑ / ↓ or scroll; double-click = 1/4.
-- **Position.** Where you are in the track, in bars.beats.sixteenths. It turns red while REC records.
+- **Position.** Where you are in the track, in bars.beats.sixteenths. It turns pink while REC records.
 
 ### 4.3 Music
 
@@ -93,32 +102,53 @@ The whole track with the playhead.
 Audio isn't needed to press PLAY: Vizzie runs from the embedded Music Understanding analysis.
 
 #### 4.3.3 Dropping files
-Drag files or a folder anywhere onto the deck: an MP3, its Music Understanding `.json`, a `.wgsl` shader, a square cover image. The deck takes the first of each type and ignores the rest; the message bar counts what it ignored. While you drag, the deck shows "Drop files" and the types it takes.
+Drag files or a folder onto the deck (anywhere but the LIBRARY): an MP3, its Music Understanding `.json`, a `.wgsl` shader, a square cover image. The deck takes the first of each type and ignores the rest; the message bar counts what it ignored. While you drag, the deck shows "Drop files" and the types it takes. Files dropped on the LIBRARY go into the LIBRARY instead (4.5).
 
 A dropped cover image must be square. It replaces the MP3's own art until another track loads.
 
 ### 4.4 Controls row
-**PLAY · LOOP · KEY LOCK · zoom · orientation ........ SOLO**
-- **PLAY / PAUSE** starts and stops. **Spacebar** does the same on CREATE.
+**PLAY · LOOP · KEY LOCK · orientation · PLAY NEXT · CONTINUOUS PLAY · SHUFFLE ........ FX**
+- **PLAY / PAUSE** starts and stops. **Spacebar** does the same.
 - **LOOP**, off when you open the app. On, the whole track loops. Click a piano roll block while LOOP is on and that block loops instead (the jump lands on QUANT); click the lit block again to go back to the whole track. Off, the track stops at its end and the playhead goes back to the start.
 - **KEY LOCK**, on when you open the app: the pitch stays put as you change the tempo, and drum hits keep their snap. Off, the pitch moves with the tempo, like a turntable.
-- **Zoom** (the % field): how much of the song the piano roll shows. Click it, then ↑ / ↓ through 0, 25, 50, 75 and 100. 0 is the closest view, 100 the whole song.
 - **Orientation**: the piano roll vertical or horizontal.
-- **SOLO** lights while any lane or group is soloed. Click it to clear all solos.
+- **PLAY NEXT** (next-track icon): the next track in the LIBRARY list, as it is shown, plays from the start now. After the last track it goes back to the first.
+- **CONTINUOUS PLAY** (playlist icon): on, when a track ends (LOOP off) the next track in the list plays from the start.
+- **SHUFFLE** (crossed arrows): on, the LIBRARY list is put in a random order, with the playing track first and still playing; PLAY NEXT and CONTINUOUS PLAY then follow that order, as streaming players do. Off, the list goes back to its own order.
+- **FX** opens the effects (4.6).
 
-### 4.5 Visual
-The live shader on the stage. The buttons sit on the right of the Visual header.
+CONTINUOUS PLAY and SHUFFLE light cyan while on. The piano roll zoom and SOLO are on the Music Understanding header (4.8).
 
-#### 4.5.1 </> Code
+### 4.5 LIBRARY
+The same LIBRARY as PERFORM's (5.10), always open under the controls row. On the website it lists the demo playlists, one button each after SHADERS (for example BIG WHEEL ENERGY), and opens on the first; a playlist shows its tracks in its own order, title first, then artist.
+- **Double-click** (or double-tap) a track: it loads and plays from the start. A shader loads onto the stage.
+- **Click** an entry to select it; then ↑ / ↓ move the selection, ← or → loads it, Delete removes it from the library.
+- **Drag** an entry onto the deck to load it.
+- **Drop** files or a folder on the LIBRARY to add them: MP3s with their Music Understanding `.json`, shaders, cover images, an `.m3u8` playlist (QUEUE, 5.11).
+- **Filters:** ALL · QUEUE · MUSIC · SHADERS, then the demo playlists.
+
+An entry on the deck is tinted yellow. Website tracks are fetched when you load them, so the page opens quickly.
+
+### 4.6 FX
+**FX** slides a panel down over the LIBRARY; click FX again to close it. Four knobs: **AFX1** over **AFX2** (music, cyan) and **VFX1** over **VFX2** (visual, purple) to the right. They are deck A's effects, the same as PERFORM's deck A (5.9).
+- **Knob:** drag up or down for the amount. Click it, then ↑ / ↓ (fine) or ← / → (coarse). Click or press Enter to kill the effect; again to restore it. Kills land on the next QUANT step while the track plays. **Double-click** resets the effect to its default.
+- **Effect box** (under the knob): click it, then the arrows step through the bank.
+
+The music effects play on CREATE; the visual effects show on the stage, in Pop Out and in REC. AUTHORING plays without effects.
+
+### 4.7 Visuals
+The live shader on the stage. The buttons sit on the right of the VISUALS header.
+
+#### 4.7.1 </> Code
 Opens the shader code. Edit or paste a complete shader, then **Apply**. **Copy** copies the code.
 
-#### 4.5.2 Pop Out
+#### 4.7.2 Pop Out
 Opens the visual in its own window. Double-click that window for fullscreen.
 
-#### 4.5.3 Orientation
+#### 4.7.3 Orientation
 Cycles the visual through 16:9, 1:1 and 9:16.
 
-#### 4.5.4 ● REC
+#### 4.7.4 ● REC
 Records the visual with the track's audio to a video file, from the playhead.
 - **Stopped, a block picked:** click a piano roll block while stopped, then REC. It records exactly that block and stops at its end. With LOOP on, the block loops and the recording runs until you press REC again.
 - **Stopped, nothing picked:** records from the playhead to the end of the track. With LOOP on, it runs on until you press REC again.
@@ -126,40 +156,39 @@ Records the visual with the track's audio to a video file, from the playhead.
 
 Click REC again to stop early. The file downloads when the recording ends.
 
-#### 4.5.5 Load a shader file
+#### 4.7.5 Load a shader file
 Drag a `.wgsl` file onto the deck, or **double-click** the visual to pick one.
 
-### 4.6 Music Understanding
+### 4.8 Music Understanding
 
-#### 4.6.1 Groups and lanes
-Six groups (RHYTHM, STRUCTURE, KEY, PACE, LOUDNESS, INSTRUMENTS) holding twelve lanes: beat, bar, section, segment, phrase, key, pace, loudness, drum, bass, vocal, other. What each lane does to the picture depends on the shader loaded. Hover over a lane to see its live value in the message bar.
+#### 4.8.1 Groups and lanes
+Six groups (RHYTHM, STRUCTURE, KEY, PACE, LOUDNESS, INSTRUMENTS) holding twelve lanes: beat, bar, section, segment, phrase, key, pace, loudness, drum, bass, vocal, other. Each lane shows in its group's colour; beat is white. What each lane does to the picture depends on the shader loaded. Hover over a lane to see its live value in the message bar.
 
-#### 4.6.2 Encoders (AUTHORING)
-Drag up or down to set how strongly that lane drives the shader (0 to full). Press to solo the lane (clicking the lane chip does the same); solos stack. Double-click to reset to full.
+#### 4.8.2 Lane chips
+Each lane is a chip. Click a chip to solo the lane; solos stack. Click a group's colour bar to solo the whole group. **SOLO**, at the right of the Music Understanding header, lights while any lane or group is soloed; click it to clear all solos.
 
-#### 4.6.3 Lane chips (PUBLIC)
-PUBLIC shows each lane as a chip in its group colour. Click a chip to solo the lane; solos stack.
-
-#### 4.6.4 Group solo
-Click a group header (a colour bar in PUBLIC) to solo the whole group.
-
-#### 4.6.5 Piano roll
-Each lane's music data moving through the centre playhead, counted in beats: 4 bars in view in AUTHORING at the closest zoom, at any tempo. PUBLIC has its own roll under the lane chips; it opens at 25 %, horizontal. The zoom field and the orientation button work on the roll that is showing.
+#### 4.8.3 Piano roll
+Each lane's music data moving through the centre playhead, counted in beats, at any tempo. It opens at 25 %, horizontal.
 - **Drag** it to scrub.
 - **Click** a block to cue to its start: a beat, bar, section, segment, phrase, key or pace change. While the track plays, the cue waits for the next QUANT step. These are your cue points, straight from Music Understanding; nothing needs saving.
 - **LOOP on:** the clicked block loops (4.4).
-- **Stopped:** the clicked block is picked: the playhead moves to its start, the block lights, and REC records exactly that block (4.5.4). Moving the playhead any other way, or PLAY, clears the pick.
-- **Zoom** with the zoom field in the controls row, or pinch, or ctrl + wheel on the roll.
+- **Stopped:** the clicked block is picked: the playhead moves to its start, the block lights, and REC records exactly that block (4.7.4). Moving the playhead any other way, or PLAY, clears the pick.
+- **Zoom** (the % field on the Music Understanding header, left of SOLO): click it, then ↑ / ↓ through 0, 25, 50, 75 and 100. 0 is the closest view, 100 the whole song. Pinch, or ctrl + wheel on the roll, zooms too.
 
-### 4.7 Another track's Music Understanding
+### 4.9 Another track's Music Understanding
 Each track has its own Music Understanding file, a `.json` made by the Sozo sidecar. Drop it on the deck (or double-click the cover or waveform and pick it): the piano roll, readout, cue points and visuals switch to that track, and TEMPO goes to its BPM. Load the track's MP3 the same way, before or after. If the audio and the `.json` are different lengths, the message bar tells you, so you can check they belong together.
+
+### 4.10 AUTHORING
+Off the website only: the same deck, arranged for building shaders. The Visual on top, then the music, the controls row **PLAY · LOOP · KEY LOCK · zoom · orientation ........ SOLO**, the full Music Understanding controls, the piano roll and the authoring sections. The track and solos are the same as on CREATE. There is no LIBRARY, FX, PLAY NEXT, CONTINUOUS PLAY or SHUFFLE, and the deck plays without effects.
+- **Encoders:** each lane has one. Drag up or down to set how strongly that lane drives the shader (0 to full). Press to solo the lane (clicking the lane chip does the same); solos stack. Double-click to reset to full. Click a group header to solo the group.
+- **Piano roll:** as on CREATE (4.8.3), with 4 bars in view at the closest zoom. It opens vertical at 0 %.
 
 ## 5. PERFORM
 
 Two decks and a mixer, for playing visuals live to music. Shown only when the app is opened off the website.
 
 ### 5.1 Layout
-**DECK A · MIXER column · DECK B**, side by side, fitted to the window, under the global strip. The MIXER column holds three modules, top to bottom: the MIXER, the panel strip (MODE · FX · EQ) and the LIBRARY. Deck A is the same deck as CREATE's: the track and solos you set on one tab are there on the other.
+**DECK A · MIXER column · DECK B**, side by side, fitted to the window, under the global strip. The MIXER column holds three modules, top to bottom: the MIXER, the panel strip (MODE · FX · EQ) and the LIBRARY. Deck A is the same deck as CREATE's: the track, solos and effects you set on one tab are there on the other.
 
 ### 5.2 Global strip
 **TEMPO · QUANT · PLAY · master position.**
@@ -214,41 +243,41 @@ Each deck has four effect knobs, two for the music and two for the picture:
 | Row 2 | VFX2 | AFX2 | AFX2 | VFX2 |
 
 AFX (cyan) are music effects; VFX (purple) are visual effects on the deck's picture, seen on its stage and in OUT.
-- **Knob:** drag up or down for the amount. Click it, then ↑ / ↓ (fine) or ← / → (coarse). Click or press Enter to kill the effect; again to restore it. Kills and restores land on the next QUANT step.
+- **Knob:** drag up or down for the amount. Click it, then ↑ / ↓ (fine) or ← / → (coarse). Click or press Enter to kill the effect; again to restore it. Kills and restores land on the next QUANT step. Double-click resets the effect to its default.
 - **Effect box** (under the knob): click it, then ↑ / ↓ or ← / → to step through the bank. A new effect starts off.
 
 **Music FX bank:** Filter (centre off, left low-pass, right high-pass), Washout, Dubby, Delay, Reverb, Flanger, Phaser, Bitcrush. Defaults: AFX1 Filter, AFX2 Dubby. Delay, Dubby, Flanger and Phaser follow the TEMPO and the QUANT step.
 
 **Visual FX bank:** RGB Split, Feedback, Glitch, Pixelate, Scanlines, Mirror, Kaleidoscope, VHS, Shake, Tone (centre off, left darker and softer, right brighter and sharper), Tile, Rotate, Zoom. Defaults: VFX1 RGB Split, VFX2 Feedback. RGB Split, Shake and Zoom kick on the deck's beats; Glitch tears on the QUANT grid; Feedback trails fade over one QUANT step; Kaleidoscope turns with the bar; Rotate turns at the tempo.
 
-Music FX play on PERFORM only. Effects and their settings last for the session.
+Music FX play on PERFORM and on CREATE (deck A). Effects and their settings last for the session.
 
 ### 5.10 LIBRARY
-Drop files or folders (subfolders included) on the MIXER column. The LIBRARY lists:
+Drop files or folders (subfolders included) on the MIXER column (on CREATE, on the LIBRARY). The LIBRARY is the same on both tabs. It lists:
 - **Tracks:** each MP3 that has its Music Understanding `.json` (same name, or the name the `.json` gives). An MP3 without its `.json`, or a `.json` without its MP3, is left out. A square cover image with the track's name goes with it.
 - **Shaders:** one entry per shader name, at its highest `_V##` (names without a version: the newest file).
 
 One message in the bar sums up what was added, skipped and ignored. Dropping the same name again replaces its entry.
 
-**Filters:** ALL · MUSIC · SHADERS, and QUEUE (5.11).
+**Filters:** ALL · QUEUE (5.11) · MUSIC · SHADERS, and on the website the demo playlists (4.5).
 
 **Entries:** click to select (cyan border); the list then takes the keys: ↑ / ↓ move the selection, ← loads it on Deck A, → on Deck B, Delete removes it from the library (a deck keeps what it has). Or drag an entry onto a deck. An entry on a deck is tinted yellow.
 
 The LIBRARY is what you dropped this session. Nothing is saved.
 
 ### 5.11 Playlist QUEUE
-Export a playlist from your music player as `.m3u8` (Swinsian, for example) and drop it with the music, before or after. **QUEUE** lights up: on, the LIBRARY shows the playlist's tracks in the playlist's order, and the ALL / MUSIC / SHADERS filters still apply. A second playlist replaces the first. The message bar counts the songs queued, those without their `.json`, and those not found in the library. Click QUEUE again to switch it off. The playlist is held for the session; Vizzie writes no playlist.
+Export a playlist from your music player as `.m3u8` (Swinsian, for example) and drop it with the music, before or after, on the MIXER column or CREATE's LIBRARY. **QUEUE** lights up: on, the LIBRARY shows the playlist's tracks in the playlist's order, and the ALL / MUSIC / SHADERS filters still apply. A second playlist replaces the first. The message bar counts the songs queued, those without their `.json`, and those not found in the library. Click QUEUE again to switch it off. The playlist is held for the session; Vizzie writes no playlist.
 
-## 6. ABOUT and LEARN
+## 6. HELP, ABOUT and LEARN
 
-**ABOUT**: what Vizzie is, who made it, the license. **LEARN** opens the learning page on onemanshyo.com in a new tab.
+**HELP**: LET'S DO THIS, eight things to try, in two boxes. **ABOUT**: what Vizzie is, who made it, the license. **LEARN** opens the learning page on onemanshyo.com in a new tab.
 
 ## 7. Messages
 
 The bar at the bottom of the screen. Everything the app has to tell you appears here, in three colours:
 - **Cyan, help:** what a control is and its keys, while you point at it or click into it, and the live values of a lane or group.
 - **Orange, values:** what just changed: playing, TEMPO, QUANT, KEY LOCK, a cue, an effect, a file loaded.
-- **Magenta, errors:** something failed: a file Vizzie can't use, a track that won't decode, a cover that isn't square, pop-out blocked, recording not supported.
+- **Red, errors:** something failed: a file Vizzie can't use, a track that won't decode, a cover that isn't square, pop-out blocked, recording not supported.
 
 When nothing needs saying, the bar is empty. Shader problems show in the visual itself instead: no WebGPU in the browser, or a mistake in the shader (the message gives the line number). Every message is listed in 9.
 
@@ -256,7 +285,7 @@ If hover help stops appearing after a click in Chrome, a browser extension may b
 
 ## 8. Pocket Rave (phones and tablets)
 
-On the website, phones and tablets in portrait get Pocket Rave; phones stay in Pocket Rave in landscape too. Tablets in landscape get the full app. Code, pop-out, recording, TEMPO, the encoders and PERFORM are only in the full app.
+On the website, phones and tablets in portrait get Pocket Rave; phones stay in Pocket Rave in landscape too. Tablets in landscape get the full app. Code, pop-out, recording, TEMPO, the LIBRARY, FX, the encoders and PERFORM are only in the full app. Pocket Rave plays without effects.
 
 ### 8.1 Full frame
 Pocket Rave opens with the shader filling the frame. **Tap** the shader to play or pause. **Double-tap** it, or tap the ONEMANSHYO header, for the normal view.
@@ -284,10 +313,13 @@ Every message the bar shows, as worded in this release. NAME stands for a file, 
 | 9.1.1.2 | Version | App version |
 | 9.1.1.3 | Tagline | Music drives the vision: the AMU of the song drives the shader |
 | 9.1.1.4 | PERFORM tab | PERFORM: two decks and the mixer |
-| 9.1.1.5 | CREATE tab | CREATE: author a shader to its music |
+| 9.1.1.5 | CREATE tab | CREATE: music and visuals |
 | 9.1.1.6 | ABOUT tab | ABOUT |
 | 9.1.1.7 | LEARN tab | LEARN |
 | 9.1.1.8 | onemanshyo.com link (ABOUT) | onemanshyo.com |
+| 9.1.1.9 | AUTHORING tab | AUTHORING: author a shader to its music |
+| 9.1.1.10 | HELP tab | HELP |
+| 9.1.1.11 | LET'S DO THIS header (HELP) | LET'S DO THIS |
 
 #### 9.1.2 PERFORM: global strip
 
@@ -339,7 +371,7 @@ Lane values: BEAT beat, beatPhase · BAR bar, barPhase · SECTION section n/N, p
 | 9.1.5.3 | EQ | EQ: later |
 | 9.1.5.4 | MIX | MIX: weighted blend of the decks at their VID strengths (on) |
 | 9.1.5.5 | ADD, SCREEN, CUT | ADD: later / SCREEN: later / CUT: later |
-| 9.1.5.6 | FX knob | Deck A AFX1 · Filter N% (drag · ↑↓ ←→ · click / Enter = kill); " · killed" while killed |
+| 9.1.5.6 | FX knob and its label | Deck A AFX1 · Filter N% (drag · ↑↓ ←→ · click / Enter = kill · double-click = reset); " · killed" while killed |
 | 9.1.5.7 | FX effect box | Deck A AFX1 effect · Filter (↑↓ ←→) |
 
 #### 9.1.6 PERFORM: LIBRARY
@@ -353,13 +385,14 @@ Lane values: BEAT beat, beatPhase · BAR bar, barPhase · SECTION section n/N, p
 | 9.1.6.5 | QUEUE, no playlist | QUEUE: drop an .m3u8 playlist on the MIXER |
 | 9.1.6.6 | QUEUE, playlist | QUEUE: playlist NAME, in its order (on / off) |
 | 9.1.6.7 | Entry | NAME (↑↓ · ← Deck A · → Deck B · Delete) |
+| 9.1.6.8 | Demo playlist (website) | Library: show NAME, in its order |
 
-#### 9.1.7 CREATE: music, controls and Visual
+#### 9.1.7 CREATE: music, controls, LIBRARY, FX and Visuals
 
 | # | Control | Message |
 |---|---|---|
 | 9.1.7.1 | MUSIC header | MUSIC: cover, waveform and transport (drop MP3, AMU .json, .wgsl or a square cover image on the deck) |
-| 9.1.7.2 | VISUAL header | VISUAL: the shader on the stage |
+| 9.1.7.2 | VISUALS header | VISUALS: the shader on the stage |
 | 9.1.7.3 | MUSIC UNDERSTANDING header | MUSIC UNDERSTANDING: the AMU lanes and buses (click = solo) and the piano roll |
 | 9.1.7.4 | TEMPO | Master tempo (click, then ↑↓ ±1 BPM, ←→ ±0.01 BPM, or type + Enter · double-click = the MASTER deck's BPM) |
 | 9.1.7.5 | QUANT | as 9.1.2.4 |
@@ -372,17 +405,28 @@ Lane values: BEAT beat, beatPhase · BAR bar, barPhase · SECTION section n/N, p
 | 9.1.7.12 | Roll orientation | Piano roll vertical / horizontal |
 | 9.1.7.13 | Piano roll | Piano roll (drag = scrub · click a block = cue to its start · ctrl + wheel, pinch = zoom) |
 | 9.1.7.14 | Lane cell (AUTHORING) | NAME · slot N · knob N% · on / muted · live value (drag = amount, click = solo, double-click = 100%) |
-| 9.1.7.15 | Lane chip (PUBLIC) | as 9.1.3.15 |
+| 9.1.7.15 | Lane chip (CREATE) | as 9.1.3.15 |
 | 9.1.7.16 | Bus | NAME bus · its lanes at their levels (solo the bus) |
 | 9.1.7.17 | Orientation | Orientation 16:9 / 1:1 / 9:16 |
 | 9.1.7.18 | Pop Out | Pop Out the visual to its own window |
 | 9.1.7.19 | REC | REC the visual from the playhead (a chip clicked while stopped = render that chip; LOOP on = loop it) · press again = stop and save |
+| 9.1.7.20 | GLOBAL header | GLOBAL: tempo · QUANT · position |
+| 9.1.7.21 | FX | FX: the deck effects |
+| 9.1.7.22 | PLAY NEXT | PLAY NEXT: the next track, now |
+| 9.1.7.23 | CONTINUOUS PLAY | CONTINUOUS PLAY: the next track plays at the end |
+| 9.1.7.24 | SHUFFLE | SHUFFLE: the list in a random order |
+| 9.1.7.25 | FX knob and its label | AFX1 · Filter N% (drag · ↑↓ ←→ · click / Enter = kill · double-click = reset); " · killed" while killed |
+| 9.1.7.26 | FX effect box | AFX1 effect · Filter (↑↓ ←→) |
+| 9.1.7.27 | LIBRARY header and list | as 9.1.6.1 |
+| 9.1.7.28 | ALL, MUSIC, SHADERS, demo playlists | as 9.1.6.2 to 9.1.6.4, 9.1.6.8 |
+| 9.1.7.29 | QUEUE, no playlist | QUEUE: drop an .m3u8 playlist on the LIBRARY |
+| 9.1.7.30 | Entry | NAME (↑↓ · ←→ or double-click load · Delete) |
 
-#### 9.1.8 CREATE: authoring
+#### 9.1.8 AUTHORING
 
 | # | Control | Message |
 |---|---|---|
-| 9.1.8.1 | Mode label | Mode: AUTHORING / PUBLIC |
+| 9.1.8.1 | Visual header | VISUAL: the shader on the stage |
 | 9.1.8.2 | Code | Shader code: show / hide |
 | 9.1.8.3 | Code editor | Shader code (edit, then Apply) |
 | 9.1.8.4 | Apply | Apply the code to the stage, preview only |
@@ -429,7 +473,11 @@ Lane values: BEAT beat, beatPhase · BAR bar, barPhase · SECTION section n/N, p
 | 9.2.29 | Library entry removed | Library: removed NAME |
 | 9.2.30 | Playlist | Playlist NAME: N queued · N no AMU · N not found |
 | 9.2.31 | QUEUE | QUEUE on · Playlist NAME: … / QUEUE off |
-| 9.2.32 | Mode switch | Public mode / Authoring mode |
+| 9.2.32 | PLAY NEXT, empty LIBRARY | PLAY NEXT: no tracks in the LIBRARY |
+| 9.2.33 | CONTINUOUS PLAY | Continuous play on / Continuous play off |
+| 9.2.34 | SHUFFLE | Shuffle on / Shuffle off |
+| 9.2.35 | FX knob reset | Deck A AFX1 · Filter N% (CREATE: AFX1 · Filter N%), at the default amount |
+| 9.2.36 | Header rename | Header: type a name (Enter = keep · Esc = cancel · empty = ONEMANSHYO) / Header: NAME (this session) / Header unchanged |
 
 ### 9.3 Errors
 
@@ -457,7 +505,7 @@ Field keys act only while that field has focus (click it first). Space is ignore
 | # | Key | Where | Action |
 |---|---|---|---|
 | 10.1 | Space | PERFORM | Master PLAY / PAUSE (the whole mix) |
-| 10.2 | Space | CREATE | PLAY / PAUSE the deck |
+| 10.2 | Space | CREATE, AUTHORING | PLAY / PAUSE the deck |
 | 10.3 | ↑ / ↓ | TEMPO (CREATE, PERFORM) | ±1 BPM |
 | 10.4 | ← / → | TEMPO | ±0.01 BPM |
 | 10.5 | type + Enter | TEMPO | Set the tempo |
@@ -474,10 +522,12 @@ Field keys act only while that field has focus (click it first). Space is ignore
 | 10.16 | Enter / Escape | FX effect box | Leave the box |
 | 10.17 | ↑ / ↓ | LIBRARY list | Select the previous / next entry |
 | 10.18 | ← | LIBRARY list | Load the entry on Deck A |
-| 10.19 | → | LIBRARY list | Load the entry on Deck B |
+| 10.19 | → | LIBRARY list | Load the entry on Deck B (CREATE: on the deck) |
 | 10.20 | Delete (Mac: delete) | LIBRARY list | Remove the entry from the library |
 | 10.21 | scroll | QUANT | Next / previous step |
 | 10.22 | ctrl + wheel, pinch | Piano roll | Zoom |
+| 10.23 | Enter | Header name (after a power light tap) | Keep the name |
+| 10.24 | Escape | Header name | Cancel |
 
 ---
 

@@ -1,13 +1,29 @@
-# OMS Vizzie app [Beta V0.10.0] Release Notes
+# OMS Vizzie app [Beta V0.11.0] Release Notes
 
-**Run date:** 2026-11-02  
-**Current Unix Epoch:** 1793632322  
+**Run date:** 2026-11-05  
+**Current Unix Epoch:** 1793912480  
 **Document purpose:** User enhancements since V0.2.18c, newest first.  
-**Filename:** OMS_Vizzie_Beta_V0_10_0_D_Release_Notes.md  
+**Filename:** OMS_Vizzie_Beta_V0_11_0_D_Release_Notes.md  
 
 ## About this document
 
-Vizzie Beta V0.10.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
+Vizzie Beta V0.11.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
+
+---
+
+## V0.11.0
+
+- CREATE is now music and visuals: MUSIC on the left (cover, waveform, controls, LIBRARY), VISUALS on the right, and Music Understanding across the bottom, filling the window.
+- The LIBRARY is always open on CREATE. On the website it lists the demo playlists (BIG WHEEL ENERGY); a playlist shows its tracks in its own order, title first. Double-click or double-tap a track to load and play it. Drop your own files on the LIBRARY to add them.
+- FX on CREATE: two music effects and two visual effects for the deck. The visual effects show on the stage, in Pop Out and in REC.
+- Double-click an FX knob to reset it to its default, on CREATE and PERFORM.
+- PLAY NEXT, CONTINUOUS PLAY and SHUFFLE on CREATE. SHUFFLE puts the list in a random order and plays it in that order.
+- SOLO and the piano roll zoom sit at the right of the Music Understanding header.
+- Off the website, AUTHORING has its own tab, after PERFORM, for building shaders.
+- A HELP tab with LET'S DO THIS: eight things to try.
+- iPhone and iPad: the music plays when you tap PLAY, silent switch on or off. The website opens faster: songs and their analysis are fetched when you play them.
+- The strip with the red power light and the jacks now frames the whole app. Tap the power light to put your own name in the header for the session.
+- New colours: Purple People Eater, Barbie Pink, Green Slime, Yellow Man, Orange Julius, Goblin White and Red Hots. Each Music Understanding lane shows in its group's colour.
 
 ---
 
