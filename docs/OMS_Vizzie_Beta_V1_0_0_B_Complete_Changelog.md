@@ -1,15 +1,42 @@
-# OMS Vizzie app [Beta V0.11.0] Complete Changelog
+# OMS Vizzie app [Beta V1.0.0] Complete Changelog
 
-**Run date:** 2026-11-05  
-**Current Unix Epoch:** 1793912480  
+**Run date:** 2026-11-07  
+**Current Unix Epoch:** 1794051010  
 **Document purpose:** The readable version of the PM backlog: the BLOGs each release packaged, grouped by release, newest first, with the builds that carried them.  
-**Filename:** OMS_Vizzie_Beta_V0_11_0_B_Complete_Changelog.md  
+**Filename:** OMS_Vizzie_Beta_V1_0_0_B_Complete_Changelog.md  
 
 ## About this document
 
-Vizzie Beta V0.11.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
+Vizzie Beta V1.0.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
 
 Versions are major.minor.iteration; a full package rolls the minor, and the iteration line before it becomes that release's iterations. Letters are revisions of the same piece of work.
+
+---
+
+## V1.0.0
+
+Packages the V0.11 iteration line (V0.11.01a to V0.11.21e). Baseline V0.11.21e. Shaders get their own settings: uniform contract V0.5.0A adds a settings block, a shader declares its settings in the `.wgsl`, and the Settings drawer sets them live on every stage; Export in every Code view writes a tuned look as the shader's next version. PERFORM gains the EQ drawer (audio EQ and RGB per deck), sixteen video mix modes, one kill rule for every knob and W A S D through the MIXER column. AUTHORING takes CREATE's chips, music row and roll, and the control rules are written down as design system rules.
+
+- **PERFORM: EQ drawer, audio EQ and RGB per deck** (BLOG0137 · V0.11.13a, 14a to 14e, 15a, 15b): The EQ button in the panel strip is live and slides its drawer over the LIBRARY, as FX does. Per deck HIGH, MID, LOW on the audio: high shelf 13 kHz, bell 1 kHz, low shelf 70 Hz, −26 dB to +6 dB, before the deck's FX rack; PERFORM only, CREATE plays without it (13a). RGB, Dojo's visual EQ: BLUE, GREEN, RED, a gain on each colour channel of the deck's picture after its visual FX, from off through ×1.00 to ×1.33 (14a). Four outlined columns, A RGB, A EQ | B EQ, B RGB, visual outside and audio inside as the mixer, no DECK A / DECK B header (14a); spacing settled in 14b to 14d: 9 px from the strip, sides and bottom, 8 px inside each column. The FX drawer re-laid the same way: A VFX, A AFX | B AFX, B VFX (14e). One kill rule on every EQ and FX knob, CREATE's FX panel included: click selects, Enter kills or restores (FX on QUANT, EQ and RGB at once), Tab steps to the next, double-click returns to the default; a killed knob dims (15a). Labels without the deck letter; the message bar names the deck (15b).
+- **Authoring preview bindings out of group 0** (BLOG0161 · V0.11.01a): The authoring preview's object mask, overlay probe and CRYPTOMATTE move from `@group(0)` to `@group(3)`, in the preview's copy of the WGSL only; group 0 is left to the contract. AUTHORING renders as before.
+- **Settings binding: the shader's own uniform block** (BLOG0162 · V0.11.02a): Uniform contract V0.4.0D → V0.5.0A. Binding 1, `@group(0) @binding(1) var<uniform> settings: array<vec4<f32>, 16>`: 64 floats belonging to the shader, one block per deck (CREATE and each PERFORM deck). Binding 0 is unchanged; shaders on binding 0 only run unchanged.
+- **Settings declaration in the .wgsl** (BLOG0163 · V0.11.03a): Comment lines, so the shader compiles as it is: `// @setting NAME settings[N].c min max step default | help` for a number, `// @setting NAME settings[N].xyz color r g b | help` for a colour. Read when the shader compiles on any deck; the deck's block takes the defaults; values kept across an edit when name, type and place match; a bad line is skipped and named in the message bar.
+- **SETTINGS drawer** (BLOG0164 · V0.11.04a, 04b): A Settings button on every stage whose shader declares settings: the Visual header on AUTHORING and the VISUALS header on CREATE (04a), each PERFORM deck's header right of MASTER (04b). One shared drawer built from the declaration, with encoders, fields and the colour wheel; a change goes straight into the deck's settings block, no recompile. Laid out as a fixed rack in BLOG0176.
+- **Settings: keeping a look** (BLOG0165 · V0.11.05a): Code's Copy wrote the current values in as the `// @setting` defaults. Replaced by Export (BLOG0174, BLOG0175); Copy is a plain copy again.
+- **AUTHORING: Music Understanding encoders become the standard chips** (BLOG0172 · V0.11.10a): AUTHORING's encoders are gone; the twelve lanes are chips and the six buses thin colour bars, as on CREATE and PERFORM: click a chip to solo the lane, a bus bar to solo the group, SOLO clears. Lane gains stay at full, so shaders get the same values on every surface.
+- **Metal inserts run to the top** (BLOG0173 · V0.11.06a): The metal inserts on the wood panels' inner edges draw above the Moogerfooger strip and run from the top of the window to the bottom; the strip had covered their top 26 px.
+- **Settings: Export** (BLOG0174 · V0.11.08a, 09b, 09f): Keeping a look became Save in the drawer (08a), named Export (09b), then moved out of the drawer into the Code views (09f). Export downloads the shader to Downloads as the next version (`_V11` → `_V12`; a name without a version gets `_V01`), the current settings as its defaults; the deck then holds that version. RULES R13 says so.
+- **Code on PERFORM decks; Export in every Code view** (BLOG0175 · V0.11.09a, 09b, 09f): Each PERFORM deck header has `</> Code` left of Settings, opening CREATE's Code view over its stage for that deck's shader: Apply, Copy, Export (09a; label 09f). Every Code view (AUTHORING, CREATE, each PERFORM deck) has Export after Copy (09a, named 09b).
+- **Settings drawer: a fixed rack of 32 slots** (BLOG0176 · V0.11.09c to 09g, 11a, 12a): The drawer is a fixed rack, the same on every stage: a 36 px encoder, the name and a value box per slot, unused slots empty and dashed (09c, 16 slots). On CREATE it slides out of the stage's left edge over the MUSIC column, Music Understanding left uncovered; AUTHORING and PERFORM slide down (09d; first open fixed in 09e). No Export in the drawer (09f). Empty value boxes fit narrow columns (09g, 11a). 32 slots in 4 rows of 8: settings in the standard area first, a shader's own from a fresh row (12a).
+- **Template standard settings** (BLOG0177 · V0.11.11a, 12a): The template's default scene declares and uses fourteen standard settings in settings[0] to settings[3]: row 1 SCALE, ROTATION, OFFSET_X, OFFSET_Y, PIVOT_X, PIVOT_Y, TILE, TIME_OFFSET; row 2 SPEED, REACT, HUE, SATURATION, VALUE, CONTRAST (eight in 11a, six added in 12a). A shader's own settings start at settings[4], on row 3. RULES R13 names them: "give me the defaults" means these.
+- **Panel strip order: EQ · FX · MODE** (BLOG0182 · V0.11.14b): PERFORM's panel strip reads EQ · FX · MODE, left to right (was MODE · FX · EQ).
+- **AUTHORING music row and roll as CREATE's** (BLOG0183 · V0.11.16a): Cover 40 px square and waveform 40 px high (were 80); the piano roll opens horizontal at 120 px high, vertical 75 px on the orientation button.
+- **Video mix modes (OUT)** (BLOG0184 · V0.11.17a to 17e): The MODE drawer sets how OUT combines the decks: sixteen modes in four rows, one row per build (17a to 17d), MIX NAM ADD SCRN / MULT OVER DIFF LUMA / DARK SOFT EXCL INVL / SUB DODGE BURN COLOR. Click or Enter picks; the change is instant; the full name in the message bar. CUT is gone: a VID at 0 is the cut (17a). Buttons in the strip's small-button style with short labels (17e).
+- **PERFORM spacing: centre column and outer gaps** (BLOG0185 · V0.11.18a, 18b): The centre column 24 px wider, the gaps either side 12 px, the decks unchanged (18a). PERFORM 9 px from the app frame each side (was 18); the other tabs keep 18 px (18b).
+- **Mixer encoders: values, dB, kill rule** (BLOG0186 · V0.11.19a, 19b, 21a to 21e): The four mixer encoders are 36 px knobs alone, with no label and no value under them; the level shows in the message bar, VID in %, AUD in dB with an audio taper (12 o'clock −12 dB). They follow the drawers' rule: click selects, Enter kills or restores, double-click returns to the default (19b). Outlined modules and value boxes (19a) and smaller sizes (21a to 21d) were removed in 21e, giving the LIBRARY and the drawers the room.
+- **W A S D: the MIXER column as one grid** (BLOG0187 · V0.11.20a to 20d): W A S D move by direction through the encoders, the EQ · FX · MODE strip and the open drawer (20a, 20c). Enter on the strip opens or closes its drawer; Escape in a drawer goes to its lit button (20c). Tab from a strip button goes into the open drawer (20b). M on PERFORM selects A VID (20d). Arrows still change values.
+- **Design system: control colours, modules, values, keys** (BLOG0188 · V0.11.20e): Selected and active rings take the control's domain colour: purple #B24DFF on visual controls (VID, VFX, RGB, the Settings rack, the mix modes), cyan #00d4ff on audio (AUD, AFX, EQ); the strip buttons show a cyan ring from the keyboard. The control rules settled in V0.11.13a to 21e (domain colours, knob modules, values in their unit, one knob behaviour, keys, small buttons, PERFORM spacing) are written down as design system rules.
+- **Deliverables: F, the blueprints** (BLOG0189 · V1.0.0): The blueprints ship with the release as F: `OMS_Vizzie_Beta_V1_0_0_F_Blueprints.html`, the editable source (ten sheets, one per page, fonts embedded), and `OMS_Vizzie_Beta_V1_0_0_F_Blueprints.pdf`, printed from it. Published from V1.0.0 on.
 
 ---
 

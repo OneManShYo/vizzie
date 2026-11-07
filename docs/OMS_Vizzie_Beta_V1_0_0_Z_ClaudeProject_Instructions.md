@@ -1,13 +1,13 @@
-# OMS Vizzie app [Beta V0.11.0] Claude Project Instructions
+# OMS Vizzie app [Beta V1.0.0] Claude Project Instructions
 
-**Run date:** 2026-11-05  
-**Current Unix Epoch:** 1793912480  
+**Run date:** 2026-11-07  
+**Current Unix Epoch:** 1794051010  
 **Document purpose:** Instructions to Claude for working on the Vizzie project.  
-**Filename:** OMS_Vizzie_Beta_V0_11_0_Z_ClaudeProject_Instructions.md  
+**Filename:** OMS_Vizzie_Beta_V1_0_0_Z_ClaudeProject_Instructions.md  
 
 ## About this document
 
-Vizzie Beta V0.11.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
+Vizzie Beta V1.0.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
 
 ---
 
@@ -72,7 +72,8 @@ You are working on Vizzie, a single self-contained HTML app (Web Audio, WebGPU, 
 - Only Wes closes a BLOG. Status words are open, closed and parked; nothing else (no 'later', no 'optional').
 - Show backlog work as a hierarchy grouped by module, and always write a BLOG as its number followed by its name.
 - The PM JSON is the record of the product. Never delete a version of it: every rebuild writes a new file beside the old one, the old one stays, and the new bundle is handed to Wes as soon as it is written. Chain commands with `set -o pipefail` so a failed step stops the chain.
-- Every release follows the OMS suite packaging workflow, `OMS#Suite#PackagingWorkflow#20261102#1793640251.md` (in the Claude project; the newest one there): versioning, filing, deliverables, PM bundles, git and deployment. Follow it as written; do not re-derive it.
+- Every release follows the OMS suite packaging workflow, `OMS#Suite#PackagingWorkflow#20261107#1794051058.md` (in the Claude project; the newest one there): versioning, filing, deliverables, blueprints, PM bundles, git and deployment. Follow it as written; do not re-derive it.
+- A release does every pre-packaging step (the workflow's §4A, blueprints included) before Wes reviews anything, then one review, one item at a time, before the push. File and bundle names come only from the workflow's templates; never invent one.
 - The packaging workflow and the PM bundle are never published or pushed.
 
 # 7. Talking to Wes
@@ -91,7 +92,7 @@ You are working on Vizzie, a single self-contained HTML app (Web Audio, WebGPU, 
 - File into the build tree only when he asks for a cleanup. A cleanup moves only this roll's own files (its `OMS_Vizzie_Beta_*` iterations and `OMS_Vizzie_PM_JSON_Bundle_*` bundles): copy, compare, then remove the Downloads copy only when identical. General PM docs, other apps' files and anything else in Downloads stay where they are.
 - A push block ends at `git push`. Checking the deploy is a separate command.
 - Song names: title first, then artist.
-- Never push on your own. The PM bundle, workflow docs and blueprints are never pushed.
+- Never push on your own. The PM bundle and workflow docs are never pushed. The blueprints are published as F from V1.0.0 on: `_F_Blueprints.html`, the editable source, and `_F_Blueprints.pdf`, printed from it. Revise the HTML, then re-print the PDF.
 
 ---
 

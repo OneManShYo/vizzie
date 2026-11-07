@@ -1,13 +1,35 @@
-# OMS Vizzie app [Beta V0.11.0] Release Notes
+# OMS Vizzie app [Beta V1.0.0] Release Notes
 
-**Run date:** 2026-11-05  
-**Current Unix Epoch:** 1793912480  
+**Run date:** 2026-11-07  
+**Current Unix Epoch:** 1794051010  
 **Document purpose:** User enhancements since V0.2.18c, newest first.  
-**Filename:** OMS_Vizzie_Beta_V0_11_0_D_Release_Notes.md  
+**Filename:** OMS_Vizzie_Beta_V1_0_0_D_Release_Notes.md  
 
 ## About this document
 
-Vizzie Beta V0.11.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
+Vizzie Beta V1.0.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
+
+---
+
+## V1.0.0
+
+- Shader settings: when a shader has its own settings, a Settings button shows on its stage (AUTHORING, CREATE, each PERFORM deck). It opens a rack of 32 slots, 4 rows of 8. Turn a knob or type a value and the picture follows at once. Double-click goes back to the default.
+- On CREATE the Settings rack slides out sideways over MUSIC, so Music Understanding stays in view.
+- Each PERFORM deck has `</> Code` in its header: its shader's code over its stage, with Apply, Copy and Export.
+- Export, in every Code view, downloads the shader to Downloads as its next version (`_V12` after `_V11`) with your current settings as its defaults, so it opens with the look you tuned.
+- PERFORM: EQ. The EQ drawer has HIGH, MID and LOW for each deck's sound (−26 dB to +6 dB) and RED, GREEN and BLUE for each deck's picture.
+- PERFORM: the strip under the MIXER reads EQ · FX · MODE. The EQ and FX drawers show deck A's columns on the left and deck B's on the right, visual outside, audio inside, as the mixer.
+- PERFORM: video mix modes. MODE has sixteen ways to combine the decks in OUT: MIX, NAM, ADD, SCRN, MULT, OVER, DIFF, LUMA, DARK, SOFT, EXCL, INVL, SUB, DODGE, BURN, COLOR. The message bar gives each mode's full name. To cut, pull a VID to 0.
+- One rule for every knob in the EQ and FX drawers, on CREATE's FX panel and on the mixer: click to select, Enter to kill or restore, double-click to go back to the default. A killed knob dims and keeps its level. Tab moves to the next knob.
+- PERFORM: the mixer's four knobs have no labels; the message bar shows the level. AUD works in dB, spread evenly by ear.
+- PERFORM keyboard: M goes into the mixer. W A S D move around the MIXER column: the knobs, the EQ · FX · MODE strip and the open drawer. Enter on the strip opens a drawer, Tab goes into it, Escape comes back out to its button.
+- PERFORM: the MIXER and LIBRARY column is wider and PERFORM sits closer to the frame.
+- Selected and active controls show their colour: purple for visuals, cyan for audio.
+- AUTHORING: the Music Understanding lanes are chips, as on CREATE and PERFORM. The cover and waveform are slim, as on CREATE, and the piano roll opens horizontal.
+- The metal inserts on the wood panels run all the way to the top.
+- For shader authors: uniform contract V0.5.0A. Declare a shader's settings in the `.wgsl` with `// @setting` lines and read them from `settings[N]`. Shaders written for V0.4.0D run unchanged.
+- For shader authors: the template's fourteen standard settings, SCALE, ROTATION, OFFSET_X, OFFSET_Y, PIVOT_X, PIVOT_Y, TILE, TIME_OFFSET, SPEED, REACT, HUE, SATURATION, VALUE and CONTRAST, fill the first two rows of the rack. A shader's own settings start on row 3.
+- The blueprints now come with the app as F: an HTML file you can open and edit, and a PDF printed from it.
 
 ---
 

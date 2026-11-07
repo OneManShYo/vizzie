@@ -1,13 +1,13 @@
-# OMS Vizzie app [Beta V0.11.0] Developer Documentation
+# OMS Vizzie app [Beta V1.0.0] Developer Documentation
 
-**Run date:** 2026-11-05  
-**Current Unix Epoch:** 1793912480  
+**Run date:** 2026-11-07  
+**Current Unix Epoch:** 1794051010  
 **Document purpose:** The explanatory technical spec for OMS Vizzie: how each system works and why. Uses the shared OMS **Cortex / Node / Leaf** vocabulary (Dojo, Chippy), sized to Vizzie's scope.  
-**Filename:** OMS_Vizzie_Beta_V0_11_0_C_Developer_Documentation.md  
+**Filename:** OMS_Vizzie_Beta_V1_0_0_C_Developer_Documentation.md  
 
 ## About this document
 
-Vizzie Beta V0.11.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
+Vizzie Beta V1.0.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
 
 ---
 
@@ -19,6 +19,11 @@ Vizzie Beta V0.11.0. License: GPL-3.0 (software); embedded assets, see the ABOUT
 **2** Cortex and the Critical Stack  
 &emsp;2.1 The master music clock (CORTEX)  
 &emsp;2.2 The uniform contract (critical: the one public interface)  
+&emsp;&emsp;2.2.1 Namespaces  
+&emsp;&emsp;2.2.2 Rules  
+&emsp;&emsp;2.2.3 Gates  
+&emsp;&emsp;2.2.4 The settings block (binding 1)  
+&emsp;&emsp;2.2.5 Authoring preview bindings (@group(3))  
 &emsp;2.3 The WGSL runtime (critical)  
 &emsp;2.4 Message System: the feedback bar (CORTEX)  
 **3** Node: Deck Audio, Tempo, Key Lock  
@@ -52,6 +57,7 @@ Vizzie Beta V0.11.0. License: GPL-3.0 (software); embedded assets, see the ABOUT
 &emsp;7.5 Compact authoring  
 &emsp;7.6 CREATE: LIBRARY, FX and the playlist controls  
 &emsp;7.7 The Moogerfooger strip and the header rename  
+&emsp;7.8 The Settings drawer  
 **8** Node: PERFORM  
 &emsp;8.1 Two decks on one clock  
 &emsp;8.2 The deck view  
@@ -59,12 +65,20 @@ Vizzie Beta V0.11.0. License: GPL-3.0 (software); embedded assets, see the ABOUT
 &emsp;8.4 Master position  
 &emsp;8.5 Mixer, OUT and encoders  
 &emsp;8.6 Layout fit  
-&emsp;8.7 Panel strip: MODE · FX · EQ  
+&emsp;8.7 Panel strip: EQ · FX · MODE  
 &emsp;8.8 FX  
 &emsp;8.9 LIBRARY  
 &emsp;8.10 Playlist QUEUE  
 &emsp;8.11 Demo playlists (the website set)  
+&emsp;8.12 EQ and RGB  
+&emsp;8.13 MODE: video mix modes (OUT)  
+&emsp;8.14 Keyboard in the MIXER column  
 **9** Node: Authoring (the template the app carries)  
+&emsp;9.1 The per-shader block  
+&emsp;9.2 Renderer hooks: AUTH_GPU  
+&emsp;9.3 Objects toggle and CRYPTOMATTE  
+&emsp;9.4 Authoring overlay  
+&emsp;9.5 Standard settings (R13)  
 **10** Node: Tabs  
 **11** Leaf Reference: Controls and Keyboard  
 **12** Design System (Human Interface Guidelines)  
@@ -78,6 +92,7 @@ Vizzie Beta V0.11.0. License: GPL-3.0 (software); embedded assets, see the ABOUT
 &emsp;12.8 Interaction pattern matrix  
 &emsp;12.9 The module hierarchy  
 &emsp;12.10 Known design debt  
+&emsp;12.11 Control rules  
 **13** User Media: AMU Data and Shaders  
 
 ---
@@ -102,7 +117,7 @@ The Cortex is the master music clock. Above it sit three layers that each depend
 | Layer | What it does | Tier | If it breaks |
 |---|---|---|---|
 | 1. Master music clock (`MASTER`, each deck's warp map, the AMU reader `readAMU(d,t)`) | says where we are in the music, in beats, every frame | **CORTEX** | nothing is in time; the picture has no musical meaning |
-| 2. Uniform contract (`pack()`) | turns musical position into the 36 floats a shader reads | critical | shaders receive garbage or stale values |
+| 2. Uniform contract (`pack()`, `deckSettings(d)`) | turns musical position into the 36 floats a shader reads (binding 0) and carries the shader's own 64 settings floats (binding 1) | critical | shaders receive garbage or stale values |
 | 3. WGSL runtime (`main()`, `build()`, per-frame draw) | compiles the shader and draws it | critical | no picture at all |
 | 4. The shader (default or user-loaded) | the actual look | rides on top | you lose *that look*, not the app; load another |
 
@@ -141,7 +156,13 @@ The AMU sidecar is embedded as `const AMU={…}`: `len`, `bpm`, `beats` and `bar
 
 ## 2.2 The uniform contract (critical: the one public interface)
 
-Contract **V0.4.0D**, unchanged in this release: **9 × vec4 / 36 floats / 144 bytes**, frozen like a published API: new data goes only into reserved slots, never by renaming or reshuffling. `pack(dk,a,w,h)` builds all 36 floats each frame for deck `dk` from the AMU reader's fields (`a = readAMU(dk, dk.t)`), the deck's gates and beat, and the canvas size. Each PERFORM deck packs its own uniforms for its own shader. The full slot table is in Y 2.2.
+Contract **V0.5.0A** (V0.11.02a; was V0.4.0D). Two bindings in `@group(0)`:
+- **Binding 0, the AMU block:** unchanged from V0.4.0D, **9 × vec4 / 36 floats / 144 bytes**, frozen like a published API: new data goes only into reserved slots, never by renaming or reshuffling. `pack(dk,a,w,h)` builds all 36 floats each frame for deck `dk` from the AMU reader's fields (`a = readAMU(dk, dk.t)`), the deck's gates and beat, and the canvas size.
+- **Binding 1, the settings block:** new, **16 × vec4 / 64 floats** (`SET_VEC4` = 16, `SET_BYTES` = 256), the shader's own values (2.2.4).
+
+A shader may use binding 0, binding 1 or both; shaders written for V0.4.0D run unchanged. Each PERFORM deck packs its own uniforms and writes its own settings block for its own shader. The full slot table is in Y 2.2.
+
+A new section is more than V0.4.0D's letter steps (a letter was a unit change in one slot): the minor rolls and the letter starts at A.
 
 ### 2.2.1 Namespaces
 - **WGSL/WebGPU standard**: types, attributes, built-ins. Untouched.
@@ -155,14 +176,45 @@ Contract **V0.4.0D**, unchanged in this release: **9 × vec4 / 36 floats / 144 b
 - Pulse is 1 − phase; a shader computes it if it wants one. `amu.mode` is 0 major / 1 minor.
 
 ### 2.2.3 Gates
-Slots 0 to 12 carry, per lane, (soloed-in ? 1 : 0) × encoder intensity (`d.gate(id)`, looked up by slot with `d.gateOf(i)`), so a shader multiplies each element by its gate and the controls work on any shader.
+Slots 0 to 12 carry, per lane, (soloed-in ? 1 : 0) × the lane's knob (`d.gate(id)`, looked up by slot with `d.gateOf(i)`), so a shader multiplies each element by its gate and the controls work on any shader. Since V0.11.10a no surface has lane encoders: every lane's knob stays at full, so a gate is its lane's solo state, the same on every surface.
+
+### 2.2.4 The settings block (binding 1)
+In WGSL, declared once after the AMU block:
+
+```
+@group(0) @binding(1) var<uniform> settings: array<vec4<f32>, 16>;
+```
+
+A plain uniform array of vec4, no struct: `settings[0].x` reads as written.
+
+**One block per deck.** `deckSettings(d)` gives deck `d`'s 64 floats (`d.settings`, a `Float32Array`), zero until something writes them. CREATE's renderer (deck A) and each PERFORM deck write their deck's block every frame beside the AMU block.
+
+**The declaration** (part of the contract). A shader declares its settings in comment lines anywhere in the `.wgsl`, so the shader compiles as it is:
+
+```
+// @setting NAME settings[N].c min max step default | help      a number (N 0 to 15, c one of x y z w)
+// @setting NAME settings[N].xyz color r g b | help              a colour (.xyz or .yzw, 0 to 1)
+```
+
+The place is written as the shader reads it, so the line and the code match; the help after `|` is optional. Example: `// @setting HUE settings[1].z 0 1 0.01 0.5 | Hue/Saturation/Value node: hue (0.5 = none)`, read in the shader as `settings[1].z`.
+
+**Reading it.** `readSettings(src)` parses the lines into `{list, errs}`: each entry `{name, type, idx, min, max, step, def, help}` (`type` 'number' or 'color'; `idx` the float indices in the block). A line that does not fit is skipped with its reason: name; settings[N].c; N is 0 to 15; a number is .x, .y, .z or .w; a colour is .xyz or .yzw; min max step default; color r g b; min below max; step above 0; default from min to max; name used twice; place used twice. The reasons show in red in the message bar, e.g. `Settings: line 1 · Q: N is 0 to 15` ("Deck B: " in front on PERFORM).
+
+**On a compile.** `settingsFrom(d,src)` runs when a shader compiles cleanly on a deck (CREATE's `main()` build and `makeDeckGpu`'s build). It reads the declaration from the shader as written, not from the authoring preview's patched copy, and keeps it on the deck as `d.setDecl` `{src, list}`. A setting with the same name, type and place as before keeps its value; a new or moved setting takes its default; floats no setting declares are 0. The same source again changes nothing, so PERFORM's deck A and CREATE, which share deck A, do not reset each other. Every change of declaration calls the functions in `SET_ON` (the Settings drawers rebuild, 7.8).
+
+**Export: keeping a look.** `settingsBake(src,d)` returns `src` with each declared setting's default replaced by deck `d`'s current value, matched by name; only the default numbers change, and a number whose value has not changed stays exactly as written. `shaderNextName(d)` gives the next version's name: the deck's shader name with `_V##` stepped up by one, the digits kept, or `_V01` added to a name without a version; a shader with no name is `OMS_Vizzie_Shader_V01`. `saveShader(d,src)` downloads `settingsBake(src,d)` as `NAME.wgsl` (the original file is never touched); the deck then holds that version: its name (`d.shaderName`), and, when `src` is the deck's running shader, its defaults (a double-tap goes to the exported values) and its source; any Code view showing that code shows the exported text. Message 'Exported NAME_V12.wgsl to Downloads' ("Deck B: " in front on PERFORM). Export sits in the Code views (6.1). The internal names keep "save" (`saveShader`, `#labSave`, `.pf-csave`); what shows is Export.
+
+**The bind group layout.** `contractLayout(device)` is one explicit group 0 layout with bindings 0 and 1 (uniform, vertex and fragment), cached on the device. The automatic layout lists only the bindings a shader uses, so one bind group could not serve shaders with and without binding 1; the explicit layout always has both, and a shader may use either. PERFORM's FX and OUT pipelines are separate and keep their own layouts.
+
+### 2.2.5 Authoring preview bindings (@group(3))
+The authoring preview's three bindings sit in `@group(3)`, keeping their binding numbers: 1 object mask (`partMask`), 2 overlay probe (`gprobe`), 3 CRYPTOMATTE (`cm`). They are patched into the preview's copy of the WGSL only (9.2); the shipped `.wgsl` is unchanged and group 0 is the contract's alone. Group 3 rather than 1: the contract roadmap keeps group 1 for assets, and 3 is the last group WebGPU allows by default. When the preview has objects, `bindP` holds bind groups 1 to 3 (1 and 2 empty, as WebGPU expects every group in the layout to be set; 3 the preview's buffers, with an explicit layout from `AUTH_GPU.entries()`), and each frame sets them after group 0. PERFORM's deck renderer never had the preview bindings.
 
 ## 2.3 The WGSL runtime (critical)
 
-`main()` requests the adapter and device, configures a `webgpu` context on `#labGpu`, creates the 144-byte uniform buffer and calls `AUTH_GPU.init(device)`. `build(src)` compiles the shader (through `AUTH_GPU.patch`, 9.2), reads `getCompilationInfo()`, and only if it is clean builds a new pipeline and bind group and swaps them in: a bad shader never kills the running one; the error line shows in `#labGpuMsg`. `build` is exposed as `window.__applyWGSL`.
+`main()` requests the adapter and device, configures a `webgpu` context on `#labGpu`, creates the 144-byte uniform buffer and the settings buffer (`SET_BYTES`), and calls `AUTH_GPU.init(device)`. `build(src)` compiles the shader (through `AUTH_GPU.patch`, 9.2), reads `getCompilationInfo()`, and only if it is clean reads the settings declaration (`settingsFrom`), builds a new pipeline on `contractLayout(device)` and a bind group, and swaps them in: a bad shader never kills the running one; the error line shows in `#labGpuMsg`. `build` is exposed as `window.__applyWGSL`.
 
 ### 2.3.1 Why it runs like a game engine
-Per frame: write 144 bytes, the authoring buffers when on, one render pass, `draw(6)` (a full-screen quad). No per-frame recompilation, no analysis, no cross-origin messaging. Keep it that way.
+Per frame: write 144 bytes (AMU block) and 256 bytes (settings block), the authoring buffers when on, one render pass, `draw(6)` (a full-screen quad). No per-frame recompilation, no analysis, no cross-origin messaging. A settings change is a buffer write, not a recompile. Keep it that way.
 
 ### 2.3.2 Full shaders only
 `WGSL` is the default scene as a complete shader (`struct U`, binding, `vs`, `fs`). Apply, drop and pick compile the source as-is.
@@ -195,9 +247,9 @@ Help lives in one table, `HELP` (selector → text or function), plus the shared
 # 3. Node: Deck Audio, Tempo, Key Lock
 
 ## 3.1 Deck audio engine
-`makeDeckAudio(ctx,buf,canStretch,keyLock)` plays the decoded track through Web Audio: an `AudioBufferSourceNode` (or the KEY LOCK worklet) into a `pre` node, then the deck gain node, into the output. The FX rack sits between them where the deck's FX are live (`FX_LIVE`, 8.8): PERFORM, and deck A on CREATE: `pre` → AFX1 → AFX2 → gain; in AUTHORING and Pocket Rave `pre` connects straight to the gain. Position = the offset played from + AudioContext time since the start × rate (the audio hardware clock, sample-accurate). It keeps the interface the app used with an `<audio>` element (`currentTime`, `duration`, `paused`, `ended`, `play`, `pause`, `captureStream`) plus `rate` and `keyLock`. One engine per deck (`d.audio`), all on the app's one AudioContext. `audioContext()` creates the AudioContext inside the drop or pick gesture; any pointer, key, touchend or click event resumes it if the browser suspended it. Web Audio only, no browser-specific APIs, with two iOS / iPadOS Safari provisions (V0.10.07d): `navigator.audioSession.type = 'playback'` where the browser has it, so silent mode does not mute the music, and the first touchend or click plays one silent sample (`audioUnlocked`), which unlocks the AudioContext for the session.
+`makeDeckAudio(ctx,buf,canStretch,keyLock)` plays the decoded track through Web Audio: an `AudioBufferSourceNode` (or the KEY LOCK worklet) into a `pre` node, then the deck gain node, into the output. The FX rack sits between them where the deck's FX are live (`FX_LIVE`, 8.8): PERFORM, and deck A on CREATE: `pre` → AFX1 → AFX2 → gain; on PERFORM the deck's EQ comes first, `pre` → LOW → MID → HIGH → AFX1 → AFX2 → gain (8.12); in AUTHORING and Pocket Rave `pre` connects straight to the gain. Position = the offset played from + AudioContext time since the start × rate (the audio hardware clock, sample-accurate). It keeps the interface the app used with an `<audio>` element (`currentTime`, `duration`, `paused`, `ended`, `play`, `pause`, `captureStream`) plus `rate` and `keyLock`. One engine per deck (`d.audio`), all on the app's one AudioContext. `audioContext()` creates the AudioContext inside the drop or pick gesture; any pointer, key, touchend or click event resumes it if the browser suspended it. Web Audio only, no browser-specific APIs, with two iOS / iPadOS Safari provisions (V0.10.07d): `navigator.audioSession.type = 'playback'` where the browser has it, so silent mode does not mute the music, and the first touchend or click plays one silent sample (`audioUnlocked`), which unlocks the AudioContext for the session.
 
-Deck volume: on PERFORM each deck's gain follows its AUD encoder (8.5); on CREATE deck A plays at full.
+Deck volume: on PERFORM each deck's gain follows its AUD encoder with an audio taper, gain = position² (8.5); on CREATE deck A plays at full.
 
 ## 3.2 Warp: steering the deck to the clock
 `steerDeck(d)` runs every frame for each playing deck. Target = the deck's track time (`d.t`). Speed = its warp map's local tempo × TEMPO (`d.beatLen(d.beat) × MASTER.tempo / 60`), times a correction that closes the gap over about a second, capped at ±2 %. A gap over 250 ms (a seek, a stall) is jumped instead. Known limit: the KEY LOCK worklet's real read position is not reported back, so the gap is measured against the engine's own position model.
@@ -228,9 +280,7 @@ PLAY goes through `deckPlayPress(d)`: a start waits for QUANT when another deck 
 ## 4.2 Lanes, buses and encoders
 `LANES` holds the 12 AMU parameters (beat, bar, section, segment, phrase, key, pace, loudness, drum, bass, vocal, other), each with an id, bus, label, colour, draw kind, contract slot and data. `buildLanes(d,box,o)` builds a deck's six bus modules (RHYTHM, STRUCTURE, KEY, PACE, LOUDNESS, INSTRUMENTS), each lane a cell with a chip and an encoder. `o.buses` adds the bus headers; `o.labels` gives short chip labels (`LANE_SHORT`); `o.chips` builds chips only, no encoder (the mini players).
 
-Encoders: endless-encoder model. Drag up / down = intensity 0 to 1 (`d.knob`, per deck), a press without dragging = solo, double-click = back to 1. Bus header click = group solo.
-
-**Mini players** (PERFORM decks and CREATE's `#labMini`, V0.9.17a): each lane is a chip (click = solo), no encoder; the bus headers are thin colour bars without text; the solo shows on the chip. The lane gain (`d.knob`) stays at its value (1) in the deck model, so shaders get the same gates. AUTHORING keeps the full section: chips, encoders and named bus headers. On CREATE the large section is hidden and not painted (`paintLanes` runs on it in AUTHORING only).
+**Chips on every surface** (V0.11.10a, BLOG0172 AUTHORING: Music Understanding encoders become the standard chips): every `buildLanes` call passes `o.chips`, so each lane is a chip (click = solo) with its short label, no encoder; the bus headers are thin colour bars without text (click = group solo); the solo shows on the chip. PERFORM decks, CREATE's `#labMini` and AUTHORING's `#labAMU` (`CREATE_LANES`) are the same. The lane gain (`d.knob`) stays at its value (1) in the deck model, so shaders get the same gates on every surface. On CREATE the large section is hidden and not painted (`paintLanes` runs on it in AUTHORING only). `buildLanes` can still build encoders without `o.chips`; no surface uses them.
 
 ## 4.3 Solo
 Owned per deck by `makeSolo()` (`d.solo`): a set of lane ids and `grp:<bus>` keys. `d.solo.on(id)` is true when nothing is soloed, the lane is soloed, or its bus is. Solos are additive. The deck's SOLO button lights when any solo is active and clears all on click. One canonical id per parameter (the lane id) is used by the chips, the encoders, the gates and SOLO.
@@ -240,7 +290,7 @@ Owned per deck by `makeSolo()` (`d.solo`): a set of lane ids and `grp:<bus>` key
 
 - **Window:** `o.base()` beats at zoom 1 × `R.zoom`, up to twice the song (`R.maxZoom()`), so the whole song is in view from the centre playhead wherever it is. Base: AUTHORING's roll `ROLL_WIN` from `MODES` (16 beats = 4 bars); CREATE's mini roll and PERFORM 16 beats.
 - **Zoom field:** one data field (`ui.field`), the standard field (12.4). Click in, ↑ / ↓ move through five steps, 0, 25, 50, 75, 100. `R.step()` maps the zoom to that scale: 0 = the closest view (zoom 1), 100 = the whole song, evenly spaced between. Ctrl + wheel and two-finger pinch on the roll still zoom freely; the field shows where that lands on the same scale.
-- **Opening view:** `o.step` and `o.horiz`. PERFORM rolls and CREATE's mini roll open at 25 %, horizontal. AUTHORING's roll opens vertical at 0 %.
+- **Opening view:** `o.step` and `o.horiz`. PERFORM rolls and CREATE's mini roll open at 25 %, horizontal. AUTHORING's roll opens horizontal at 0 %, 120 px high (`o.hh`, the fixed horizontal height; V0.11.16a, BLOG0183 AUTHORING music row and roll as CREATE's); vertical it is 75 px high (`MODES` rollH).
 - **Two rolls on the CREATE panel** (`o.active`): the full roll is active in AUTHORING, the mini on CREATE (the full roll is hidden there, V0.10.05a); each keeps its own zoom and orientation, and `R.syncUI()` puts the active roll's values on the shared zoom field and orientation button at every switch. The zoom field sits in AUTHORING's controls row and on CREATE's Music Understanding header (7.2).
 - **Orientation:** vertical (lanes as columns) or horizontal (lanes as rows), toggled by the deck's orientation button.
 - **Input** (`rollInput`): drag = scrub in beats; click without dragging = cue to that block's start (`amuStart` / `amuCue`: beat, bar, section, segment, phrase, key span, pace step; loudness and the instruments are not cue targets). A cue goes through `deckCue(d,sec,landed)` and waits for QUANT whenever the deck is playing and QUANT is not None (8.3). With LOOP on the cued chip becomes the loop span; clicking the lit chip again releases it to the whole track. On a stopped deck the chip is **picked** (`d.pick`): the playhead goes to its start and REC renders it (6.4); any other playhead move, or PLAY, clears it. The looped or picked chip is lit solid cyan (Dojo 'selected').
@@ -278,10 +328,17 @@ A Sozo Sidecar v2 `.json` dropped on a deck, or picked with the MP3 picker (CREA
 
 # 6. Node: Viewer Surfaces
 
-These are on the CREATE panel (CREATE and AUTHORING). PERFORM has no Code, REC or Pop Out (8.2). On CREATE the stage shows deck A's visual FX when a VFX slot is live (7.6), so Pop Out and REC carry them too.
+These are on the CREATE panel (CREATE and AUTHORING). Each PERFORM deck has a Code view too (6.1); PERFORM has no REC or Pop Out (8.2). On CREATE the stage shows deck A's visual FX when a VFX slot is live (7.6), so Pop Out and REC carry them too.
 
 ## 6.1 Code view
-`</> Code` shows the current shader source; **Apply** compiles it as the preview (`window.__applyWGSL`); **Copy** copies it.
+`</> Code` (`#labCodeBtn`) shows the current shader source over the stage (`#labCodeView`, editor `#labCode`), with three buttons and a status line beside them (`#labCodeMsg`):
+- **Apply** (`#labApply`) compiles the editor text as the preview (`window.__applyWGSL`): "applied (preview only)" or "error, see stage".
+- **Copy** (`#labCopy`) copies the editor text, as written: "copied".
+- **Export** (`#labSave`) exports the editor text as the next version with the deck's current settings as its defaults (`saveShader`, 2.2.4); the editor then shows the exported text: "exported".
+
+**PERFORM decks** (V0.11.09a, BLOG0175 Code on PERFORM decks; Export in every Code view): each deck header has `</> Code` (`.pf-code`), left of Settings. It opens the same Code view (`.pf-codeview`: the same markup, styles and button order, Apply · Copy · Export, editor `.pf-codeta`) over that deck's stage, with that deck's shader; Code lights while open. Apply on deck A goes through CREATE's renderer, as CREATE's Code does; on deck B it sets the deck's shader (`d.wgsl`, `d.wgslVer`) and its stage compiles it ("applied", or "error, see stage" when the stage shows a WGSL error). A new shader loaded on the deck shows in its open Code view unless the editor has focus (`v.codeSync`). Clicks inside the Code view do not reach the stage, so a double-click in the code does not open the shader picker.
+
+Editing a setting's default in the code and pressing Apply keeps the setting's current value (same name, type and place, 2.2.4); the new default applies on a fresh load or a double-tap reset. Export writes the current value as the default.
 
 ## 6.2 Drop or pick a `.wgsl`
 Drop a `.wgsl` on the deck, or double-tap the stage to pick one: the code view fills and the same compile path runs.
@@ -320,7 +377,7 @@ CREATE and AUTHORING are two tabs over one panel, `#panelLab`, in two modes (V0.
 | Key | AUTHORING | CREATE (`public`) |
 |---|---|---|
 | autoplay / loop | off / off | off / off |
-| roll height / window | 75 px / 16 beats | (the large roll is hidden) |
+| roll height (vertical) / window | 75 px / 16 beats (horizontal: 120 px, 4.4) | (the large roll is hidden) |
 | readout line | yes | no |
 | placeholder waveform before audio | no (sidecar loudness) | yes |
 | song info from the sidecar | yes | no |
@@ -329,16 +386,16 @@ CREATE and AUTHORING are two tabs over one panel, `#panelLab`, in two modes (V0.
 
 **CREATE** (`LAYOUT.render()`), top to bottom:
 1. **GLOBAL** section header (`#labModeHdr`, text `Global`) over the global strip (7.3).
-2. A row of two columns. Left, under a **Music** header (`#labVisTxt` reads Music): `#labLeftCol` holding the music row (`#labMusic`, 40 px: cover 40 × 40 and the waveform), the controls row (`#labTransportHold`) and the LIBRARY module (`#labLibSec`, 7.6) down to the stage's bottom. Right, under a **Visuals** header holding Code, Pop Out, orientation and REC: the stage.
+2. A row of two columns. Left, under a **Music** header (`#labVisTxt` reads Music): `#labLeftCol` holding the music row (`#labMusic`, 40 px: cover 40 × 40 and the waveform), the controls row (`#labTransportHold`) and the LIBRARY module (`#labLibSec`, 7.6) down to the stage's bottom. Right, under a **Visuals** header holding Code, Settings (while the shader declares settings, 7.8), Pop Out, orientation and REC: the stage.
 3. **Music Understanding** (`#labMuSec`), full width: the mini (`#labMini`: `buildLanes` with chips and bus bars, and its own `deckRoll` on deck A). Its header carries the roll zoom field and SOLO at the far right (V0.10.10d), at the header buttons' height. `LAYOUT.fitMu()` sizes the mini down to the bottom of the page (at least 160 px), trimming any overflow so the page does not scroll; it runs on render, on window resize and from a ResizeObserver on the left column and `.body`.
 
 The large Music Understanding (`#labAMU`, its header) and the large roll (`#labRollWrap`) are hidden on CREATE. Because the controls row is off the page while the layouts swap, `LAYOUT` holds SOLO and the zoom field as references (`soloEl`, `zoomEl`) and moves them back in `author()`.
 
 CREATE controls row: **PLAY | LOOP | KEY LOCK | roll orientation | PLAY NEXT | CONTINUOUS PLAY | SHUFFLE ........ FX** (FX pushed to the far right).
 
-**AUTHORING** (`LAYOUT.author()`): the GLOBAL header and strip, the Visual header (`Visual : Authoring`) over the stage, the music, the controls row **PLAY | LOOP | KEY LOCK | zoom | roll orientation ........ SOLO**, the large Music Understanding (chips, encoders, named bus headers), the large roll and the authoring sections. FX, PLAY NEXT, CONTINUOUS PLAY and SHUFFLE are hidden; the deck plays dry.
+**AUTHORING** (`LAYOUT.author()`): the GLOBAL header and strip, the Visual header (`Visual : Authoring`, holding Code, Settings, Pop Out, orientation and REC) over the stage, the music row (cover 40 × 40 and the waveform box 40 px high, as CREATE's; V0.11.16a), the controls row **PLAY | LOOP | KEY LOCK | zoom | roll orientation ........ SOLO**, the large Music Understanding (`#labAMU`: the lane chips and bus bars, as CREATE's and PERFORM's; V0.11.10a), the large roll (horizontal, 120 px, 4.4) and the authoring sections. FX, PLAY NEXT, CONTINUOUS PLAY and SHUFFLE are hidden; the deck plays dry.
 
-`setMode(on)` switches mode, layout, roll and messages, and closes the FX drawer.
+`setMode(on)` switches mode, layout, roll and messages, and closes the FX drawer and the Settings drawer.
 
 ## 7.3 Global strips
 A thin strip across the top of the tab, as Ableton's top bar: global settings you set and leave. One look on both panels (`.pf-global`; the CREATE panel adds `.cr-global` for its margins). On the CREATE panel it sits under a **GLOBAL** section header, which switches nothing (V0.10.08a). A global setting belongs here; a deck setting belongs on the deck.
@@ -354,7 +411,7 @@ QUANT is one value on every tab: `bindQuantField()` binds every QUANT field (`QU
 The website's compact surface. Opens full frame (`.pr-expanded`); the ONEMANSHYO header toggles full frame and the normal view (off-site a further tap goes to compact authoring); the top strip (power light, jacks) returns off-site to AUTHORING. Normal view: MUSIC / ABOUT / LEARN tabs, the shader, the music row (cover beside the waveform), version line, PLUR. Shader: tap = play / pause; double tap in full frame = normal view, in the normal view = `.wgsl` picker. Cover: tap = song info over the waveform, on / off (the card follows the 5.2 rule); double tap = MP3 picker. Chrome redraws at about 22 fps only while Pocket Rave is on screen. Pocket Rave draws without FX.
 
 ## 7.5 Compact authoring
-Off-site on a compact viewport: Pocket Rave's frame and header with the authoring sections in one column (one row of 12 lanes, colour bars for chips, knobs up to 40 px). Its header goes to Pocket Rave. It can be forced on a wide viewport (Pocket Rave header, third tap), where it shows as a 430 px column. The arrangement position box, Pop Out and REC are hidden there.
+Off-site on a compact viewport: Pocket Rave's frame and header with the authoring sections in one column (one row of 12 lanes, colour bars for chips). Its header goes to Pocket Rave. It can be forced on a wide viewport (Pocket Rave header, third tap), where it shows as a 430 px column. The arrangement position box, Pop Out and REC are hidden there.
 
 ## 7.6 CREATE: LIBRARY, FX and the playlist controls
 Built once when the app opens (V0.10.03a to 10e). CREATE only: AUTHORING hides FX and the three icons (`html.author-on`), and a mode or surface switch closes the FX drawer (`window.__crFx.show(false)`).
@@ -367,25 +424,45 @@ Built once when the app opens (V0.10.03a to 10e). CREATE only: AUTHORING hides F
 ## 7.7 The Moogerfooger strip and the header rename
 The strip (`#prSafeTop`: red power light `.pr-pwr` and five jacks) shows on the main app on every tab, on the website and off it, inside the wood frame above the header (`html:not(.pr-on) #prSafeTop`; `.app` padding-top 26 px under the safe area), as on Pocket Rave (V0.10.11a). A tap on the strip acts only on Pocket Rave and compact authoring (off-site: back to AUTHORING); on the main app it does nothing.
 
+**Metal inserts** (V0.11.06a, BLOG0173 Metal inserts run to the top through the Moogerfooger strip): the two metal inserts on the inner edge of the wood panels (`.app::before`, `.app::after`) sit above the strip (z-index 121; the strip is 120), so they run from the top of the window to the bottom, as in Mezcla.
+
 **Header rename** (V0.10.11c): on the main app a tap on the power light makes the header text (`#brandTxt`) editable, selected, with a dashed cyan outline. Enter or a blur keeps it, Esc restores it, empty restores ONEMANSHYO; whitespace is collapsed and the text cut to 24 characters; pasted text is plain. Keys typed there stop at the header (Space does not play). It lasts for the session: nothing is saved.
+
+## 7.8 The Settings drawer
+One component, `settingsDrawer(d,btn,anchor,limit,side)`, for every WGSL stage (BLOG0164 SETTINGS drawer, BLOG0176 Settings drawer: a fixed rack of 32 slots). It is built from the deck's declaration (`d.setDecl.list`, 2.2.4), rebuilt through `SET_ON` whenever the deck's shader changes, and writes straight into the deck's settings block (`deckSettings(d)`): no recompile, the picture follows the next frame. Values last for the session.
+
+**The button.** **Settings** shows only while the deck's shader declares settings; a shader without settings hides it and closes the drawer. AUTHORING: in the Visual header after Code (`#labSetBtn`); CREATE: in the VISUALS header with Code, Pop Out, orientation and REC; each PERFORM deck: in its header right of `</> Code` (`.pf-set`). It lights while the drawer is open; click again to close. A mode or surface switch closes CREATE's drawer (`window.__setDrawer`), as the FX drawer.
+
+**Where it opens.**
+- **CREATE:** sideways (class `set-left`), out of the stage box's left edge over the MUSIC column (`#labLeftCol`: cover, waveform, controls row, LIBRARY), the stage's height, from the column's left edge to 6 px behind the stage's left edge, the stage on top. Music Understanding below stays uncovered, and Space still plays. The side is set before the drawer is placed, so the first open also comes from the side (V0.11.09e).
+- **AUTHORING:** slides down out of the Visual module's bottom edge, tucked 6 px behind it, at the module's width, as the PERFORM FX drawer.
+- **PERFORM deck:** slides down out of the stage box's bottom edge, at the stage's width, over the rows below. The deck column clips what passes its bottom edge, so the drawer stays inside the column, 8 px above its bottom, and its panel scrolls when the settings do not fit. Each deck has its own drawer and block; deck A's drawer here and CREATE's work on the same values.
+
+**The rack** (`.set-pnl`, `SLOTS` = 32): 32 slots in 4 rows of 8, always drawn, the same on every stage, as Ableton's macros: a slot not used shows an empty encoder (dashed, dim) and an empty value box (`.set-empty`). Settings in the standard area (`settings[0]` to `settings[3]`) fill the rack first, in declaration order; a shader's own settings start on a fresh row. A shader with no standard settings fills from slot 1. More than 32: the first 32 show and the bar says "Settings: N beyond the 32 slots not shown" in red. Each slot: the 36 px encoder, the name (10px, cut with "…" when it does not fit; the full name in the hover help), the value box (`.set-val`, 10px, 16 px high, up to 64 px wide, as wide as its column allows). A colour takes one slot.
+
+**A slot.**
+- **Number:** encoder drag up / down = its range in 150 px, snapped to its step; double-tap = its default. Field: click, then ↑ / ↓ = ± step, or type + Enter; double-click = default; Escape leaves.
+- **Colour:** the encoder shows the colour, its pointer the hue; drag up / down = hue; tap = the colour wheel at the foot of the drawer (hue around, saturation from the centre out, a value bar beside it); double-tap = default. Field: a hex + Enter; double-click = default.
+
+Purple People Eater `#B24DFF` throughout (visual domain): arcs, names, value boxes and the selected ring. The drawer holds no Export: Export is in the Code views (6.1; V0.11.09f).
 
 ---
 # 8. Node: PERFORM
 
-Two decks and a mixer, for playing visuals live to music. Shown off-site only (7.1). The ADD / SCREEN / CUT mix modes and EQ are shown but inactive.
+Two decks and a mixer, for playing visuals live to music. Shown off-site only (7.1). Every control on it is live: the sixteen video mix modes (8.13), the EQ and RGB (8.12) and the FX (8.8).
 
 ## 8.1 Two decks on one clock
 Deck A is `DK`, the same deck object CREATE shows: its track, solos, knobs and position are shared between the tabs. Deck B is a second `makeDeck('B',AMU)` on the same master clock, starting on the embedded track and default shader. Both decks follow `MASTER`, the tempo master (3.3) and QUANT (8.3).
 
 ## 8.2 The deck view
 `deckView(d,root)` places the shared deck controls (4) in a deck's column. It owns nothing of its own. Top to bottom:
-1. **Header:** DECK A / B · KEY LOCK · MASTER (right-aligned). MASTER (`.pf-master`) is an indicator in the standard toggle style: lit while the deck is the tempo master; plain arrow cursor.
+1. **Header:** DECK A / B · KEY LOCK · MASTER · `</> Code` · Settings (right-aligned). MASTER (`.pf-master`) is an indicator in the standard toggle style: lit while the deck is the tempo master; plain arrow cursor. `</> Code` opens the deck's Code view over its stage (6.1); Settings, shown while the deck's shader declares settings, opens its Settings drawer (7.8).
 2. **Stage:** the deck's shader, 16:9, in the standard line.
 3. **Music row, 40 px:** cover 40 × 40 and the waveform beside it; the song info line opens over the waveform.
 4. **Row:** PLAY | LOOP | zoom | orientation | position ........ SOLO.
 5. **Music Understanding:** the lane chips and bus bars (mini player, 4.2) and the roll, which takes the remaining height.
 
-No Code, REC or Pop Out on PERFORM: it is for performing, not authoring. The stage shows the deck's picture after its visual FX (8.8).
+No REC or Pop Out on PERFORM: it is for performing, not authoring. Code and Settings are there so a deck's shader can be read, tuned and exported where it plays. The stage shows the deck's picture after its visual FX and its RGB (8.8, 8.12).
 
 ## 8.3 QUANT
 One master value in music time, in the PERFORM global strip: **None, 1/4, 1/2, 1 Bar, 2 Bars, 4 Bars, 8 Bars** (`QUANT_STEPS`); default 1/4 (`QUANT_DEF`). Triplets and the steps below 1/4 were removed in V0.8.13a: they have no use for starting and cueing a track, and triplet timing in a visual is the shader's job.
@@ -393,7 +470,7 @@ One master value in music time, in the PERFORM global strip: **None, 1/4, 1/2, 1
 The step size is the master's; each deck lands its own AMU point on that step. That alignment is the sync: there is no separate DJ-style SYNC button. The QUANT field is on both tabs' global strips (7.3).
 - **PLAY on a stopped deck** (`deckPlayPress`) waits for the master's next step when another deck is playing (`othersPlaying(d)`), on either tab; the deck starts from its own nearest step line on its AMU grid (bar 1 = its first AMU bar). PLAY blinks (`armed`) while it waits; a second press cancels.
 - **A cue on a playing deck** (`deckCue`: roll blocks, waveform clicks) waits for the master's next point at the cue's place within the step, whenever QUANT is not None (V0.9.04a), one deck or two. A cue on a paused deck is at once.
-- **FX kills and restores** wait for the next step while any deck plays (`fxLater`, 8.8).
+- **FX kills and restores** wait for the next step while any deck plays (`fxLater`, 8.8). EQ, RGB and mixer kills are at once (8.5, 8.12).
 - **Forward only** (OMS canon). None = at once.
 - A deck playing alone, on either tab, leads the master grid: `quantTick()` sets the master's phase to the deck's position in an 8-bar cycle from its bar 1 (`QCYCLE` = 32 beats), so every step size lines up with its phrases.
 
@@ -403,21 +480,27 @@ The step size is the master's; each deck lands its own AMU point on that step. T
 The PERFORM global strip's position box (`#pfMasterPos`) is the session on the master clock, not a deck position, in bars.beats.sixteenths. It starts at 1.1.1 and counts at the master tempo while any deck plays, from the first PLAY. When every deck stops it holds, and carries on when a deck plays again. Double-click = back to 1.1.1. The count is kept in `window.__mpB` (beats) and advanced in `chrome()` from `performance.now()`. The deck positions stay on the decks.
 
 ## 8.5 Mixer, OUT and encoders
-- **OUT** (`#pfOut`): the mix of the two deck pictures (after their visual FX) at their VID strengths, MIX = weighted blend. ADD, SCREEN and CUT are shown, inactive, in the MODE panel (8.7).
-- **Encoders**, in a row: A VID, A AUD, B AUD, B VID. VID = the deck's strength in OUT (`d.outGain`); AUD = the deck's volume (`d.audGain`). Drag up / down, double-click = 0. VID encoders open at 12 o'clock (0.5), so OUT shows both decks on open; AUD encoders open at 0. VID encoders take the visual-domain Purple People Eater `#B24DFF`, AUD the audio-domain cyan `#00d4ff`.
+- **OUT** (`#pfOut`): the two deck pictures (after their visual FX and RGB) combined at their VID strengths in the video mix mode picked in the MODE drawer (`OUT_MODE`, 8.13); MIX, the weighted blend, on open.
+- **Encoders** (`.pf-encs`), in a row: A VID, A AUD, B AUD, B VID. VID = the deck's strength in OUT (`d.outGain`); AUD = the deck's volume (`d.audGain`). They are 36 px knobs alone: no outline, no label and no value under them (V0.11.21e; the outlined modules and value boxes of V0.11.19a were tried and removed in V0.11.21b to 21e to give the drawer below its room). The encoder's place and colour say which it is: VID Purple People Eater `#B24DFF` outside, AUD cyan `#00d4ff` inside; deck A left, deck B right. The level shows in the message bar on hover, drag and arrows: VID in %, AUD in dB.
+- **AUD in dB, audio taper:** the deck gain is the knob position squared (gain = p²), so the turn spreads evenly by ear: full left −∞ dB (silence), 9 o'clock −24 dB, 12 o'clock −12 dB, full right 0 dB. AUD tops out at 0 dB: with no master gain yet (BLOG0180 Master gain for PERFORM audio, parked), a boost could clip at the output.
+- **Behaviour** (the drawers' rule, BLOG0186 Mixer encoders: values, dB, kill rule, compact): drag up / down = level (full range over 150 px); ↑ / ↓ ±0.01, ← / → ±0.05 of the turn; click = select (the ring in the encoder's domain colour), no change; Enter = kill / restore the selected encoder (AUD: silence; VID: the deck out of OUT), killed dims and the level is kept (`d.mixK` `{audGain, outGain}`); double-click = the default and restored (VID 50 %, AUD silence, as on open). VID encoders open at 12 o'clock (0.5), so OUT shows both decks on open; AUD encoders open at 0.
 
 ## 8.6 Layout fit
-PERFORM is three columns side by side, DECK A | MIXER column | DECK B (`.pf`, grid `1fr / 0.563fr / 1fr`, 24 px apart), under the global strip. Each deck is a module in the standard line (12.6). The MIXER column has no line of its own: it holds three modules of the same width, each in the standard line, 6 px apart: the MIXER (`.pf-mixmod`: header, OUT and encoders), the panel strip (`.pf-pwrap`, 8.7) and the LIBRARY (`.pf-libmod`, 8.9), which takes the remaining height. The page fits the window without scrolling. Per deck, `fit(v)` sizes the stage 16:9 from the column width, smaller on short windows, after reserving the fixed rows, the gaps, the lanes and 40 px of roll, so the Music Understanding panel always keeps room for chips and roll.
+PERFORM is three columns side by side, DECK A | MIXER column | DECK B (`.pf`, grid `1fr / 0.563fr / 1fr`, gap 24 px), under the global strip. The MIXER column reaches 12 px into each gap (`.pf-col.pf-mix` margin `0 -12px`), so the gaps either side are 12 px and the decks keep their width (V0.11.18a). PERFORM sits 9 px from the app's frame at each side (`#panelPerform.active` margin `0 -9px`; the other tabs keep the page's 18 px; V0.11.18b) (BLOG0185 PERFORM spacing: centre column and outer gaps). Each deck is a module in the standard line (12.6). The MIXER column has no line of its own: it holds three modules of the same width, each in the standard line, 6 px apart: the MIXER (`.pf-mixmod`: header, OUT and encoders), the panel strip (`.pf-pwrap`, 8.7) and the LIBRARY (`.pf-libmod`, 8.9), which takes the remaining height. The page fits the window without scrolling. Per deck, `fit(v)` sizes the stage 16:9 from the column width, smaller on short windows, after reserving the fixed rows, the gaps, the lanes and 40 px of roll, so the Music Understanding panel always keeps room for chips and roll.
 
-## 8.7 Panel strip: MODE · FX · EQ (PERFORM)
-`.pf-panelrow`: three equal buttons in the toggle style, MODE, FX and EQ (EQ is a placeholder, `.ph`). MODE and FX open a **drawer** (`.pf-fxslide`, V0.9.22d to 22g) that slides out of the strip's bottom edge, `transform: translateY(-100%)` → 0 in 0.26 s, inside a clipping window (`.pf-fxpanel`, `overflow:hidden`). The window is the strip's width, tucked 6 px under it, and reaches the bottom of the LIBRARY module (`fxPlace()`, re-run on resize); it covers the LIBRARY, which is left as it is underneath. One panel at a time (`fxShow`); the open button is lit; clicking it again slides the drawer back up. MODE holds the video mode row (`.pf-modes`: MIX on; ADD, SCREEN, CUT placeholders). FX holds the deck effects (8.8).
+## 8.7 Panel strip: EQ · FX · MODE (PERFORM)
+`.pf-panelrow`: three equal buttons in the toggle style (`.btn.loop.pf-fxbtn`, 22 px high, 10px with 1px letter spacing), **EQ · FX · MODE**, left to right by priority (V0.11.14b, BLOG0182 Panel strip order: EQ · FX · MODE; was MODE · FX · EQ). Each opens a **drawer** (`.pf-fxslide`, V0.9.22d to 22g) that slides out of the strip's bottom edge, `transform: translateY(-100%)` → 0 in 0.26 s, inside a clipping window (`.pf-fxpanel`, `overflow:hidden`). The window is the strip's width, tucked 6 px under it, and reaches the bottom of the LIBRARY module (`fxPlace()`, re-run on resize); it covers the whole LIBRARY, which is left as it is underneath, so its height follows the window. One panel at a time (`fxShow`, `fxOpen` = 'eq' | 'fx' | 'mode' | null); the open button is lit; clicking it again slides the drawer back up. EQ holds the deck EQs and RGB (8.12), FX the deck effects (8.8), MODE the video mix modes (8.13). The drawer comes right after the strip in the page order, so Tab goes strip, drawer, LIBRARY (8.14).
+
+**Drawer layout** (EQ and FX, V0.11.14a to 14e): four columns, as the mixer above (`.pf-eqgrid`, each column a `.pf-eqcol` module: 1px `#2a2a2a`, radius 6px, `#0a0a0a`), visual outside, audio inside: deck A's two on the left, deck B's on the right. No DECK A / DECK B header and no deck letter on the labels (V0.11.15b): the column's place names the deck; the message bar names it in full. The columns sit 9 px from the strip, the sides and (EQ) the drawer's bottom (`.pf-eqpan` padding 15px 8px 8px: the drawer starts 6 px under the strip), 6 px apart, 8 px inside each column.
 
 ## 8.8 FX
-One FX engine for PERFORM and CREATE (V0.10.01a): `fxInit(d)` gives a deck `d.fx = {a:[2 slots], v:[2 slots]}`, slot `{name, amt, killed, node}`; session only. Deck A's slots are shared by PERFORM's deck A and CREATE (7.6). PERFORM's FX panel is a 4 × 2 grid: DECK A VFX | DECK A AFX | DECK B AFX | DECK B VFX, rows 1 and 2. Each cell (`fxCell`) is a knob (`.pf-enc.pf-fxk`, drag = amount; click or Enter = kill / restore; a second click within 300 ms = reset to the effect's default, unmuted, dropping a kill the first click armed (`s.gen`, V0.10.07c); ↑ / ↓ ±0.01, ← / → ±0.05) and an effect box under it (`.pf-fxsel`: click, then the arrows step the bank; a new effect starts at its neutral value). AFX cells are cyan `#00d4ff`, VFX Purple People Eater `#B24DFF`.
+One FX engine for PERFORM and CREATE (V0.10.01a): `fxInit(d)` gives a deck `d.fx = {a:[2 slots], v:[2 slots]}`, slot `{name, amt, killed, node}`; session only. Deck A's slots are shared by PERFORM's deck A and CREATE (7.6). PERFORM's FX drawer (V0.11.14e, BLOG0135 PERFORM FX panel) is four outlined columns, as the EQ drawer (8.7): A VFX · A AFX | B AFX · B VFX (`.pf-eqgrid.pf-fxcols`), slot 1 above slot 2 in each; the columns keep their height (two rows) and the space is below them; 4 px inside at the sides (`.pf-fxcols .pf-eqcol` padding 8px 4px) so the effect names fit. Each cell (`fxCell`) is a knob (`.pf-enc.pf-fxk`, labelled AFX1, AFX2, VFX1, VFX2) and an effect box under it (`.pf-fxsel`, spanning its column at 9px; a name too long ends in "…", the message bar shows it in full: click, then the arrows step the bank; a new effect starts at its neutral value). AFX cells are cyan `#00d4ff`, VFX Purple People Eater `#B24DFF`.
 
-**Music FX** (`AFX`), where `FX_LIVE` says the deck's rack plays (PERFORM; deck A on CREATE). `fxWire(d)` rewires when the slots or that answer change: live = `pre` → AFX1 → AFX2 → gain (killed slots bypassed); otherwise `pre` → gain. Each effect is a `mixer()` (dry / wet). Filter (bipolar, neutral at 0.5: left low-pass 20 kHz → 150 Hz, right high-pass 20 Hz → 6 kHz, Q 1.1), Washout (high-pass 20 Hz → 2 kHz), Dubby (band-passed feedback echo, dotted 1/8), Delay (the QUANT division, None = 1/4), Reverb (2.8 s noise impulse), Flanger and Phaser (LFO = 1 / (4 × QUANT division)), Bitcrush (16 → 3 bits, curve of 65 536 points). Defaults AFX1 Filter, AFX2 Dubby. Tempo-timed effects follow TEMPO and QUANT every frame (`tick`).
+**The knob** (the one kill rule, V0.11.15a, the same on CREATE's FX drawer): drag = amount; ↑ / ↓ ±0.01, ← / → ±0.05; click = select (the ring in the knob's domain colour), it no longer kills; Enter = kill / restore on QUANT (`fxLater`; the ring shows while it waits, purple on a VFX knob, cyan on AFX); a killed knob dims and keeps its amount; double-click (a second click within 300 ms) = reset to the effect's default, unmuted, dropping a kill already armed (`s.gen`); Tab / Shift+Tab = the next / previous control.
 
-**Visual FX** (`VFX`, V0.9.22h; one shared chain `vfxRun` since V0.10.02a). One WGSL post pass, `PERF_VFX`, with a uniform of kind, amount, deck beat, beat phase, size, QUANT division, time, Feedback decay, QUANT step, beat kick and bar phase. `makeDeckGpu` (PERFORM) and CREATE's renderer render the shader into a texture, then `vfxRun` runs each live slot (`vfxLive(d)`: not killed, not at its neutral value) as a pass ping-ponging two textures (`fxA` / `fxB`, in the chain's state `vfxState`), Feedback reading `prev` (a copy of the last final picture). On PERFORM the final picture is the deck's stage view and what OUT mixes; on CREATE it is the stage. Bank: RGB Split, Feedback, Glitch, Pixelate, Scanlines, Mirror, Kaleidoscope, VHS, Shake (Dojo's nine), Tone (bipolar: left darker / softer, right brighter / sharper), Tile (1 to 8), Rotate (at tempo; a mirrored repeat at the edges), Zoom (pulses on the beat). Defaults VFX1 RGB Split, VFX2 Feedback.
+**Music FX** (`AFX`), where `FX_LIVE` says the deck's rack plays (PERFORM; deck A on CREATE). `fxWire(d)` rewires when the slots, the EQ's place or that answer change: live = `pre` → AFX1 → AFX2 → gain (killed slots bypassed), with the deck's EQ before AFX1 on PERFORM (8.12); otherwise `pre` → gain. Each effect is a `mixer()` (dry / wet). Filter (bipolar, neutral at 0.5: left low-pass 20 kHz → 150 Hz, right high-pass 20 Hz → 6 kHz, Q 1.1), Washout (high-pass 20 Hz → 2 kHz), Dubby (band-passed feedback echo, dotted 1/8), Delay (the QUANT division, None = 1/4), Reverb (2.8 s noise impulse), Flanger and Phaser (LFO = 1 / (4 × QUANT division)), Bitcrush (16 → 3 bits, curve of 65 536 points). Defaults AFX1 Filter, AFX2 Dubby. Tempo-timed effects follow TEMPO and QUANT every frame (`tick`).
+
+**Visual FX** (`VFX`, V0.9.22h; one shared chain `vfxRun` since V0.10.02a). One WGSL post pass, `PERF_VFX`, with a uniform of kind, amount, deck beat, beat phase, size, QUANT division, time, Feedback decay, QUANT step, beat kick and bar phase. `makeDeckGpu` (PERFORM) and CREATE's renderer render the shader into a texture, then `vfxRun` runs each live slot (`vfxLive(d)`: not killed, not at its neutral value) as a pass ping-ponging two textures (`fxA` / `fxB`, in the chain's state `vfxState`), Feedback reading `prev` (a copy of the last final picture). On PERFORM the deck's RGB pass follows (8.12) and its result is the deck's stage view and what OUT mixes; on CREATE the final picture is the stage. Bank: RGB Split, Feedback, Glitch, Pixelate, Scanlines, Mirror, Kaleidoscope, VHS, Shake (Dojo's nine), Tone (bipolar: left darker / softer, right brighter / sharper), Tile (1 to 8), Rotate (at tempo; a mirrored repeat at the edges), Zoom (pulses on the beat). Defaults VFX1 RGB Split, VFX2 Feedback.
 
 **Kills on QUANT:** `fxLater(run,armed)` queues the kill or restore in `FXQ` for the master's next step (`nextMaster`) while any deck plays, else at once; `fxTick()` fires due entries every frame (called from `chrome()` through `window.__fxTick`).
 
@@ -435,6 +518,59 @@ An `.m3u8` dropped on the MIXER column or CREATE's LIBRARY module, before or aft
 ## 8.11 Demo playlists (the website set)
 On http / https, `libWebSet()` reads `./examples/library.json` on open: `{"files":[file names in ./examples/], "playlists":[{"name","file"}]}` (V0.10.04a). Audio files and AMU `.json` files are listed as stand-ins: an audio entry keeps its URL (`_url`) and is fetched when its track is loaded; an AMU entry (`_lazy`, its `text()` fetches) pairs with its MP3 by name and is fetched when its track loads (V0.10.07g), so opening the page fetches no music or analysis. Other files are fetched on open. They are imported quietly (no message). Each playlist (`LIB.lists`) becomes a filter button after SHADERS, its name in capitals (`.pf-libpl`), listing its tracks in its order; its `#EXTINF:sec, Artist - Title` lines name those tracks 'Title · Artist' (V0.10.05b). Tracks match by path, then file name. The LIBRARY opens on the first playlist. Loading a website track fetches its MP3 and AMU, with the message 'Loading NAME …'.
 
+## 8.12 EQ and RGB
+The EQ drawer (BLOG0137 EQ per deck (3-band) and RGB): four outlined columns (8.7), three rows, visual outside under the VID encoders, audio inside under the AUD encoders:
+
+| Row | A RGB | A EQ | B EQ | B RGB |
+|---|---|---|---|---|
+| 1 | BLUE | HIGH | HIGH | BLUE |
+| 2 | GREEN | MID | MID | GREEN |
+| 3 | RED | LOW | LOW | RED |
+
+Red sits with LOW, green with MID, blue with HIGH (the DVS waveform colours). Each cell (`eqCell(d,i,vis)`) is a 36 px knob, its name and its value box (`.pf-eqval`), spanning its column. The rows spread evenly over the column's height and close up to 6 px in a short window. PERFORM only; levels are kept for the session.
+
+**EQ, audio** (V0.11.13a). `d.eq` = `[low, mid, high]` in dB, per deck (`fxInit`). Three biquad filters (`createBiquadFilter`): LOW `lowshelf` 70 Hz, MID `peaking` 1 kHz Q 0.7, HIGH `highshelf` 13 kHz, the DJ channel EQ (as Pioneer's DJM). Each band runs from −26 dB (left) through 0 dB (centre) to +6 dB (right); near the centre it snaps to 0 dB. `eqApply(d)` sets the gains. The chain is `pre` → LOW → MID → HIGH → the FX rack → gain (the AUD encoder). It plays on PERFORM only: `fxWire` routes through it when `window.__eqOn(d)` says so; on CREATE deck A plays without it (CREATE has no EQ control). Cyan knobs, the value in dB ("+6.0 dB", "0 dB"). A shelf at −26 dB cuts the sub and most of the kick, not all of it; a full kill is the isolator's job (BLOG0181 Isolator in the mixer (3-band, full kill), parked, master chain).
+
+**RGB, visual** (V0.11.14a, Dojo's visual EQ). `d.rgb` = `[r, g, b]` gains on the deck's picture: left = channel off (×0.00), centre = ×1.00, right = ×1.33 (Dojo's top). It runs as one more `PERF_VFX` pass, kind 14, after the deck's visual FX and before OUT (`vfxRun(…, rgb)`, PERFORM decks only), so the deck stage and OUT both show it. The pass is drawn only when a channel is off ×1.00, so a deck at ×1.00 costs nothing. Feedback keeps its trail from the picture before RGB, so a channel change does not build up in the trail. Purple knobs, the value as a gain ("×1.00").
+
+**The knob** (the one kill rule, V0.11.15a): drag = level; ↑ / ↓ fine, ← / → coarse; click = select; Enter = kill / restore, at once (EQ: the band at −26 dB, `d.eqK`; RGB: the channel at 0, `d.rgbK`); killed dims and the level is kept; double-click = 0 dB / ×1.00, restored. Message: "Deck B RGB BLUE ×1.00", "Deck A EQ HIGH +6.0 dB".
+
+## 8.13 MODE: video mix modes (OUT)
+The MODE drawer (BLOG0184 Video mix modes (OUT)): sixteen buttons (`.pf-modes` > `.pf-mode`), four rows of four, each with a short label; the message bar gives the full name and what it does. Click or Enter picks a mode; it changes at once; the mode in use is purple (visual domain). `OUT_MODE` (session) goes to `PERF_MIX` as `m.mode`. With `a` = deck A × VID A, `b` = deck B × VID B, `A` / `B` the decks' pictures, `ga` / `gb` the VIDs:
+
+| # | Label | Mode | OUT |
+|---:|---|---|---|
+| 0 | MIX | MIX | the crossfade, `(a + b) / max(1, ga + gb)` |
+| 1 | NAM | NAM | non-additive mix: the brighter pixel, `max(a, b)` |
+| 2 | ADD | ADD | `min(a + b, 1)` |
+| 3 | SCRN | SCREEN | `1 − (1 − a)(1 − b)` |
+| 4 | MULT | MULTIPLY | `mix(a, a × B, gb)`: B only where A is bright |
+| 5 | OVER | OVERLAY | overlay of B on a, mixed by `gb` |
+| 6 | DIFF | DIFFERENCE | `abs(a − b)` |
+| 7 | LUMA | LUMA | `b × mix(1, l, ga)`, `l` = A's luma: A is the matte |
+| 8 | DARK | DARKEN | `min(a, b)` (a deck at 0: the other alone) |
+| 9 | SOFT | SOFT LIGHT | a gentle OVERLAY, B tints a, mixed by `gb` |
+| 10 | EXCL | EXCLUSION | `a + b − 2ab` |
+| 11 | INVL | INV LUMA | `b × mix(1, 1 − l, ga)` |
+| 12 | SUB | SUBTRACT | `max(a − b, 0)` |
+| 13 | DODGE | DODGE | `a / (1 − B × gb)` |
+| 14 | BURN | BURN | `1 − (1 − a) / mix(1, B, gb)` |
+| 15 | COLOR | COLOR | B's colour at a's luma, mixed by `gb` |
+
+In the modes with a base (MULTIPLY, OVERLAY, SOFT LIGHT, DODGE, BURN, COLOR) deck A is the base at VID A and VID B is how much of B goes over it; with VID A at 0, B alone. In LUMA and INV LUMA, VID B is B's strength and VID A how much matte. A VID at 0 takes its deck out in every mode, so there is no CUT: pulling a VID to 0 is the cut (dropped in V0.11.17a). MIX and ADD look the same while the two VIDs add up to 100 % or less.
+
+The mode buttons are styled as the strip buttons (22 px, 10px Courier New, 1px letter spacing, radius 3px).
+
+## 8.14 Keyboard in the MIXER column
+BLOG0187 W A S D: the MIXER column as one grid.
+- **W A S D** move through the whole MIXER column as one grid: the four encoders, the EQ · FX · MODE strip and the open drawer's controls (knobs, effect boxes, mode buttons). Each press goes to the nearest control that way (only controls within a 50° cone that way count; the score favours the same row or column). At an edge it stays. W from a drawer's top row goes to the strip, W again to the encoders; S goes back down; A / D move along a row.
+- With a drawer open and nothing in the column selected, the first W A S D selects the drawer's first control. With no drawer open, W A S D act only once something in the column is selected.
+- **M** on PERFORM selects the mixer's first encoder (A VID) from anywhere on the page, with the message "Mixer: W A S D move · arrows = level · Enter = kill / open · Escape = out of a drawer".
+- **Enter** on a strip button opens / closes its drawer. **Escape** anywhere in a drawer goes to its lit strip button.
+- **Tab** from a strip button with a drawer open goes straight to the drawer's first control (EQ: BLUE; FX: VFX1; MODE: MIX), then steps on through the drawer; with no drawer open, Tab goes on to the LIBRARY.
+- Unchanged: the arrows change the selected control's value (an effect box: its effect); Enter kills / restores / picks; double-click.
+- W A S D and M do nothing while typing in a field or the Code view, or with Ctrl / Cmd / Alt held; M does nothing on the other tabs. The strip buttons' help ends "(W A S D move)"; the MIXER header's help adds "M = into the mixer, then W A S D".
+
 ---
 
 # 9. Node: Authoring (the template the app carries)
@@ -442,24 +578,51 @@ On http / https, `libWebSet()` reads `./examples/library.json` on open: `{"files
 The app is the shader authoring template: a copy of the app HTML at any build works on its own as the template, opening in AUTHORING off-site. There is no separate template version line; the app build is the template version. To author a shader, copy out the current app HTML; it becomes `OMS_Vizzie_Shader_<Name>_V<nn>.html` with its `.wgsl`.
 
 ## 9.1 The per-shader block
-One contiguous block holds everything a shader fills: `RULES` (TECHNICAL, carried unchanged; R11 music time is listed first), `NOTES`, `BUILD`, `TEMPLATE` (the app build it was copied from), the `WGSL`, the embedded `AMU`, the authoring pack (`TRACK_INFO`, `TRACK_MP3`, `TRACK_COVER`), `SPECDOC` (scene, music understanding mapping, objects definitions, hierarchy), `CHANGELOG`, `RIG` (one entry per object), the objects-toggle and CRYPTOMATTE patches, and the overlay slots (`OV_PRELUDE`, `OV_V`, `OV_H`, `OV_AP`, `OV_FRAME_M`). App code sits outside it.
+One contiguous block holds everything a shader fills: `RULES` (TECHNICAL, carried unchanged; in the order R11 music time, R12 authoring pack, R13 settings, then R1 to R10), `NOTES`, `BUILD`, `TEMPLATE` (the app build it was copied from), the `WGSL`, the embedded `AMU`, the authoring pack (`TRACK_INFO`, `TRACK_MP3`, `TRACK_COVER`), `SPECDOC` (scene, music understanding mapping, objects definitions, hierarchy), `CHANGELOG`, `RIG` (one entry per object), the objects-toggle and CRYPTOMATTE patches, and the overlay slots (`OV_PRELUDE`, `OV_V`, `OV_H`, `OV_AP`, `OV_FRAME_M`). App code sits outside it.
 
 **Music time (R11).** Every position, length and cue in authoring is bars and beats, never seconds: 62.1 = bar 62, beat 1; bar.beat B.N = beat (B − 1) × 4 + (N − 1) in `vizzie.time`.
 
 **Authoring pack (R12).** The shader HTML can pack the song it is authored against: its AMU (compact) in the AMU slot, its info in `TRACK_INFO`, its MP3 and cover as data URIs in `TRACK_MP3` / `TRACK_COVER`. A packed MP3 and cover load on open from anywhere (`dataBlob`), so the song survives every iteration and the file can be sent as one; the `.wgsl` stays lean. Empty = the default, Ain't No Trick. App code is never changed for it.
 
-**Default scene.** The AMU test tunnel with Yobot Squint on top, Squint sized as in HalloweenBounceFeatSquint V60 at 16:9 (`SUBJECT_HEIGHT` 0.765, the Yobot 43.7 % of the frame height; V0.8.02a).
+**Default scene.** The AMU test tunnel with Yobot Squint on top, Squint sized as in HalloweenBounceFeatSquint V60 at 16:9 (`SUBJECT_HEIGHT` 0.765, the Yobot 43.7 % of the frame height; V0.8.02a). It declares and uses the template's standard fourteen settings (9.5), so on open the Settings button shows with the template's own picture.
+
+**Settings (R13).** The values an author exposes to tune the look are settings, not consts: declare the block once and each setting as a `// @setting` line (2.2.4); read it where the const was used, with a `let` at the top of each function that uses it (`let CAM_DIST = settings[0].w;`). A WGSL const cannot be built from a setting: a value made from one is a `let` inside the function. Settings are static: to make one move with the music, write that in the shader from the AMU slots and expose the amount as its own setting. Nothing checks the declaration against the code: a setting never read does nothing, a wrong `settings[N]` reads another value. Export in a Code view exports the shader to Downloads as the next version, the tuned values as its defaults. Its check: the drawer lists every declared setting at its default, each one changes the picture, no Settings line in red, no const left that a setting replaces.
 
 ## 9.2 Renderer hooks: AUTH_GPU
-Everything the preview adds to the WebGPU renderer lives in `AUTH_GPU`; the renderer calls `init`, `patch`, `entries`, `write`, `copy` and `read`. `patch(src)` adds the preview-only bindings (1 object mask, 2 overlay probe, 3 CRYPTOMATTE table) and patches; the shipped `.wgsl` is unchanged.
+Everything the preview adds to the WebGPU renderer lives in `AUTH_GPU`; the renderer calls `init`, `patch`, `entries`, `write`, `copy` and `read`. `patch(src)` adds the preview-only bindings in `@group(3)` (1 object mask `partMask`, 2 overlay probe `gprobe`, 3 CRYPTOMATTE table `cm`; 2.2.5) and patches; the shipped `.wgsl` is unchanged.
 
 ## 9.3 Objects toggle and CRYPTOMATTE
-One tile per object (`RIG`) shows or hides it on the stage through a bit mask (binding 1). CRYPTOMATTE paints each object in its ID colour (binding 3, `cmTable()`), from `RIG` `cm` or a colour from the tile index.
+One tile per object (`RIG`) shows or hides it on the stage through a bit mask (`@group(3)` binding 1). CRYPTOMATTE paints each object in its ID colour (`@group(3)` binding 3, `cmTable()`), from `RIG` `cm` or a colour from the tile index. CRYPTOMATTE shows its ID colours at the standard HUE 0.5 and VALUE 1; with other values the default scene's HSV node shifts them too.
 
 ## 9.4 Authoring overlay
 GRID, GUIDES and POINTS draw on a 2D canvas over the stage, never in the shader (R5). Guides and anchor points are WGSL expressions of the shader's own constants (R6): the preview's shader evaluates them at one pixel (`ovProbeWGSL()`, binding 2), reads them back every sixth frame and `drawOverlay()` draws them. A shader's `OV_PRELUDE` defines `ov_origin` (vec2) and `ov_m` (frame units per metre); guides are metres from `ov_origin`, anchor points are frame units.
 
 **Camera and grid (R10).** World units are always metres; framing belongs to the camera, as in Blender. A shader with its own camera declares it in `OV_PRELUDE`; the GRID steps with the camera: major = the largest power of ten not above the frame height in metres, minor = a tenth (2 m frame: 1 m / 10 cm; 20 cm: 10 cm / 1 cm; 2 cm: 1 cm / 1 mm); labels in metres and a corner label naming the step. A shader with no camera uses `OV_FRAME_M` (template: 2 m).
+
+## 9.5 Standard settings (R13)
+The template's standard fourteen (BLOG0177 Template standard settings: the first two rows of the rack), for any shader: "give me the defaults" means these, declared and used as the default scene does. `settings[0]` to `settings[3]` are the standard area; a shader's own settings start at `settings[4]` and show from row 3 of the rack (7.8).
+
+| Rack | Setting | Place | Range, step, default | Acts on |
+|---|---|---|---|---|
+| row 1 | SCALE | settings[0].x | 0.25 to 4, 0.05, 1 | the frame: zoom |
+| row 1 | ROTATION | settings[0].y | −180 to 180, 1, 0 | the frame: turn, degrees |
+| row 1 | OFFSET_X | settings[0].z | −1 to 1, 0.01, 0 | the frame: left / right, half-heights |
+| row 1 | OFFSET_Y | settings[0].w | −1 to 1, 0.01, 0 | the frame: up / down, half-heights |
+| row 1 | PIVOT_X | settings[2].x | −1 to 1, 0.01, 0 | centre of ROTATION and SCALE, left / right |
+| row 1 | PIVOT_Y | settings[2].y | −1 to 1, 0.01, 0 | centre of ROTATION and SCALE, up / down |
+| row 1 | TILE | settings[2].z | 1 to 8, 1, 1 | repeats the frame; each tile shows the whole frame |
+| row 1 | TIME_OFFSET | settings[2].w | 0 to 32 beats, 0.25, 0 | slides the motion along the music clock |
+| row 2 | SPEED | settings[1].x | 0 to 4, 0.05, 1 | `vizzie.time` × SPEED |
+| row 2 | REACT | settings[1].y | 0 to 1, 0.05, 1 | every lane gate × REACT |
+| row 2 | HUE | settings[1].z | 0 to 1, 0.01, 0.5 | Blender's Hue/Saturation/Value node, hue (0.5 = none) |
+| row 2 | SATURATION | settings[3].x | 0 to 2, 0.05, 1 | the same node, saturation (0 = grey) |
+| row 2 | VALUE | settings[1].w | 0 to 2, 0.05, 1 | the same node, value |
+| row 2 | CONTRAST | settings[3].y | 0 to 2, 0.05, 1 | contrast around mid grey, after the node |
+
+Row 2 ends with two empty slots. In the default scene:
+- `stdFrame(p, asp)` acts on the frame before anything is drawn (tunnel and Yobot alike): TILE first, then rotate and zoom around PIVOT, then OFFSET (`p = rotate(-ROTATION) * (p - OFFSET - PIVOT) / SCALE + PIVOT`). PIVOT alone does nothing: at ROTATION 0 and SCALE 1 the picture does not change. TILE is whole numbers, and the pixel size for the edges follows it, so the Yobot stays sharp when tiled.
+- The tunnel's clock: `vizzie.time` × SPEED + TIME_OFFSET; its lane gates × REACT. SPEED multiplies the clock, so turning it moves the motion to the matching place on the scaled clock (a jump while turning).
+- Last on the picture: `stdHSV(col)` (hue, saturation, value), then CONTRAST around 0.5.
 
 ---
 
@@ -479,16 +642,22 @@ The full keyboard table is E 10 (Keyboard index); every control's help, with its
 - **Music (every deck):** cover (tap = song info on / off, double tap = MP3 / AMU picker) · waveform (click = cue on QUANT, drag = scrub, double tap = MP3 / AMU picker) · drop files or folders anywhere on the deck (first MP3, AMU `.json`, `.wgsl`, square cover image).
 - **CREATE controls row:** PLAY / PAUSE · LOOP · KEY LOCK · roll orientation · PLAY NEXT · CONTINUOUS PLAY · SHUFFLE ........ FX. **Music Understanding header (CREATE):** zoom field · SOLO, far right.
 - **AUTHORING controls row:** PLAY / PAUSE · LOOP · KEY LOCK · zoom field · roll orientation ........ SOLO.
-- **PERFORM deck:** header KEY LOCK · MASTER (indicator); row PLAY / PAUSE · LOOP · zoom field · orientation · position ........ SOLO.
-- **FX (PERFORM panel, CREATE drawer):** knob drag = amount · ↑ / ↓ ±1 % · ← / → ±5 % · click / Enter = kill / restore on QUANT · double-click = reset to the default; effect box: click, then the arrows = previous / next effect.
+- **PERFORM deck:** header KEY LOCK · MASTER (indicator) · `</> Code` · Settings (shown while the shader declares settings); row PLAY / PAUSE · LOOP · zoom field · orientation · position ........ SOLO.
+- **Code view (AUTHORING, CREATE, each PERFORM deck):** Apply · Copy · Export (the next version to Downloads, the current settings as its defaults) · the editor. Clicks in it stay off the stage.
+- **Settings drawer (every stage):** number encoder drag = value (its range in 150 px, snapped to its step) · double-tap = default; number field: click, then ↑ / ↓ = ± step, or type + Enter · double-click = default · Escape leaves. Colour encoder: tap = colour wheel · drag = hue · double-tap = default; colour field: a hex + Enter · double-click = default.
+- **PERFORM panel strip:** EQ · FX · MODE: click or Enter = open / close its drawer · Tab (a drawer open) = into the drawer.
+- **FX (PERFORM drawer, CREATE drawer):** knob drag = amount · ↑ / ↓ ±1 % · ← / → ±5 % · click = select · Enter = kill / restore on QUANT · double-click = reset to the default · Tab / Shift+Tab = next / previous; effect box: click, then the arrows = previous / next effect.
+- **EQ drawer (PERFORM):** EQ and RGB knobs: drag = level · ↑ / ↓ fine · ← / → coarse · click = select · Enter = kill / restore, at once (EQ −26 dB, RGB 0) · double-click = 0 dB / ×1.00.
+- **MODE drawer (PERFORM):** click or Enter = pick the video mix mode, at once.
 - **LIBRARY:** click = select · ↑ / ↓ select · ← = Deck A · → = Deck B (CREATE: both = deck A) · Delete = remove · drag onto a deck = load · CREATE: double-click or double tap = load and play; filters ALL · QUEUE · MUSIC · SHADERS · demo playlists.
-- **Visuals header (CREATE) / Visual header (AUTHORING):** `</> Code` · Pop Out · orientation · REC. Stage: drop or double tap = `.wgsl`.
+- **Visuals header (CREATE) / Visual header (AUTHORING):** `</> Code` · Settings (shown while the shader declares settings) · Pop Out · orientation · REC. Stage: drop or double tap = `.wgsl`.
 - **Power light (main app):** tap = retype the header for the session (Enter = keep · Esc = cancel · empty = ONEMANSHYO).
 - **Zoom field:** click in, ↑ / ↓ = 0 / 25 / 50 / 75 / 100.
-- **Encoders (AUTHORING):** drag = intensity · press = solo · double-click = reset to full. Chips: click = solo. Bus headers and bars: click = group solo.
-- **Mixer encoders:** drag = level · double-click = 0.
+- **Music Understanding (every surface):** chips: click = solo. Bus bars: click = group solo. SOLO clears.
+- **Mixer encoders:** drag = level (VID %, AUD dB, in the message bar) · ↑ / ↓ fine · ← / → coarse · click = select · Enter = kill / restore · double-click = the default (VID 50 %, AUD silence), restored.
 - **Piano roll:** drag = scrub · click = cue to block start (on QUANT while playing; LOOP on = loop it; stopped = pick it) · pinch / ctrl + wheel = zoom.
 - **Keyboard:** SPACE = play / pause deck A on CREATE and AUTHORING, the master PLAY / PAUSE on PERFORM (ignored while typing). Esc no longer closes the song info (V0.9.05a).
+- **Keyboard, PERFORM MIXER column** (8.14): M = into the mixer (A VID) · W / A / S / D = up / left / down / right to the nearest control in the column (encoders, strip, open drawer) · Enter on a strip button = open / close its drawer · Escape in a drawer = its lit strip button · Tab from a strip button (a drawer open) = the drawer's first control. W A S D and M are ignored while typing or with Ctrl / Cmd / Alt.
 - **Pocket Rave:** see 7.4.
 
 ---
@@ -505,7 +674,9 @@ The shared OMS tokens and component language: the `.app` shell, `.header` (gradi
 - **One small-button standard:** 11px Courier New, padding 3px 10px, 1px border, radius 4px. SOLO and Pop Out set it; PLAY, KEY LOCK and MASTER follow it on PERFORM and CREATE.
 - **A button hugs its label.** It never stretches to fill a row (`flex:0 0 auto`). A row aligns its buttons; it does not size them.
 - **A button never changes size with its state.** PLAY / PAUSE is fixed at the width of its longest word (PAUSE, 5 characters of the mono font) in both states, text centred, so the row never shifts.
-- **Toggle** (`.btn.loop`): grey off (`#7a7a7a` on `#3a3a3a`), cyan on (`#00d4ff` border and text, cyan glow). LOOP, KEY LOCK, MASTER, the LIBRARY filters, MODE / FX / EQ, CREATE's FX.
+- **Toggle** (`.btn.loop`): grey off (`#7a7a7a` on `#3a3a3a`), cyan on (`#00d4ff` border and text, cyan glow). LOOP, KEY LOCK, MASTER, the LIBRARY filters, EQ / FX / MODE, CREATE's FX.
+- **Strip and mode buttons** (PERFORM's EQ · FX · MODE `.pf-fxbtn`, the video mix modes `.pf-mode`): a smaller form, 22 px high, 10px Courier New, 1px letter spacing, radius 3px; the strip buttons in the toggle colours, the mode buttons `#aaa` on `#1a1a1a` with a 1px `#333` border. Short labels (four or five letters) with the full name in the message bar. Selected from the keyboard: a 2px ring, cyan on the strip buttons, purple on the mode buttons.
+- **Code and Settings** (Visual header, PERFORM deck headers): the small-button standard; lit (`.btn.primary`) while their view or drawer is open.
 - **SOLO** on the CREATE panel (`.btn.solo`): grey off, Barbie Pink on (`#E0218A`, glow). PERFORM's SOLO uses the toggle style (cyan on); see 12.10.
 - **Primary** (`.btn.primary`): cyan (PLAY). While a QUANT start waits, PLAY blinks (`.btn.armed`).
 - **Indicator in button form** (MASTER): the toggle style with the plain arrow cursor.
@@ -517,44 +688,62 @@ The shared OMS tokens and component language: the `.app` shell, `.header` (gradi
 
 **Position box** (`#labRecTime`, `.pf-pos`): 11px Courier New 600, `#888`, 1px `#333` border, radius 4px, fixed width (8 characters + padding), so it never moves. Barbie Pink while REC records.
 
+**Value box** under a knob (FX effect box `.pf-fxsel`, EQ / RGB value `.pf-eqval`, Settings value `.set-val`): 10px Courier New (9px in the FX drawer's columns), 1px border, radius 3px, in the knob's domain colour (cyan text on a `#2c5560` border; visual: Purple People Eater on `rgba(178,77,255,0.35)`), spanning its column. A Settings value box is also a field: click, then type.
+
 ## 12.5 Spacing
 **One gap between neighbouring controls everywhere: 8 px** (buttons, fields, toggles, mixer mode chips), set by the row's or strip's `gap`, never by per-control margins. A control pushed to the end of a row (SOLO) uses `margin-left:auto`. The Music Understanding grid has its own tighter spacing: lane cells 4 px apart on CREATE and 2 px on PERFORM, bus modules 6 px apart on CREATE.
 
+**Knob modules:** 6 px between modules, 8 px inside each on every side (the FX drawer's columns 4 px at the sides). **PERFORM:** 9 px from the app's frame at each side, 12 px between its three columns (8.6); the drawer's columns 9 px from the strip and the sides (EQ also from the bottom).
+
 ## 12.6 Lines and modules
 **The standard line:** 1px `#2a2a2a`, radius 6px. Modules (DECK A, MIXER, DECK B), stages, the waveform, the cover, the AMU box and the global strip use it. A module is a line only: no fill (`#0a0a0a` belongs to the inner boxes that had it), 8 px inside so content does not touch the line. Section headers keep `.sec-hdr` (3 × 13 bar, 11px uppercase label, 1px `#262626` rule).
+
+**Knob module** (`.pf-eqcol`): a group of knobs sits in outlined modules, the standard line with the `#0a0a0a` fill (1px `#2a2a2a`, radius 6px), one module per column. Each knob: the 36 px knob, an optional name, the value box under it spanning the module. No A / B on the labels: the column's place names the deck (A left, B right) and the message bar names it in full. Used by the EQ and FX drawers; the Settings rack is a grid of the same knob, name and value box. Exception: the PERFORM mixer's four encoders are 36 px knobs alone, with no outline, label or value under them (8.5).
 
 ## 12.7 Colour semantics
 
 **Key colours.** Wes's own colours: Purple People Eater `#B24DFF`, Barbie Pink `#E0218A`, Green Slime `#65FF00`, Yellow Man `#FFF000`, Orange Julius `#FFA500` (brand), Goblin White `#FFFFFF` and Red Hots `#FF006E` (key). Where the UI needs a colour these fill the role first. **One shade of each colour in the app:** any purple, pink, green or yellow is the key colour; a dim form is the same colour at lower opacity, never a second shade (V0.10.12a, 12b). Shader WGSL colours are the shader's own and are not part of the design system.
 
-- **Domain colours:** visual Purple People Eater `#B24DFF`, audio cyan `#00d4ff`. The mixer's VID and AUD encoders, the FX knobs and boxes and the LIBRARY dots carry them.
+- **Domain colours:** visual Purple People Eater `#B24DFF`, audio cyan `#00d4ff`. A control's arc, value box, active state and selected ring all take its domain colour (V0.11.20e). Visual (purple): mixer VID, FX VFX knobs and their effect boxes, EQ drawer RGB knobs, the Settings rack's knobs and value boxes, the video mix modes (the mode in use and the selected ring), the FX "waiting for QUANT" ring on a VFX knob. Audio (cyan): mixer AUD, FX AFX knobs and boxes, EQ HIGH / MID / LOW. The LIBRARY dots carry them too. Neutral app buttons (EQ · FX · MODE) take a cyan ring when selected from the keyboard.
 - Chrome and section headers cyan `#00d4ff`; authoring sections Orange Julius `#ffa500`.
 - Messages: info cyan `#00d4ff`, state Orange Julius `#ffa500`, error Red Hots `#ff006e`. Red Hots also: the danger button (`.btn.mag`), GPU errors on a stage, the ONEMANSHYO gradient (cyan to Red Hots) and Pocket Rave's stage border while playing.
 - Active and recording: Barbie Pink `#E0218A` (SOLO on the CREATE panel, the roll and waveform playheads, all of REC).
 - Picked or rendered chip on the roll: Yellow Man; LIBRARY entry loaded on a deck: Yellow Man tint.
 - Bus colours: RHYTHM Red Hots, STRUCTURE Orange Julius, KEY Yellow Man, PACE Green Slime, LOUDNESS blue `#00a8ff`, INSTRUMENTS Purple People Eater. **Every lane takes its bus colour**; beat is Goblin White.
 - Credits and PLUR (ABOUT, Pocket Rave) and the authoring overlay's anchor points: Purple People Eater.
-- Active state = border colour + tint + glow (toggle cyan, SOLO Barbie Pink, REC Barbie Pink pulse).
+- Active state = border colour + tint + glow (toggle cyan, SOLO Barbie Pink, REC Barbie Pink pulse). Selected knob or box = a 2px ring in its domain colour; killed = dimmed (opacity 0.35).
 
 ## 12.8 Interaction pattern matrix
 Same gesture = same result everywhere (Dojo's matrix, with Vizzie's values).
 
-**Encoders (lane knobs):**
+**Lane chips (Music Understanding, every surface):**
 
 | Gesture | Result | Feedback |
 |---|---|---|
-| Hover | Help in the message bar; lanes show live values | cyan message |
-| Drag vertical | Intensity, 0.005 per px | knob arc |
-| Press without dragging | Solo the lane | the lane shows soloed, others dim; SOLO lit |
-| Double-click | Back to full (1.0) | knob arc |
+| Hover | Help in the message bar with the lane's live value | cyan message |
+| Click a chip | Solo the lane | the lane shows soloed, others dim; SOLO lit |
+| Click a bus bar | Solo the group | as above |
 
-**Mixer encoders:**
+**Knobs (mixer encoders, FX, EQ, RGB):** one behaviour.
 
 | Gesture | Result | Feedback |
 |---|---|---|
-| Hover | Help with the current value | cyan message |
-| Drag vertical | Level, full range over 150 px | orange value |
-| Double-click | 0 | orange value |
+| Hover | Help with the current value and the keys | cyan message |
+| Drag vertical | Value, full range over 150 px | orange value |
+| ↑ / ↓, ← / → | Value, fine / coarse | orange value |
+| Click | Select | the ring in the knob's domain colour |
+| Enter | Kill / restore (FX on QUANT, the rest at once); the value is kept | dimmed; orange message |
+| Double-click | Default, restored (mixer VID 50 %, AUD silence; FX the effect's default; EQ 0 dB; RGB ×1.00) | orange value |
+| Tab / Shift+Tab | Next / previous control | the ring |
+
+**Settings rack knobs:**
+
+| Gesture | Result | Feedback |
+|---|---|---|
+| Hover | Help: name, value, the shader's own help, range | cyan message |
+| Drag vertical | Value, its range over 150 px, snapped to its step (colour: hue) | orange value |
+| Tap (colour) | The colour wheel | the wheel opens |
+| Double-tap | Default | orange value |
 
 **Buttons:**
 
@@ -589,24 +778,20 @@ Same gesture = same result everywhere (Dojo's matrix, with Vizzie's values).
 
 **Piano roll:** drag = scrub · click a block = cue to its start · pinch / ctrl + wheel = zoom.
 
-**FX knobs:**
+**FX effect box:** click, then the arrows = previous / next effect (a new effect starts at its neutral value).
 
-| Gesture | Result | Feedback |
-|---|---|---|
-| Hover | Help with the slot, effect and amount | cyan message |
-| Drag vertical | Amount | orange value |
-| ↑ / ↓, ← / → | Amount ±1 % / ±5 % | orange value |
-| Click or Enter | Kill / restore on QUANT | orange message |
-| Double-click | Reset to the effect's default, unmuted | orange value |
+**Video mix mode buttons:** click or Enter = pick, at once; the mode in use purple.
+
+**Keyboard in a section** (PERFORM MIXER column, 8.14): Tab from a strip button enters the open drawer; W A S D move by direction through the column as one grid; Escape leaves a drawer to its lit button; M enters the mixer.
 
 **Drop zones:** one hint everywhere, "Drop files" and the types one per line (`dropHint`); files and folders on every drop zone.
 
 **LIBRARY list:** click = select · double-click or double tap = load and play (CREATE) · drag onto a deck = load.
 
-Keys act only in the focused field, knob, box or list; the only app-wide key is SPACE (CREATE and AUTHORING: deck A; PERFORM: master PLAY).
+Keys act only in the focused field, knob, box or list; the page-wide keys are SPACE (CREATE and AUTHORING: deck A; PERFORM: master PLAY), and on PERFORM M (into the mixer) and W A S D once the MIXER column holds the selection or a drawer is open.
 
 ## 12.9 The module hierarchy
-**section → bus module → lane cell → chip + encoder** (`.amu-mod` → `.amu-cell` → `.lab-lane` + `.amu-knob`); mini players: chip only. The piano roll sits in its own module perimeter aligned with the bus modules above. PERFORM: **tab → global strip + DECK A | MIXER column | DECK B → deck view rows** (8.2); the MIXER column → MIXER, panel strip, LIBRARY modules, the drawer over the LIBRARY (8.6, 8.7). CREATE: **tab → GLOBAL + MUSIC column | VISUALS stage → Music Understanding**; the MUSIC column → music row, controls row, LIBRARY module, the FX drawer over the LIBRARY (7.2, 7.6). Module per function.
+**section → bus → lane cell → chip** (`.amu-mod` → `.amu-cell` → `.lab-lane`), on every surface since V0.11.10a (`buildLanes` can still add `.amu-knob` encoders; no surface does). The piano roll sits in its own module perimeter aligned with the bus modules above. PERFORM: **tab → global strip + DECK A | MIXER column | DECK B → deck view rows** (8.2); the MIXER column → MIXER, panel strip, LIBRARY modules, the drawer over the LIBRARY (8.6, 8.7) → the drawer's knob modules (`.pf-eqcol`). CREATE: **tab → GLOBAL + MUSIC column | VISUALS stage → Music Understanding**; the MUSIC column → music row, controls row, LIBRARY module, the FX drawer over the LIBRARY (7.2, 7.6). Module per function.
 
 ## 12.10 Known design debt
 Where the build does not follow the standard.
@@ -617,6 +802,20 @@ Where the build does not follow the standard.
 - Some code comments describe earlier layouts (CREATE "render" mode stacking PLAY / LOOP, PERFORM placeholders, CREATE's LIBRARY as a drawer opened by a LIBRARY button, "CREATE PUBLIC"); `MODES.idle` and `IDLE_MSG` are set but no longer shown (idle = empty bar).
 - The mode key for CREATE is still `public` in `MODES` and `mode()`; the word PUBLIC is gone from the UI.
 - HELP's line "Press LIBRARY to see more music and visuals" names a button CREATE no longer has (the LIBRARY is always open since V0.10.09a); the wording is Wes's, kept as is.
+- The Settings rack's knobs do not follow the one knob behaviour (12.11): no Enter kill, no arrows, not reached by Tab (`tabindex="-1"`); they keep drag and double-tap (V10's model), and their value boxes take the keys.
+- The mixer encoders still build a value box each (`.pf-encs span.pf-eqval.pf-fxsel`), hidden by CSS; their CSS comments still describe the outlined modules and value boxes of V0.11.19a to 21d.
+- Left from the placeholders: the dashed `.pf-fxbtn.ph` rule (EQ before V0.11.13a), the cyan `.pf-modes .pf-on` rule (overridden by the purple `.pf-mode.pf-on`).
+- The compact authoring CSS still sizes `.amu-knob` encoders that are no longer built.
+
+## 12.11 Control rules
+Settled in V0.11.13a to 20e and written down as design system rules (BLOG0188 Design system: control colours, modules, values, keys), for every surface:
+1. **Domain colour.** Visual = Purple People Eater `#B24DFF`, audio = cyan `#00d4ff`. A control's arc, value box, active state and selected ring all take its domain colour: VID, VFX, RGB, shader settings and the video mix modes purple; AUD, AFX and the EQ bands cyan. Neutral app buttons (EQ · FX · MODE) take a cyan ring (12.7).
+2. **Knob module.** Knob, optional name, value box under it; a group of knobs in outlined modules (1px `#2a2a2a`, radius 6px, `#0a0a0a`), 8 px inside on every side, 6 px between modules, the value box spanning the module. No A / B on labels: the column's place names the deck (A left, B right); the message bar names it in full (12.6). **Exception:** the PERFORM mixer's four encoders are 36 px knobs alone, with no outline, label or value under them; the level is in the message bar (V0.11.21e).
+3. **Values in their unit.** dB for audio level (audio taper), % for picture strength, × gain for RGB, the setting's own number for settings.
+4. **Knob behaviour.** Drag and arrows (↑ / ↓ fine, ← / → coarse) = value; click = select; Enter = kill / restore (dims, keeps its value; FX on QUANT, the rest at once); double-click = default and restored (12.8).
+5. **Keyboard.** Tab enters an open drawer from its strip button; W A S D move by direction through a section as one grid (the PERFORM MIXER column: encoders, strip, open drawer); Escape leaves a drawer to its lit button; M enters the mixer (8.14).
+6. **Small buttons** (strip, mix modes): 22 px, 10px Courier New, 1px letter spacing, radius 3px; short labels (four or five letters) with the full name in the message bar (12.3).
+7. **Spacing.** PERFORM 9 px from the app frame, 12 px between its columns (12.5, 8.6).
 
 ---
 
@@ -628,7 +827,7 @@ Everything the performer provides: music, its AMU, shaders, cover images and pla
 Apple's Music Understanding framework (Swift module `MusicUnderstanding`) analyses a track on-device; the OMS Sozo Sidecar writes it to JSON; Vizzie embeds it. Chain of trust: Apple → Sozo → JSON → `readAMU()` and `MASTER` → `pack()` → shader. Apple is the authority.
 
 ## 13.2 Shaders
-Vizzie runs any WGSL shader written to the uniform contract. Shaders are authored in the app itself (9), named `OMS_Vizzie_Shader_<Name>_V##.wgsl` / `.html`, and kept in `VIZZIE/App Folder/Library/Shaders/`, one folder per shader. Moving a shader onto V0.7.0 or later means restating any `vizzie.time` rates per beat (2.2.2).
+Vizzie runs any WGSL shader written to the uniform contract. Shaders are authored in the app itself (9), named `OMS_Vizzie_Shader_<Name>_V##.wgsl` / `.html`, and kept in `VIZZIE/App Folder/Library/Shaders/`, one folder per shader. Moving a shader onto V0.7.0 or later means restating any `vizzie.time` rates per beat (2.2.2). A shader exposes its tuning values as settings (binding 1, R13; 2.2.4, 9.1); an exported version (`_V##` + 1) carries the tuned values as its defaults.
 
 ---
 
