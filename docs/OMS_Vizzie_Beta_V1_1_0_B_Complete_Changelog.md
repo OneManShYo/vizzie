@@ -1,15 +1,45 @@
-# OMS Vizzie app [Beta V1.0.0] Complete Changelog
+# OMS Vizzie app [Beta V1.1.0] Complete Changelog
 
-**Run date:** 2026-11-07  
-**Current Unix Epoch:** 1794051010  
+**Run date:** 2026-11-09  
+**Current Unix Epoch:** 1794244147  
 **Document purpose:** The readable version of the PM backlog: the BLOGs each release packaged, grouped by release, newest first, with the builds that carried them.  
-**Filename:** OMS_Vizzie_Beta_V1_0_0_B_Complete_Changelog.md  
+**Filename:** OMS_Vizzie_Beta_V1_1_0_B_Complete_Changelog.md  
 
 ## About this document
 
-Vizzie Beta V1.0.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
+Vizzie Beta V1.1.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
 
 Versions are major.minor.iteration; a full package rolls the minor, and the iteration line before it becomes that release's iterations. Letters are revisions of the same piece of work.
+
+---
+
+## V1.1.0
+
+Packages the V1.0 iteration line (V1.0.01a to V1.0.31d). Baseline V1.0.31d. CREATE and PERFORM split: three decks on one global layer (tempo, clock, QUANT, master bus), as Ableton's channels, and switching surface pauses the one left. One drop zone for the whole app feeds the LIBRARY, which gains SETS, a sort header and names from the MP3 tags and the shader's own metadata. PERFORM gets a master bus (ISOLATOR, MASTER, DSP), TRIM, LINK, automatic and hand-picked tempo master and song switches on QUANT. CUE on every deck. One keyboard flow for the whole UI. Pocket Rave gets a normal view modelled on compact AUTHORING.
+
+- **One drop zone for the whole app** (BLOG0191 · V1.0.01a, 04a, 10a, 12a, 14a): Files and folders dropped anywhere, on any tab, show one overlay and go into the LIBRARY; the deck drop zones, CREATE's LIBRARY drop zone and PERFORM's MIXER column drop zone are gone (01a). On a one-deck tab with nothing playing the deck also loads the drop's alphabetically first song (with its AMU) and first shader (10a), and the LIBRARY returns to ALL (12a); while a song plays, or on PERFORM, a drop goes to the LIBRARY only (04a). Removing the MIXER column's drop zone also removed its positioning frame, so EQ, FX and MODE opened off to the left; restored in 14a.
+- **LIBRARY: Clear** (BLOG0192 · V1.0.02a, 05a, 08a): One button empties the LIBRARY (tracks, covers, shaders, playlists); the decks keep what they have (02a). An X icon at the far right of the header (05a, 08a).
+- **LIBRARY: sets** (BLOG0193 · V1.0.03a, 05a to 09a, 11a, 16a, 17a, 19a): A dropped .m3u8 becomes a set named for its `#PLAYLIST:` line or its file name (03a). After a drop-down (05a) and a drawer (06a), SETS became a filter like the others: ALL · MUSIC · VISUALS · SETS · X, set rows with found/total, double-click or Enter applies a set (MUSIC, in the set's order) and again turns it off; SHADERS renamed VISUALS; QUEUE and the PLAYLIST drawer removed (16a). Sets in alphabetical order (08a); a drop applies no set (10a); the set button keeps one size (11a); W A S D and arrows through the header and list on PERFORM (07a, 09a, 17a); the message bar names the sets a drop added (19a).
+- **Shader loads wait for QUANT** (BLOG0194 · V1.0.13a): With music playing a shader load (LIBRARY, picker, drop) swaps on the next QUANT step, as a song start does; nothing playing or QUANT None, at once. Apply in a Code view stays immediate.
+- **Mixer: VID starts at 0** (BLOG0195 · V1.0.15a): Both VID encoders open at 0%, as AUD; OUT is black on open. Double-click returns VID to 0%.
+- **EQ drawer: TRIM** (BLOG0196 · V1.0.18a): A TRIM knob at the top of each EQ column, as on an Ecler mixer: audio TRIM is the deck's input gain before the EQ (−15 to +15 dB), visual TRIM one gain on the whole picture before RGB (off to ×1.33). The drawer's knob rules and the W A S D grid include it.
+- **Master bus: ISOLATOR, MASTER, DSP** (BLOG0180, BLOG0181, BLOG0197 · V1.0.20a): Both decks feed one bus: ISOLATOR → MASTER → DSP compressor → speakers. ISOLATOR (LOW · MID · HIGH, 250 Hz and 2.5 kHz Linkwitz-Riley, full kill to +6 dB) in the MIXER header; MASTER, a dB field at the global strip's right end; DSP, a button after it with Dojo V5.9.0's compressor panel (presets Off, Gentle, Medium, Aggressive, Limiter; THRESH, RATIO, OUTPUT, GR bar), starting on Limiter. PERFORM only; elsewhere every stage is neutral.
+- **Song switch on a playing deck, on QUANT** (BLOG0198 · V1.0.21a): A LIBRARY track loaded onto a playing deck no longer stops it: the new track loads in the background, then on the next QUANT step the old song stops and the new one starts from its bar 1 at the master tempo. A second load replaces a waiting one; PLAY cancels it.
+- **Pocket Rave normal view** (BLOG0199 · V1.0.22a to 22h): A tap on the header from full frame opens a view modelled on compact AUTHORING, full width (22a to 22c): VISUAL (Settings, REC), the 16:9 canvas in AUTHORING's grey frame (22d), MUSIC with the 40 px cover and waveform, MUSIC UNDERSTANDING lane buttons and the roll, the status line, version and PLUR. GLOBAL removed (22e), the transport row removed, tap the canvas to play (22f), spacing set to 10 px around headers (22g), the orientation button removed and the instrument lanes 25% lower, roll 144 px (22h). The roll shows the structure and instrument lanes only (22c).
+- **Compact AUTHORING: stage keeps 16:9 height** (BLOG0204 · V1.0.23a): The compact stage box is 16:9 of its width in every orientation; 1:1 and 9:16 sit centred in it, so nothing under it jumps.
+- **LIBRARY: names from the MP3 tags, sort header** (BLOG0206 · V1.0.24a, 24b, 24c): One rule everywhere: the ID3 title · artist, else the file name. TITLE, ARTIST, BPM and KEY columns under a sort header on CREATE and PERFORM, default TITLE A to Z, alphanumeric; a set keeps its own order (24a). Arrow keys show the row in the message bar (24b) and win over a resting mouse (24c). Workflow §2.13, one behaviour, one code path.
+- **W A S D in CREATE's LIBRARY** (BLOG0207 · V1.0.25a, 28a): One LIBRARY key handler for CREATE and PERFORM, on the website too (25a); folded into the app-wide keyboard flow (28a).
+- **Shader metadata** (BLOG0208 · V1.0.26a): `// @title`, `// @author`, `// @type`, `// @desc` under a .wgsl's first line name the shader everywhere; without `@title`, the file name minus prefix and `_V##`. VISUALS columns TITLE · AUTHOR · VER · TYPE. RULES R16.
+- **Template: new shaders start named right** (BLOG0209 · V1.0.27a): The default scene carries the four metadata lines; R16 says to write them when the shader is made, and gives the file-name rule `OMS_Vizzie_Shader_<Name>_V##`.
+- **Keyboard: one flow for the whole UI** (BLOG0210 · V1.0.28a, 29b, 30b, 30c, 30d): W A S D, Tab and the arrows move over the same stops on CREATE, PERFORM and AUTHORING, the tab bar and AMU lanes included; Enter is on / off everywhere; one cyan focus ring (28a). Values move with Shift+arrows; TEMPO is a stop (29b). LIBRARY list: A / ← Deck A, D / → Deck B; Enter on CREATE loads (30b). PERFORM: Shift+A / Shift+B / Shift+M into Deck A, Deck B, the mixer; the deck headers' buttons are mouse only (30c). Shift+L into the LIBRARY on CREATE and PERFORM (30d).
+- **Mixer: LINK per deck** (BLOG0178 · V1.0.29a): A chain icon between each deck's encoders. Linked, AUD leads: VID waits until AUD reaches it, then follows; moving VID unlinks.
+- **Tempo master** (BLOG0215 · V1.0.30a, 30e): A load sets the tempo only when nothing else on its surface plays and the deck is the master, so a playing deck is never retempoed by another's load. A master that stops, or whose AUD goes to 0 or is killed, hands MASTER to a playing deck that is up; with nothing playing, the deck up in the mix. Click a deck's MASTER to pick it by hand until the next start, stop or AUD change. The tempo never changes on a handover.
+- **PERFORM waveform repaints on a new track** (BLOG0216 · V1.0.30f): The waveform cache now redraws when the deck's track changes; PERFORM's decks had kept their first track's picture.
+- **Mixer LINK on by default** (BLOG0217 · V1.0.30g): Both decks' LINK starts on.
+- **CUE** (BLOG0218 · V1.0.30h): A CUE button right of PLAY / PAUSE on CREATE and each PERFORM deck: back to the start of the track, on QUANT while playing, at once when paused.
+- **CREATE and PERFORM split** (BLOG0219 · V1.0.30i): CREATE (with AUTHORING and Pocket Rave) has its own deck; PERFORM has its own Deck A and Deck B. A load, PLAY, CUE, shader or FX on one surface never touches the other. Switching between them pauses the surface left. MASTER, QUANT and the LIBRARY's on-deck marks use the open surface's decks; the tempo stays one value for the app. An optional link between the two is parked (BLOG0220).
+- **Help texts match the keys** (BLOG0221 · V1.0.31a): Every value control's hover help names Shift+arrows (the mixer encoders, the EQ, RGB and TRIM knobs, the FX effect box, TEMPO, QUANT, MASTER, zoom), as the keys work since V1.0.29b. The deck, stage and MUSIC hints say drop files anywhere, into the LIBRARY (the deck drop zones went in V1.0.01a).
+- **Keyboard: drawer grid, decks top to bottom** (BLOG0222 · V1.0.31b, 31c, 31d): With EQ, FX or MODE open, W A S D and the arrows stay in the drawer's grid; only W from its top row leaves, to the strip; S from a visual TRIM had jumped to the deck's SOLO or PLAY (31b). W / S take a control straight below or above first, the nearest row first: PLAY → the RHYTHM bus bar, not the beat chip under it, and on Deck B not the LIBRARY (31c); of a row under the selected control, its first, leftmost: a bus bar → its first chip (31d).
 
 ---
 

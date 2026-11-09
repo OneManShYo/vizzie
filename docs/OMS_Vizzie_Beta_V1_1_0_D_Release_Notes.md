@@ -1,13 +1,35 @@
-# OMS Vizzie app [Beta V1.0.0] Release Notes
+# OMS Vizzie app [Beta V1.1.0] Release Notes
 
-**Run date:** 2026-11-07  
-**Current Unix Epoch:** 1794051010  
+**Run date:** 2026-11-09  
+**Current Unix Epoch:** 1794244147  
 **Document purpose:** User enhancements since V0.2.18c, newest first.  
-**Filename:** OMS_Vizzie_Beta_V1_0_0_D_Release_Notes.md  
+**Filename:** OMS_Vizzie_Beta_V1_1_0_D_Release_Notes.md  
 
 ## About this document
 
-Vizzie Beta V1.0.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
+Vizzie Beta V1.1.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
+
+---
+
+## V1.1.0
+
+- CREATE and PERFORM are separate now. CREATE has its own deck (AUTHORING and Pocket Rave use it too); PERFORM has its own Deck A and Deck B. Loading, playing or changing a shader on one never touches the other. Switch tabs and the one you leave pauses. The tempo is shared.
+- CUE, right of PLAY / PAUSE on CREATE and on each PERFORM deck: back to the start of the track. While playing it lands on the next QUANT step and keeps playing.
+- Drop files anywhere in the app, on any tab: they go into the LIBRARY. With nothing playing on CREATE, the deck also loads the first song and shader of the drop, in LIBRARY order. While a song plays, or on PERFORM, nothing on a deck changes.
+- LIBRARY: ALL · MUSIC · VISUALS · SETS, and X at the far right to clear it. A dropped .m3u8 playlist becomes a set: SETS lists them, double-click or Enter applies one (its tracks, in its order) and again turns it off.
+- LIBRARY: tracks show their MP3 title and artist, the same everywhere. Columns TITLE, ARTIST, BPM, KEY (VISUALS: TITLE, AUTHOR, VER, TYPE). Click a heading to sort; click again to reverse.
+- Load a song onto a deck that is playing and it switches on the next QUANT step, from the new song's bar 1, with no gap. PLAY cancels a waiting switch.
+- A shader loaded while music plays swaps on the next QUANT step, as songs do.
+- PERFORM: ISOLATOR (LOW · MID · HIGH, full kill) in the MIXER header; MASTER volume and DSP (compressor / limiter presets, from Dojo) at the right end of the global strip.
+- PERFORM: a TRIM knob tops each EQ column: input gain for the sound, overall gain for the picture.
+- PERFORM: LINK, the chain between each deck's VID and AUD, is on: move AUD and VID catches up, then follows. Move VID and it unlinks.
+- PERFORM: VID starts at 0, so OUT is black on open. Double-click VID goes back to 0.
+- PERFORM: MASTER follows the music. The deck started first is master; it hands over when it stops or its AUD goes to 0, and with nothing playing the deck that is up in the mix takes it. Click a deck's MASTER to pick it yourself. Loading a track never changes a playing deck's tempo.
+- PERFORM: each deck's waveform shows the track that is on it (it kept the first track's).
+- Keyboard everywhere: W A S D, Tab and the arrows move the same way over every control, the tabs and AMU lanes included. Enter turns things on and off. Shift+arrows change a value. PERFORM: Shift+A, Shift+B, Shift+M jump into Deck A, Deck B, the mixer. Shift+L jumps into the LIBRARY on CREATE and PERFORM. In the LIBRARY list A / ← loads Deck A and D / → Deck B; on CREATE Enter loads. In an open EQ, FX or MODE drawer the keys stay in the drawer.
+- Pocket Rave: tap the header in full frame for the normal view: the 16:9 visual, the music row, and Music Understanding's structure and instrument lanes. Tap the visual to play or pause; pinch the roll to zoom.
+- AUTHORING on a small screen: the stage keeps its 16:9 height in every orientation, so nothing jumps.
+- For shader authors: name a shader in its .wgsl with `// @title`, `// @author`, `// @type` and `// @desc` under the first line; the LIBRARY and the messages use them. New shaders from the template start with these lines.
 
 ---
 
