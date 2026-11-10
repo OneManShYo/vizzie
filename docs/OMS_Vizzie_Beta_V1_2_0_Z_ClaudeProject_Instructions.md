@@ -1,13 +1,13 @@
-# OMS Vizzie app [Beta V1.1.0] Claude Project Instructions
+# OMS Vizzie app [Beta V1.2.0] Claude Project Instructions
 
-**Run date:** 2026-11-09  
-**Current Unix Epoch:** 1794244147  
+**Run date:** 2026-11-10  
+**Current Unix Epoch:** 1794328405  
 **Document purpose:** Instructions to Claude for working on the Vizzie project.  
-**Filename:** OMS_Vizzie_Beta_V1_1_0_Z_ClaudeProject_Instructions.md  
+**Filename:** OMS_Vizzie_Beta_V1_2_0_Z_ClaudeProject_Instructions.md  
 
 ## About this document
 
-Vizzie Beta V1.1.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
+Vizzie Beta V1.2.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
 
 ---
 
@@ -52,7 +52,8 @@ You are working on Vizzie, a single self-contained HTML app (Web Audio, WebGPU, 
 # 4. Versions and builds
 
 - major.minor.iteration. A full package always rolls the minor.
-- One piece of work, one iteration number. Letters are revisions of that same work (19a → 19b). New work takes the next number.
+- Every iteration build carries a letter (V1.1.06a). One piece of work, one iteration number; letters are revisions of that same work (19a → 19b). New work takes the next number.
+- A build already handed over is never renamed or re-issued: a numbering mistake is fixed going forward.
 - Numbers only go forward. Never go back to an earlier number or build a revision on top of a later one.
 - Build each iteration from the previous iteration's HTML with a script that fails if a replacement does not match exactly once.
 - Test headless before handing over (layout, sizes, gaps, behaviour, page errors). Say what you tested and what you could not.
@@ -74,10 +75,11 @@ You are working on Vizzie, a single self-contained HTML app (Web Audio, WebGPU, 
 - Only Wes closes a BLOG. Status words are open, closed and parked; nothing else (no 'later', no 'optional').
 - Show backlog work as a hierarchy grouped by module, and always write a BLOG as its number followed by its name.
 - The PM JSON is the record of the product. Never delete a version of it: every rebuild writes a new file beside the old one, the old one stays, and the new bundle is handed to Wes as soon as it is written. Chain commands with `set -o pipefail` so a failed step stops the chain.
-- Every release follows the OMS suite packaging workflow, `OMS#Suite#PackagingWorkflow#20261109#1794243985.md` (in the Claude project; the newest one there): versioning, filing, deliverables, blueprints, PM bundles, git and deployment. Follow it as written; do not re-derive it.
+- Every release follows the OMS suite packaging workflow, `OMS#Suite#PM#PackagingWorkflow#<date>#<epoch>.md` (the newest one): versioning, filing, deliverables, blueprints, PM bundles, git and deployment. Follow it as written; do not re-derive it.
 - A release does every pre-packaging step (the workflow's §4A, blueprints included) before Wes reviews anything, then one review, one item at a time, before the push. File and bundle names come only from the workflow's templates; never invent one.
 - "Push" alone never means the fast push (the workflow's §6.5). When features changed since the last tag, or Wes asks for the deliverable with the push, it is the full roll as the next minor.
 - The packaging workflow and the PM bundle are never published or pushed.
+- Never change Wes's system (workflow rules, naming, numbering, folders) unasked. Anything that slips through is recorded in the PM JSON's `claude_changes`. Every full build opens a documentation BLOG listing what changed in the docs.
 
 # 7. Talking to Wes
 
@@ -90,9 +92,10 @@ You are working on Vizzie, a single self-contained HTML app (Web Audio, WebGPU, 
 
 # 8. Commands, files and git
 
-- Wes runs every command himself. Give one pasteable block that starts with `clear && printf '\e[3J'`. Files for Wes go in `~/Downloads` itself, no subfolders, or straight into the build tree. Helper scripts go in the project folder under `VIZZIE/Claude/`, never in Downloads. Never the Desktop. Never offer to reach his local files.
+- Wes runs every command himself. Give one pasteable block that starts with `clear && printf '\e[3J'`. Deliverables for Wes (builds, notes, PM bundles) go in `~/Downloads` itself or straight into the build tree. Claude's own scripts, tools, test pages and backups go under `~/Downloads/zClaude/Vizzie/`, never loose in Downloads. Never the Desktop. Never offer to reach his local files.
+- A message that hands over files opens with a line saying there is a download; the file cards can come at the end.
 - Commands never open files, apps or browsers (no `open`); testing a build is his step, in Chrome.
-- File into the build tree only when he asks for a cleanup. A cleanup moves only this roll's own files (its `OMS_Vizzie_Beta_*` iterations and `OMS_Vizzie_PM_JSON_Bundle_*` bundles): copy, compare, then remove the Downloads copy only when identical. General PM docs, other apps' files and anything else in Downloads stay where they are.
+- Filing follows the packaging workflow (its 3.5 and 3.8): the newest build and the newest PM bundle stay in Downloads for Wes and are also filed; older ones are filed (copy, compare, then remove the Downloads copy only when identical). A filing block checks the files are there before it moves anything. It moves only this roll's own files (`OMS_Vizzie_Beta_*` iterations, `OMS_Vizzie_PM_JSON_Bundle_*` bundles); general PM docs, other apps' files and anything else in Downloads stay where they are.
 - A push block ends at `git push`. Checking the deploy is a separate command.
 - Song names: title first, then artist.
 - Never push on your own. The PM bundle and workflow docs are never pushed. The blueprints are published as F from V1.0.0 on: `_F_Blueprints.html`, the editable source, and `_F_Blueprints.pdf`, printed from it. Revise the HTML, then re-print the PDF.

@@ -1,13 +1,13 @@
-# OMS Vizzie app [Beta V1.1.0] User Guide
+# OMS Vizzie app [Beta V1.2.0] User Guide
 
-**Run date:** 2026-11-09  
-**Current Unix Epoch:** 1794244147  
+**Run date:** 2026-11-10  
+**Current Unix Epoch:** 1794328405  
 **Document purpose:** How to use Vizzie.  
-**Filename:** OMS_Vizzie_Beta_V1_1_0_E_UserGuide_All.md  
+**Filename:** OMS_Vizzie_Beta_V1_2_0_E_UserGuide_All.md  
 
 ## About this document
 
-Vizzie Beta V1.1.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
+Vizzie Beta V1.2.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
 
 ---
 
@@ -41,6 +41,7 @@ Vizzie Beta V1.1.0. License: GPL-3.0 (software); embedded assets, see the ABOUT 
 &emsp;5.11 SETS  
 &emsp;5.12 EQ  
 &emsp;5.13 MODE  
+&emsp;5.14 Midi Fighter Twisters  
 **6** HELP, ABOUT and LEARN  
 **7** Messages  
 **8** Pocket Rave (phones and tablets)  
@@ -70,7 +71,7 @@ On iPhone and iPad, Safari plays the music when you tap PLAY, with the silent sw
 
 **CREATE · PERFORM · AUTHORING · HELP · ABOUT · LEARN.** On the website: **CREATE · HELP · ABOUT · LEARN**, and CREATE opens. PERFORM and AUTHORING show only when the app is opened off the website (as a local file, for example), and then AUTHORING opens.
 
-Above the header is the strip with the red power light and five jacks, on every tab. **Tap the power light** to type your own name in place of ONEMANSHYO: Enter keeps it, Esc cancels, an empty name puts ONEMANSHYO back. Up to 24 characters. It lasts until you reload the page.
+Above the header is the strip with the red power light and five jacks, on every tab. **Tap the power light** to type your own name in place of ONEMANSHYO and your own tagline at the header's right. The name gets the cursor; click the tagline to type there. Each takes up to 75 characters, and the message bar counts them as you type. Enter keeps it, Esc cancels, an empty one goes back to its default (ONEMANSHYO; "Music makes magic!"). It lasts until you reload the page.
 
 **CREATE and PERFORM are separate.** CREATE has its own deck (shared with AUTHORING and Pocket Rave); PERFORM has its own Deck A and Deck B. A load, PLAY, CUE, shader, Apply or FX on one never touches the other. Switching between CREATE and PERFORM pauses the decks of the tab you leave, so only one plays. The TEMPO, QUANT and the LIBRARY are shared.
 
@@ -182,19 +183,21 @@ Click REC again to stop early. The file downloads when the recording ends.
 Drop a `.wgsl` file anywhere (4.3.3), load it from the LIBRARY, or **double-click** the visual to pick one. While music plays, the new shader swaps in on the next QUANT step, so the picture changes with the song; with nothing playing, or QUANT at None, at once. While it waits, the message bar says "on the next 1/4" (the QUANT value). Apply in the Code view stays immediate.
 
 #### 4.7.6 Settings
-A shader can declare settings: the values that tune its look (size, speed, colours). **Settings**, after Code on the header, shows only while the loaded shader declares settings. It opens the Settings drawer; Settings lights while it is open; click it again to close.
+A shader can declare settings: the values that tune its look (size, speed, colours). **Settings**, after Code on the header, shows only while the loaded shader declares settings. It opens the Settings drawer; Settings lights while it is open; click it again to close. The purple dot on the button glows while any setting is off the shader's default. **Shift+click** the button to put every setting back to the shader's default, without opening the drawer (on CREATE, Shift+Enter does the same from the keyboard).
 - **On CREATE** the drawer slides out of the stage's left edge, over the MUSIC column, at the stage's height. Music Understanding below stays in view, and Space still plays and pauses.
 - **On AUTHORING** it slides down out of the Visual module.
 - **On a PERFORM deck** it slides down out of the deck's stage, inside the deck column; it scrolls when the settings do not fit.
 
 **The rack.** 32 slots, 4 rows of 8, always drawn, the same on every stage. The standard settings fill the first rows; the shader's own settings start on a fresh row. A shader with no standard settings fills from slot 1. Unused slots show a dashed, dim knob and an empty value box. Each slot: a purple knob, the name (cut with "…" when it is long; the full name shows in the message bar) and the value box.
 
+**Keys:** W A S D and the arrows move between the knobs and stay in the open drawer; W off its top row leaves. From the Settings button, with the drawer open, the next W A S D or arrow goes to its first knob.
+
 **A number setting:**
-- **Knob:** drag up or down across its range, in its steps. Double-tap = its default.
+- **Knob:** drag up or down across its range, in its steps; or select it and Shift+↑ / ↓ one step, Shift+← / → five steps. Double-tap = its default.
 - **Value box:** click it, then ↑ / ↓ (or Shift+↑ / ↓) one step, or type a value and press Enter; Escape leaves. Double-click = its default.
 
 **A colour setting** takes one slot:
-- **Knob:** shows the colour; its pointer is the hue. Drag up or down = hue. Tap = the colour wheel at the foot of the drawer (hue around, saturation from the centre out, a bar beside it for value); tap again to close it. Double-tap = its default.
+- **Knob:** shows the colour; its pointer is the hue. Drag up or down = hue, or Shift+↑ / ↓ 5°, Shift+← / → 30°. Tap (or Enter) = the colour wheel at the foot of the drawer (hue around, saturation from the centre out, a bar beside it for value); tap again to close it. Double-tap = its default.
 - **Value box:** type a hex (#RRGGBB) and press Enter. Double-click = its default.
 
 Values are set live: the picture follows at once, with no recompile. They last for the session. Apply after an edit keeps a setting's value when its name, type and place are unchanged; a new or moved setting starts at its default. To keep a look, Export it from a Code view (4.7.1).
@@ -308,7 +311,7 @@ The tempo never changes on a handover, so nothing jumps. A track loaded on a dec
 
 ### 5.6 Starting and cueing in time (QUANT)
 - **PLAY** on a deck, while the other deck is playing, waits for the next QUANT step of the master grid, then starts this deck from the matching place in its own track, so the two land together. PLAY blinks while it waits; press it again to cancel.
-- **A cue** on a playing deck (a click on a piano roll block or on the waveform, or CUE) waits for the next QUANT step, then jumps.
+- **A cue** on a playing deck (a click on a piano roll block or on the waveform, or CUE) waits for the next QUANT step, then jumps. A cued block fills orange while it waits.
 - **A shader load** (from the LIBRARY, the picker or a drop) waits for the next QUANT step while music plays, then swaps. A second load while one waits replaces it. Apply in the Code view is immediate.
 - **A song switch:** a LIBRARY track loaded onto a playing deck does not stop it. The playing song carries on while the new one loads; then, on the next QUANT step, the old song stops and the new one starts from its bar 1, at the master tempo. The message bar says "Loading … (switches on QUANT)", then "on the next 1/4", then "Playing …". A second load while one waits replaces it; PLAY while it waits cancels it and the song plays on. If the new track fails to load, the playing song carries on.
 - **FX kills** (5.9) land on the next QUANT step while anything plays. EQ, RGB, TRIM, ISOLATOR and mixer kills happen at once.
@@ -332,6 +335,10 @@ The panel strip under the MIXER, left to right **EQ · FX · MODE**. Each opens 
 - **MODE:** the video mix mode, how the decks combine in OUT (5.13).
 
 The EQ and FX drawers have four outlined columns, as the mixer above them: deck A's two on the left, deck B's two on the right, visual outside and audio inside.
+
+**The dots** on EQ and FX, two each side, are those columns in the same order: deck A visual (purple), deck A audio (cyan), deck B audio (cyan), deck B visual (purple). A dot glows while anything in its column is off its default (a level moved, an effect turned up, a knob killed), and is dim when the column is all at default. It never blinks.
+
+**Shift+click** EQ or FX to reset without opening the drawer: click the left third for Deck A, the middle for both decks, the right third for Deck B. EQ goes back to 0 dB and ×1.00 with the kills cleared; FX goes back to each effect's neutral with the kills cleared, and the picked effects stay. Hold Shift over the button and the message bar says what a click there resets. Shift+Enter on the selected button resets both decks.
 
 **One kill rule** for every knob in the EQ and FX drawers, the ISOLATOR and the four mixer encoders:
 - **Click** selects the knob. The selected knob shows a ring: purple on a visual control, cyan on an audio one.
@@ -438,6 +445,25 @@ The MODE drawer: sixteen video mix modes for OUT, four rows of four. Click one, 
 
 MIX and ADD look the same while the two VIDs add up to 100 % or less; past that, MIX shows the average and ADD the sum. With both decks on the same shader the modes look alike: load another shader on one deck to see them.
 
+### 5.14 Midi Fighter Twisters
+PERFORM plays from two DJ TechTools Midi Fighter Twisters, one per deck, straight out of the box: no setup tool. Use Chrome (it has Web MIDI). Plug both in, open PERFORM, then **press any knob on the LEFT Twister**: it becomes Deck A. Then press a knob on the RIGHT one for Deck B. The message bar asks for each. They stay bound until you reload the page, also if you unplug one and plug it back in.
+
+The knobs are named by column A to D, left to right, and row 1 to 4, top to bottom, on each Twister. Deck B is the mirror of Deck A, so the gains meet in the middle:
+
+| Row | Deck A: A | B | C | D | Deck B: A | B | C | D |
+|---|---|---|---|---|---|---|---|---|
+| 1 | WF Cue | AMU Solo | Video Gain | Audio Gain | Audio Gain | Video Gain | AMU Solo | WF Cue |
+| 2 | VFX1 | AFX1 | BLUE | HIGH | HIGH | BLUE | AFX1 | VFX1 |
+| 3 | VFX2 | AFX2 | GREEN | MID | MID | GREEN | AFX2 | VFX2 |
+| 4 | Library | (not used) | RED | LOW | LOW | RED | (not used) | Library |
+
+- **Gains, EQ and FX:** turn = the level, as the knob on screen; push = kill or restore (FX on QUANT, as on screen). Turning an EQ or FX knob opens its drawer, so you see what changes. The rings show the app's values, cyan for sound and purple for picture, and follow any change you make on screen; the knob carries on from there.
+- **Library** (A4 left, D4 right): turn to move through the LIBRARY's buttons (ALL, MUSIC, VISUALS, SETS), then down the list; push to press the button, or to load the selected track or shader onto that Twister's deck. Both knobs move the same selection. A turn closes an open EQ, FX or MODE drawer so the LIBRARY shows.
+- **WF Cue** (A1 left, D1 right): turn to pick a section of the song: an orange outline on its block in the piano roll, and the message bar says which ("Deck A cue · section 2 of 26 · bar 9.1"). The first turn starts at the section playing. Push to jump there on the next QUANT step; the block fills orange while it waits. The outline stays on that section until you turn again, so pushing again jumps back to it, like a cue point. It works after the playhead has passed it too.
+- **AMU Solo** (B1 left, C1 right): turn to move an orange outline along the deck's Music Understanding groups and lanes, left to right; push to solo or unsolo it. Push twice quickly to clear all the deck's solos.
+
+The library, cue and solo knobs move one step for a short turn, so small lists stay easy to work. The Twisters' side buttons are not used; two of them switch the Twister to its second bank, where the knobs do nothing in Vizzie, so press them again to come back.
+
 ## 6. HELP, ABOUT and LEARN
 
 **HELP**: LET'S DO THIS, eight things to try, in two boxes. **ABOUT**: what Vizzie is, who made it, the license. **LEARN** opens the learning page on onemanshyo.com in a new tab.
@@ -485,7 +511,7 @@ Every message the bar shows, as worded in this release. NAME stands for a file, 
 |---|---|---|
 | 9.1.1.1 | Brand | ONEMANSHYO vizzie app |
 | 9.1.1.2 | Version | App version |
-| 9.1.1.3 | Tagline | Music drives the vision: the AMU of the song drives the shader |
+| 9.1.1.3 | Tagline | Music makes magic! The red power light (top left) makes this and the header name editable: up to 75 characters each, this session |
 | 9.1.1.4 | PERFORM tab | PERFORM: two decks and the mixer |
 | 9.1.1.5 | CREATE tab | CREATE: music and visuals |
 | 9.1.1.6 | ABOUT tab | ABOUT |
@@ -661,11 +687,12 @@ Code, Apply, Copy, Export and the editor are the same controls on CREATE.
 
 | # | Control | Message |
 |---|---|---|
-| 9.1.9.1 | Number knob and its label | NAME value · help · min to max (drag up / down · double-tap = default) |
-| 9.1.9.2 | Number value box | NAME value · help · min to max (click, then Shift+↑↓ ±step, or type + Enter · double-click = default) |
-| 9.1.9.3 | Colour knob and its label | NAME #RRGGBB · help (tap = colour wheel · drag up / down = hue · double-tap = #RRGGBB) |
+| 9.1.9.1 | Number knob and its label | NAME value · help · min to max (drag up / down · Shift+↑↓ ±step · Shift+←→ ±5 steps · double-tap = default) |
+| 9.1.9.2 | Number value box | NAME value · help · min to max (click, then ↑↓ ±step, or type + Enter · double-click = default) |
+| 9.1.9.3 | Colour knob and its label | NAME #RRGGBB · help (tap / Enter = colour wheel · drag up / down or Shift+arrows = hue · double-tap = #RRGGBB) |
 | 9.1.9.4 | Colour value box | NAME #RRGGBB · help (type a hex + Enter · double-click = #RRGGBB) |
 | 9.1.9.5 | Colour wheel | Colour wheel: hue around, saturation from the centre out · bar: value, black to full |
+| 9.1.9.6 | Settings button | Settings: show / hide (dot lit: a setting is off its default · Shift+click = reset them all) |
 
 The help after the value is the shader's own, from its declaration; without it the "· help" part is left out. On PERFORM each starts with "Deck A: " or "Deck B: ".
 
@@ -734,6 +761,16 @@ The help after the value is the shader's own, from its declaration; without it t
 | 9.2.59 | DSP knob | DSP THRESH -20.0 dB / DSP RATIO 4.0:1 / DSP OUTPUT +1.6 dB |
 | 9.2.60 | Shift+A / Shift+B | Deck A: W A S D or Tab move · Enter = on / off |
 | 9.2.61 | Shift+L | Library: W A S D, arrows or Tab move · in the list A / D load / Library: under the open drawer (EQ · FX · MODE); close it first |
+| 9.2.62 | Header name / tagline while typing | Header: 31/75 (Enter = keep · Esc = cancel · empty = ONEMANSHYO) / Tagline: 18/75 (Enter = keep · Esc = cancel · empty = Music makes magic!) |
+| 9.2.63 | Header name / tagline kept | Header: NAME (this session) / Header unchanged |
+| 9.2.64 | Shift over EQ or FX | Shift+click: reset Deck A EQ / Shift+click: reset both decks FX |
+| 9.2.65 | EQ or FX reset | EQ reset: Deck A to default / FX reset: both decks to default |
+| 9.2.66 | Settings reset | Settings reset: every setting to the shader default (PERFORM: "Deck A: " first) |
+| 9.2.67 | Twister not bound | MIDI: press a knob on the LEFT Twister (Deck A) / MIDI: press a knob on the RIGHT Twister (Deck B) |
+| 9.2.68 | Twister bound | MIDI: Twister bound to Deck A · now press a knob on the RIGHT Twister (Deck B) / MIDI: Twister bound to Deck B |
+| 9.2.69 | Twister WF Cue | Deck A cue · section 2 of 26 · bar 9.1 (push = jump on QUANT) |
+| 9.2.70 | Twister Library | the button's or row's help, then " (Twister LIBRARY: push = press)" on a button |
+| 9.2.71 | Twister AMU Solo | the group's or lane's help, then " · Twister: push = solo, double push = release all" |
 
 ### 9.3 Errors
 
@@ -813,13 +850,19 @@ The keys work on CREATE, PERFORM and AUTHORING, on the website and off it; Pocke
 | 10.49 | Delete (Mac: delete) | LIBRARY list | Remove the row from the library (not a set row) |
 | 10.50 | A / D or ← / → | LIBRARY header | Along the buttons (ALL, MUSIC, VISUALS, SETS, X) |
 | 10.51 | S or ↓ | LIBRARY header | Down into the list |
-| 10.52 | Enter | Header name (after a power light tap) | Keep the name |
-| 10.53 | Escape | Header name | Cancel |
+| 10.52 | Enter | Header name or tagline (after a power light tap) | Keep it |
+| 10.53 | Escape | Header name or tagline | Cancel |
 | 10.54 | ↑ / ↓ or Shift+↑ / ↓ | Settings value box, a number | ± one step |
 | 10.55 | type + Enter | Settings value box | Set the value (a number, or a hex for a colour) |
 | 10.56 | Escape | Settings value box | Leave the box |
+| 10.57 | W / A / S / D, arrows | Settings drawer | Between its knobs; the keys stay in the drawer (W off its top row leaves) |
+| 10.58 | Shift+↑ / ↓ | Settings knob | ± one step (a colour: hue ±5°) |
+| 10.59 | Shift+← / → | Settings knob | ± five steps (a colour: hue ±30°) |
+| 10.60 | Enter | Settings colour knob | Open / close the colour wheel |
+| 10.61 | Shift+Enter | EQ or FX button (PERFORM) | Reset both decks to default |
+| 10.62 | Shift+Enter | Settings button (CREATE) | Every setting to the shader default |
 
-PERFORM's deck headers (KEY LOCK, MASTER, Code, Settings) are mouse only: the keys pass them by. On CREATE they are in the flow. The Settings drawer's knobs are mouse only; its value boxes are fields.
+PERFORM's deck headers (KEY LOCK, MASTER, Code, Settings) are mouse only: the keys pass them by, but with a Settings drawer open the next key from its button goes into the drawer. On CREATE they are in the flow. The Settings drawer's value boxes are fields.
 
 ---
 

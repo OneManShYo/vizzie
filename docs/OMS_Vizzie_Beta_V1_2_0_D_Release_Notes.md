@@ -1,13 +1,27 @@
-# OMS Vizzie app [Beta V1.1.0] Release Notes
+# OMS Vizzie app [Beta V1.2.0] Release Notes
 
-**Run date:** 2026-11-09  
-**Current Unix Epoch:** 1794244147  
+**Run date:** 2026-11-10  
+**Current Unix Epoch:** 1794328405  
 **Document purpose:** User enhancements since V0.2.18c, newest first.  
-**Filename:** OMS_Vizzie_Beta_V1_1_0_D_Release_Notes.md  
+**Filename:** OMS_Vizzie_Beta_V1_2_0_D_Release_Notes.md  
 
 ## About this document
 
-Vizzie Beta V1.1.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
+Vizzie Beta V1.2.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
+
+---
+
+## V1.2.0
+
+- PERFORM plays from two Midi Fighter Twisters, one per deck, straight out of the box (no setup tool; Chrome). Press a knob on the left Twister for Deck A, then the right one for Deck B. Gains, EQ, RGB and FX turn and kill as on screen, and turning an EQ or FX knob opens its drawer. The rings show the app's values and the knobs carry on from them.
+- Twisters: a Library knob on each scrolls the LIBRARY and loads onto its deck; WF Cue picks a section of the song and jumps there on QUANT, and stays on it as a cue point; AMU Solo solos the groups and lanes, and a double push clears them.
+- KEY LOCK decks stay in time with the grid: no more slow drift.
+- KEY LOCK sounds clean: the echo and the muddy kicks are gone.
+- Loading a track onto a deck with its volume down no longer thumps.
+- A cued block in the piano roll fills orange while it waits for QUANT.
+- PERFORM: the EQ and FX buttons have dots, one per drawer column, that glow while something in that column is off its default. Shift+click a button to reset: left third Deck A, middle both, right third Deck B.
+- Settings: the button's dot glows while a setting is off the shader's default, and Shift+click puts them all back. In the drawer, W A S D and the arrows move between the knobs and Shift+arrows change them.
+- The header name and the tagline: tap the power light and type up to 75 characters in either; the tagline now reads "Music makes magic!".
 
 ---
 

@@ -1,13 +1,13 @@
-# OMS Vizzie app [Beta V1.1.0] Developer Documentation
+# OMS Vizzie app [Beta V1.2.0] Developer Documentation
 
-**Run date:** 2026-11-09  
-**Current Unix Epoch:** 1794244147  
+**Run date:** 2026-11-10  
+**Current Unix Epoch:** 1794328405  
 **Document purpose:** The explanatory technical spec for OMS Vizzie: how each system works and why. Uses the shared OMS **Cortex / Node / Leaf** vocabulary (Dojo, Chippy), sized to Vizzie's scope.  
-**Filename:** OMS_Vizzie_Beta_V1_1_0_C_Developer_Documentation.md  
+**Filename:** OMS_Vizzie_Beta_V1_2_0_C_Developer_Documentation.md  
 
 ## About this document
 
-Vizzie Beta V1.1.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
+Vizzie Beta V1.2.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
 
 ---
 
@@ -32,6 +32,7 @@ Vizzie Beta V1.1.0. License: GPL-3.0 (software); embedded assets, see the ABOUT 
 &emsp;3.3 TEMPO and the tempo master  
 &emsp;3.4 KEY LOCK  
 &emsp;3.5 The master bus: ISOLATOR, MASTER, DSP  
+&emsp;3.6 Audio calibration tests  
 **4** Node: Deck Controls (one code for every deck)  
 &emsp;4.1 The control strip  
 &emsp;4.2 Lanes, buses and encoders  
@@ -74,6 +75,7 @@ Vizzie Beta V1.1.0. License: GPL-3.0 (software); embedded assets, see the ABOUT 
 &emsp;8.12 EQ and RGB  
 &emsp;8.13 MODE: video mix modes (OUT)  
 &emsp;8.14 Keyboard: one flow for the whole UI  
+&emsp;8.15 Hardware: two Midi Fighter Twisters  
 **9** Node: Authoring (the template the app carries)  
 &emsp;9.1 The per-shader block  
 &emsp;9.2 Renderer hooks: AUTH_GPU  
@@ -252,10 +254,12 @@ Help lives in one table, `HELP` (selector → text or function), plus the shared
 ## 3.1 Deck audio engine
 `makeDeckAudio(ctx,buf,canStretch,keyLock)` plays the decoded track through Web Audio: an `AudioBufferSourceNode` (or the KEY LOCK worklet) into a `pre` node, then the deck gain node, into the master bus (`masterIn(ctx)`, 3.5). The FX rack sits between them where the deck's FX are live (`FX_LIVE`, 8.8): PERFORM's decks, and CREATE's deck on CREATE: `pre` → AFX1 → AFX2 → gain; on PERFORM the deck's TRIM and EQ come first, `pre` → TRIM → LOW → MID → HIGH → AFX1 → AFX2 → gain (8.12); in AUTHORING and Pocket Rave `pre` connects straight to the gain. Position = the offset played from + AudioContext time since the start × rate (the audio hardware clock, sample-accurate). It keeps the interface the app used with an `<audio>` element (`currentTime`, `duration`, `paused`, `ended`, `play`, `pause`, `captureStream`) plus `rate` and `keyLock`. One engine per deck (`d.audio`), all on the app's one AudioContext. `audioContext()` creates the AudioContext inside the drop or pick gesture; any pointer, key, touchend or click event resumes it if the browser suspended it. Web Audio only, no browser-specific APIs, with two iOS / iPadOS Safari provisions (V0.10.07d): `navigator.audioSession.type = 'playback'` where the browser has it, so silent mode does not mute the music, and the first touchend or click plays one silent sample (`audioUnlocked`), which unlocks the AudioContext for the session.
 
-Deck volume: on PERFORM each deck's gain follows its AUD encoder with an audio taper, gain = position² (8.5); on CREATE its deck plays at full.
+Deck volume: on PERFORM each deck's gain follows its AUD encoder with an audio taper, gain = position² (8.5); on CREATE its deck plays at full. One function gives that value, `deckVol(d)` (PERFORM: AUD², 0 when killed; CREATE: 1), and a new audio path starts at it: `makeDeckAudio(ctx,buf,canStretch,keyLock,vol)` builds the gain node at the deck's volume, so a track loaded onto a deck with its AUD down or killed makes no sound, also when it starts at once on a playing deck (V1.1.02, BLOG0227 Load thump). Before, every load built the path at full and the AUD value came a frame later.
 
 ## 3.2 Warp: steering the deck to the clock
-`steerDeck(d)` runs every frame for each playing deck. Target = the deck's track time (`d.t`). Speed = its warp map's local tempo × TEMPO (`d.beatLen(d.beat) × MASTER.tempo / 60`), times a correction that closes the gap over about a second, capped at ±2 %. A gap over 250 ms (a seek, a stall) is jumped instead. Known limit: the KEY LOCK worklet's real read position is not reported back, so the gap is measured against the engine's own position model.
+`steerDeck(d)` runs every frame for each playing deck. Target = the deck's track time (`d.t`). Speed = its warp map's local tempo × TEMPO (`d.beatLen(d.beat) × MASTER.tempo / 60`), times a correction that closes the gap over about a second, capped at ±2 %. A gap over 250 ms (a seek, a stall) is jumped instead.
+
+With KEY LOCK on, the gap is measured against where the time-stretch really is (V1.1.01, BLOG0226 KEY LOCK: decks drift apart over time). The worklet posts its read position, the nominal track position of the block being played, every 8 render blocks (about 23 ms): `{type:'at', id, t, pos}`, with `t` the AudioContext time of that block. The deck's audio position is the last report carried forward at the rate, so the pull above closes the real gap. The play message carries its start time (`{type:'play', pos, rate, id, at}`): a start that reaches the worklet late begins in place instead of late. Before V1.1.01 the position was the engine's own prediction (start + elapsed × rate), so the pull never saw the worklet fall behind and KEY LOCK decks drifted. KEY LOCK off is unchanged: the buffer source plays at the exact rate set.
 
 A seek, PLAY or load on one deck does not reset the master clock's last tick (V0.8.09b), so scrubbing one deck never stalls another.
 
@@ -275,7 +279,7 @@ On CREATE the master is its one deck. A surface switch (`window.__surf`, 8.1) gi
 **TEMPO** is one field in the global strip (7.3), the same field on CREATE and PERFORM (`bindTempoField(tv)`). It is a keyboard stop (8.14): W A S D and the plain arrows move on from it; Shift+↑ / ↓ = ±1 BPM, Shift+← / → = ±0.01 BPM (V1.0.29b); type a value and Enter, Escape leaves the field, double-click = the master deck's track BPM exactly. These keys act only in that field; there are no app-wide tempo keys. `setTempo(bpm,exact)` sets `MASTER.tempo`, rounded to 0.01, clamped to half and one and a half times the **master deck's** track BPM, and every loaded deck's rate. `d.ratio()` = master tempo / the deck's track BPM. The change message is "TEMPO 129.01 BPM" (orange). There is no tempo % any more.
 
 ## 3.4 KEY LOCK
-On, the deck plays through the `vizzie-stretch` AudioWorklet: a WSOLA time-stretch (Hann-windowed frames, overlap-added) that holds pitch at any rate. The worklet source is `STRETCH_SRC`, loaded once per AudioContext by `loadStretch(ctx)` as a `data:` URL module (a `blob:` module is refused from `file://`; blob is the fallback). Transients: `findOnsets(buf)` finds the track's onsets once (high-passed level steps over twice the recent average, at least 50 ms apart) and the worklet places attacks so drum hits keep their snap. Off, the plain source's playback rate moves pitch with tempo, like a turntable.
+On, the deck plays through the `vizzie-stretch` AudioWorklet: a WSOLA time-stretch (Hann-windowed frames, overlap-added) that holds pitch at any rate. The worklet source is `STRETCH_SRC`, loaded once per AudioContext by `loadStretch(ctx)` as a `data:` URL module (a `blob:` module is refused from `file://`; blob is the fallback). **The splice match** (V1.1.03, BLOG0228 KEY LOCK sound: echo and muddy kicks): each new frame is placed where it best continues the last one, rated by normalised cross-correlation over 1024 samples, so the match does not depend on loudness; the search runs ±512 samples, every 4th offset first, then ±3 around the best. Before, the rating was raw signal strength over a shorter stretch: a louder spot won over a matching one, so frames landed in the wrong place and parts played twice a few ms apart (an echo, muddy kicks), even at an unchanged tempo. The rate always carries the clock's pull (3.2), so it is never exactly 1 and the worklet never plays the track straight. Transients: `findOnsets(buf)` finds the track's onsets once (high-passed level steps over twice the recent average, at least 50 ms apart) and the worklet places attacks so drum hits keep their snap. Off, the plain source's playback rate moves pitch with tempo, like a turntable.
 
 Per deck (`d.keyLock`), **on by default** on every deck since V0.8.28a. Where the browser has no AudioWorklet, KEY LOCK shows off and disabled.
 
@@ -287,6 +291,16 @@ V1.0.20a (BLOG0180 Master gain for PERFORM audio, BLOG0181 Isolator in the mixer
 - **PERFORM only**, as the EQ and TRIM: a check every 200 ms (`mixOn()`) sets `MSTR.perf`; off PERFORM every stage is neutral (bands at 1, MASTER 0 dB, compressor at 0 dB threshold and 1:1, OUTPUT 0 dB). The nodes stay in the path on every tab.
 
 The controls are on PERFORM: the isolator in the MIXER header (8.5), MASTER and DSP at the global strip's right end (7.3).
+
+## 3.6 Audio calibration tests
+BLOG0229 Audio calibration tests. How an audio change is checked before a build is handed over, written so the tests can be rebuilt. The tests are not part of the app: they run the build headless in Chromium (Web Audio, the real worklet) and read the decks from the page. Every build that touches deck audio, the clock or KEY LOCK reports the five, in this order and these units, in its build notes.
+
+**Click track:** 44.1 kHz stereo, 200 s, a kick every 0.5 s: a sine sweeping 50 + 120·e^(−30t) Hz, decay e^(−12t), 0.25 s long, amplitude 0.9. **Tap:** the final output, before the device. An onset is the first sample above 0.15 after at least 0.15 s below; its time is the block's playback time plus its offset. The deck's grid position is logged every 16 ms and read at each onset; error = grid position − heard kick time (a constant offset is the tap latency; only change over time counts).
+1. **Drift** (ms, first to last window): the error's median per 10-second window. Cases: steady at ×1.06 for 2 minutes; the tempo jumping ×0.94 / ×1.08 every 1.7 s for 90 s. Pass: the last window within 5 ms of the first.
+2. **Two-deck phase** (beats): both decks on the click track, the tempo jumps as above, the app hidden 3 s and shown; once a second the fractional beat difference between the two deck clocks. Pass: constant within 0.001 beat.
+3. **Load thump** (output peak, 6 cases): a deck at volume 0 gets a track loaded while it plays, while it is paused and while the other deck plays, each with KEY LOCK on and off. Pass: peak below 0.0001 in every case.
+4. **KEY LOCK kick fidelity** (offline): the stretcher rendered on a 30 s mix at 124 BPM (kick, off-beat noise hat, bass, pad) at ×1.0003, 0.97, 1.03, 0.94, 1.06, 0.90 and 1.12; each kick from −5 to +120 ms against the source at the best lag within ±15 ms, as normalised correlation (1 = identical).
+5. **CPU** (ms/s): the stretcher's offline render time per second of audio, 20 s at ×1.06 and ×0.94.
 
 ---
 
@@ -317,7 +331,7 @@ Owned per deck by `makeSolo()` (`d.solo`): a set of lane ids and `grp:<bus>` key
 - **Opening view:** `o.step` and `o.horiz`. PERFORM rolls, CREATE's mini roll and Pocket Rave's roll open at 25 %, horizontal. AUTHORING's roll opens horizontal at 0 %, 120 px high (`o.hh`, the fixed horizontal height; V0.11.16a, BLOG0183 AUTHORING music row and roll as CREATE's); vertical it is 75 px high (`MODES` rollH).
 - **Two rolls on the CREATE panel** (`o.active`): the full roll is active in AUTHORING, the mini on CREATE (the full roll is hidden there, V0.10.05a); each keeps its own zoom and orientation, and `R.syncUI()` puts the active roll's values on the shared zoom field and orientation button at every switch. The zoom field sits in AUTHORING's controls row and on CREATE's Music Understanding header (7.2).
 - **Orientation:** vertical (lanes as columns) or horizontal (lanes as rows), toggled by the deck's orientation button.
-- **Input** (`rollInput`): drag = scrub in beats; click without dragging = cue to that block's start (`amuStart` / `amuCue`: beat, bar, section, segment, phrase, key span, pace step; loudness and the instruments are not cue targets). A cue goes through `deckCue(d,sec,landed)` and waits for QUANT whenever the deck is playing and QUANT is not None (8.3). With LOOP on the cued chip becomes the loop span; clicking the lit chip again releases it to the whole track. On a stopped deck the chip is **picked** (`d.pick`): the playhead goes to its start and REC renders it (6.4); any other playhead move, or PLAY, clears it. The looped or picked chip is lit solid cyan (Dojo 'selected').
+- **Input** (`rollInput`): drag = scrub in beats; click without dragging = cue to that block's start (`amuStart` / `amuCue`: beat, bar, section, segment, phrase, key span, pace step; loudness and the instruments are not cue targets). A cue goes through `deckCue(d,sec,landed)` and waits for QUANT whenever the deck is playing and QUANT is not None (8.3). With LOOP on the cued chip becomes the loop span; clicking the lit chip again releases it to the whole track. On a stopped deck the chip is **picked** (`d.pick`): the playhead goes to its start and REC renders it (6.4); any other playhead move, or PLAY, clears it. The looped or picked chip is lit solid cyan (Dojo 'selected'). A cued chip waiting for QUANT is filled Orange Julius `#FFA500` until the jump lands (`d.armed`, V1.1.09j; a cyan outline before). The Twister's cue cursor (8.15) is an Orange Julius outline on its chip.
 
 ## 4.5 The drop zone and double-tap loaders
 **One drop zone for the whole app** (`appDrop`, V1.0.01a to 12a, BLOG0191 One drop zone for the whole app). Files and folders dragged anywhere over the window, on any tab, show one layer over the whole window (`.drop-hint.app-drop`) with one hint built by `dropHint(main,types)`: "Drop files" with MP3, AMU .json, .wgsl, cover image, .m3u8 playlist, one per line. `readDrop()` reads files and folders (File System Access handles first, which work on `file://`; then the older entries; then plain files) and records each file's path inside the drop (`f._rel`). **Every drop goes into the LIBRARY** (`libImport`, 8.9); the LIBRARY's summary is the last message. What else happens:
@@ -469,12 +483,14 @@ The strip (`#prSafeTop`: red power light `.pr-pwr` and five jacks) shows on the 
 
 **Metal inserts** (V0.11.06a, BLOG0173 Metal inserts run to the top through the Moogerfooger strip): the two metal inserts on the inner edge of the wood panels (`.app::before`, `.app::after`) sit above the strip (z-index 121; the strip is 120), so they run from the top of the window to the bottom, as in Mezcla.
 
-**Header rename** (V0.10.11c): on the main app a tap on the power light makes the header text (`#brandTxt`) editable, selected, with a dashed cyan outline. Enter or a blur keeps it, Esc restores it, empty restores ONEMANSHYO; whitespace is collapsed and the text cut to 24 characters; pasted text is plain. Keys typed there stop at the header (Space does not play). It lasts for the session: nothing is saved.
+**Header rename and tagline** (V0.10.11c; V1.1.04, BLOG0224 Header rename; V1.1.05, BLOG0231 Tagline): on the main app a tap on the power light makes both the header name (`#brandTxt`) and the tagline at the header's right (`#descTxt`) editable, each with a dashed cyan outline; the name gets the cursor, a click puts it in the tagline. Each takes up to 75 characters (`MAXN`): typing stops there, a paste is trimmed to what fits, and Enter keeps exactly what is shown (the old 24-character cut is gone). While typing, the message bar counts: "Header: 31/75 (Enter = keep · Esc = cancel · empty = ONEMANSHYO)". Each ends on its own: Enter or a blur keeps it, Esc restores it, empty restores its default (ONEMANSHYO; the tagline "Music makes magic!"); whitespace is collapsed; pasted text is plain. Keys typed there stop at the field (Space does not play). It lasts for the session: nothing is saved.
 
 ## 7.8 The Settings drawer
 One component, `settingsDrawer(d,btn,anchor,limit,side)`, for every WGSL stage (BLOG0164 SETTINGS drawer, BLOG0176 Settings drawer: a fixed rack of 32 slots). It is built from the deck's declaration (`d.setDecl.list`, 2.2.4), rebuilt through `SET_ON` whenever the deck's shader changes, and writes straight into the deck's settings block (`deckSettings(d)`): no recompile, the picture follows the next frame. Values last for the session.
 
 **The button.** **Settings** shows only while the deck's shader declares settings; a shader without settings hides it and closes the drawer. AUTHORING: in the Visual header after Code (`#labSetBtn`); CREATE: in the VISUALS header with Code, Pop Out, orientation and REC; each PERFORM deck: in its header right of `</> Code` (`.pf-set`); Pocket Rave: in its VISUAL header (`#prSetBtn`, 7.4). It lights while the drawer is open; click again to close. A mode or surface switch closes CREATE's drawer (`window.__setDrawer`), as the FX drawer.
+
+**Changed dot and reset** (V1.1.08a, BLOG0237 Settings button): every Settings button but Pocket Rave's (`.set-btn`, 24 px padding each side) carries one purple dot at its left, as the EQ and FX buttons' dots (8.7): dim while every setting is at the shader's default (the declaration's defaults, `s.def`), a steady glow while any is changed; no blinking. Shift+click resets every setting to the shader default and leaves the drawer as it is; Shift+Enter does the same where the button is a keyboard stop (CREATE). Pocket Rave's button (`#prSetBtn`, touch only) has neither.
 
 **Where it opens.**
 - **CREATE:** sideways (class `set-left`), out of the stage box's left edge over the MUSIC column (`#labLeftCol`: cover, waveform, controls row, LIBRARY), the stage's height, from the column's left edge to 6 px behind the stage's left edge, the stage on top. Music Understanding below stays uncovered, and Space still plays. The side is set before the drawer is placed, so the first open also comes from the side (V0.11.09e).
@@ -487,6 +503,8 @@ One component, `settingsDrawer(d,btn,anchor,limit,side)`, for every WGSL stage (
 **A slot.**
 - **Number:** encoder drag up / down = its range in 150 px, snapped to its step; double-tap = its default. Field: click, then ↑ / ↓ = ± step, or type + Enter; double-click = default; Escape leaves.
 - **Colour:** the encoder shows the colour, its pointer the hue; drag up / down = hue; tap = the colour wheel at the foot of the drawer (hue around, saturation from the centre out, a value bar beside it); double-tap = default. Field: a hex + Enter; double-click = default.
+
+**Keys** (V1.1.07a, BLOG0236 Settings drawer keyboard): every encoder in the rack is a keyboard stop (`tabindex=0`). W A S D and the arrows move between them as in the EQ and FX drawers and stay inside the open drawer; W off its top row leaves (8.14). With the drawer open, the next W A S D or arrow from its Settings button goes to the drawer's first knob (`btn._setWin`), also on PERFORM, where the deck header's buttons are not stops. Shift+↑ / ↓ = one step, Shift+← / → = five steps (the setting's own step). A colour encoder: Shift+↑ / ↓ turn the hue 5°, Shift+← / → 30°; Enter opens and closes its colour wheel, as a tap.
 
 Purple People Eater `#B24DFF` throughout (visual domain): arcs, names, value boxes and the selected ring. The drawer holds no Export: Export is in the Code views (6.1; V0.11.09f).
 
@@ -540,6 +558,10 @@ PERFORM is three columns side by side, DECK A | MIXER column | DECK B (`.pf`, gr
 
 ## 8.7 Panel strip: EQ · FX · MODE (PERFORM)
 `.pf-panelrow`: three equal buttons in the toggle style (`.btn.loop.pf-fxbtn`, 22 px high, 10px with 1px letter spacing), **EQ · FX · MODE**, left to right by priority (V0.11.14b, BLOG0182 Panel strip order: EQ · FX · MODE; was MODE · FX · EQ). Each opens a **drawer** (`.pf-fxslide`, V0.9.22d to 22g) that slides out of the strip's bottom edge, `transform: translateY(-100%)` → 0 in 0.26 s, inside a clipping window (`.pf-fxpanel`, `overflow:hidden`). The window is the strip's width, tucked 6 px under it, and reaches the bottom of the LIBRARY module (`fxPlace()`, re-run on resize); it covers the whole LIBRARY, which is left as it is underneath, so its height follows the window. One panel at a time (`fxShow`, `fxOpen` = 'eq' | 'fx' | 'mode' | null); the open button is lit; clicking it again slides the drawer back up. EQ holds the deck EQs and RGB (8.12), FX the deck effects (8.8), MODE the video mix modes (8.13). The drawer comes right after the strip in the page order, so Tab goes strip, drawer, LIBRARY (8.14).
+
+**Changed dots** (V1.1.06a, BLOG0232 EQ and FX buttons show which columns are off their defaults): EQ and FX carry four dots each (`.pf-dots`), two left and two right, in the drawer's column order: A visual (purple), A audio (cyan) | B audio (cyan), B visual (purple). A dot is dim (22 %) while every control in its column is at its default, and glows steadily otherwise; no blinking. EQ: a band, TRIM or colour channel off 0 dB / ×1.00, or killed. FX: an effect's amount off its neutral and not killed (picking another effect alone does not light it). `window.__pfDots()` checks every frame. MODE has none.
+
+**Shift+click reset** (V1.1.06b, BLOG0234 Shift+click on EQ / FX resets to defaults): Shift+click on EQ or FX resets by where it lands: the left third Deck A, the centre both decks, the right third Deck B, audio and visual alike. EQ: every band and audio TRIM to 0 dB, every colour channel and visual TRIM to ×1.00, kills cleared. FX: every amount to its neutral, kills cleared, a pending QUANT kill dropped; the picked effects stay. The drawer stays as it is. Shift+Enter on the selected button resets both decks. With Shift held over the button the bar names what a click resets; after it, "EQ reset: Deck A to default".
 
 **Drawer layout** (EQ and FX, V0.11.14a to 14e): four columns, as the mixer above (`.pf-eqgrid`, each column a `.pf-eqcol` module: 1px `#2a2a2a`, radius 6px, `#0a0a0a`), visual outside, audio inside: deck A's two on the left, deck B's on the right. No DECK A / DECK B header and no deck letter on the labels (V0.11.15b): the column's place names the deck; the message bar names it in full. The columns sit 9 px from the strip, the sides and (EQ) the drawer's bottom (`.pf-eqpan` padding 15px 8px 8px: the drawer starts 6 px under the strip), 6 px apart, 8 px inside each column.
 
@@ -625,16 +647,43 @@ The mode buttons are styled as the strip buttons (22 px, 10px Courier New, 1px l
 
 ## 8.14 Keyboard: one flow for the whole UI
 BLOG0210 Keyboard: W A S D and Tab across the whole UI; Enter on / off; Shift+A / Shift+B / Shift+M on PERFORM (V1.0.28a to 30d). One document-level `keydown` handler (capture phase) serves CREATE, PERFORM and AUTHORING, on a local file and on the website. Pocket Rave is touch only (`prActive()`). It replaces PERFORM's MIXER column grid (BLOG0187) and CREATE's own LIBRARY handler.
-- **The stops** (`kbdItems`, `KBD_SEL`): on the open tab, buttons, selects, links, the TEMPO field and anything with a tab index, plus the tab bar; lane chips, bus bars and lane knobs are stops. Not a stop: `tabindex="-1"` (the Settings rack's knobs), a control clipped out of view (the buttons of a closed drawer) or under an open drawer or panel (`kbdShown`), and PERFORM's deck-header controls (KEY LOCK, MASTER, Code, Settings), which are mouse only (V1.0.30c; CREATE keeps its headers in the flow).
+- **The stops** (`kbdItems`, `KBD_SEL`): on the open tab, buttons, selects, links, the TEMPO field and anything with a tab index, plus the tab bar; lane chips, bus bars and lane knobs are stops. Not a stop: `tabindex="-1"`, a control clipped out of view (the buttons of a closed drawer) or under an open drawer or panel (`kbdShown`), and PERFORM's deck-header controls (KEY LOCK, MASTER, Code, Settings), which are mouse only (V1.0.30c; CREATE keeps its headers in the flow).
 - **W A S D = arrows** (V1.0.29b): the nearest stop that way. W / S go to the next row close to straight ahead (a wider cone when nothing is), then the nearest in it; A / D move along the same row first. **Tab / Shift+Tab** move in page order over the same stops. With nothing selected, the first press goes to the tab's first control (`kbdFirst`: its top row's leftmost; controls a few px apart in height count as one row).
 - **The tab bar:** W (or ↑) into it lands on the open tab; S (or ↓) from it goes to the tab's first control (TEMPO), as Tab does; Enter opens a tab.
 - **Enter = on / off:** presses a button, opens a tab, solos a lane chip or bus bar (`_enter`), kills / restores a knob or encoder, opens / closes a drawer from its strip button, applies a set, makes a deck MASTER.
 - **Shift+arrows = the selected control's value:** encoders, knobs, the TEMPO, QUANT, zoom and MASTER fields, the effect and preset boxes. The plain arrows only move, so ↓ on TEMPO no longer lowers the tempo. TEMPO: digits type a tempo, Shift+↑ / ↓ ±1 BPM, Shift+← / → ±0.01. Text fields and the Code views keep their keys.
 - **The LIBRARY** keeps its rules (`libNav`, 8.9): in the list W / S step the rows and A / D (← / →) load; on the header A / D move along and S goes down into the list. W on the header goes on by the general rule (PERFORM: up into the mixer).
 - **Jump keys**, each to a section's first control, from anywhere (also from the TEMPO field), with no exit first: **Shift+L** into the LIBRARY (ALL), on CREATE and PERFORM, website included; with an EQ, FX or MODE drawer over the LIBRARY the bar says to close it first. On PERFORM (`window.__pfKeys`): **Shift+A** / **Shift+B** into Deck A / Deck B (their PLAY), **Shift+M** into the mixer (A VID), with the message "Mixer: W A S D, arrows or Tab move · Shift+arrows = level · Enter = kill / open · Escape = out of a drawer". Plain M is retired. CREATE has no other section keys.
-- **Drawers (PERFORM):** Tab from a strip button with a drawer open goes straight to the drawer's first control (EQ: A's visual TRIM; FX: VFX1; MODE: MIX), then steps on through the drawer. W A S D and the arrows stay in the open drawer's grid (`.pf-fxin`): only W from its top row leaves, to the strip (V1.0.31b, BLOG0222). W / S take a stop straight below / above first (overlapping it side to side), the nearest row first, then that row's leftmost: PLAY → the RHYTHM bus bar → beat (V1.0.31c, 31d); with none straight that way, the nearest in a cone as before. **Escape** anywhere in a drawer goes to its lit strip button.
+- **Drawers (PERFORM):** Tab from a strip button with a drawer open goes straight to the drawer's first control (EQ: A's visual TRIM; FX: VFX1; MODE: MIX), then steps on through the drawer. W A S D and the arrows stay in the open drawer's grid (`.pf-fxin`): only W from its top row leaves, to the strip (V1.0.31b, BLOG0222). W / S take a stop straight below / above first (overlapping it side to side), the nearest row first, then that row's leftmost: PLAY → the RHYTHM bus bar → beat (V1.0.31c, 31d); with none straight that way, the nearest in a cone as before. **Escape** anywhere in a drawer goes to its lit strip button. The Settings drawers follow the same rule: the keys stay in the open rack (7.8; V1.1.07a, BLOG0236).
 - **One focus look:** the app's cyan ring (`box-shadow: 0 0 0 2px #00d4ff`) on every stop picked from the keyboard (`.kbd-nav … :focus-visible`); the video mix modes keep their purple ring.
 - Nothing acts while typing in a field or the Code view (TEMPO excepted, as above), or with Ctrl / Cmd / Alt held.
+
+## 8.15 Hardware: two Midi Fighter Twisters
+BLOG0238 Hardware: two Midi Fighter Twisters drive the PERFORM mixer (V1.1.09a to 09k). Two DJ TechTools Midi Fighter Twisters, on their factory settings (no configuration tool, no scripting on the unit), play PERFORM, one per deck, by the Hardware Perform Map (blueprint sheet F). Web MIDI (`navigator.requestMIDIAccess`, no SysEx): Chrome and other browsers that have it. CREATE ignores the units.
+
+**What the units send and take** (factory settings, measured 2026-11-10): a turn sends channel 1, CC 0 to 15 (bank 1, top left to bottom right), an absolute value 0 to 127; a push sends channel 2, the same CC, 127 pressed and 0 released. The app sets each ring with a CC on channel 1, which also sets the knob's own value, so the next turn carries on from the app's value: the knobs behave as endless encoders without the configuration tool. Ring colour is set on channel 2 (cyan 31 on unit A, 34 on unit B; purple 108; blue 1 for the deck and navigation knobs). The side buttons send channel 4 (CC 8, 10, 11); two of them switch the unit to bank 2 (CC 0 and 1 on channel 4), whose knobs send other CCs: bank 2 is not used.
+
+**Binding.** Every MIDI input is read, not by name: a unit's port name can differ from its device name and cannot always be renamed (one unit reports "USB MIDI Device"). On PERFORM, the first unit whose knob is pushed binds to Deck A (the LEFT unit), the next to Deck B; the message bar asks for each ("MIDI: press a knob on the LEFT Twister (Deck A)"). Its output is the port of the same name. Binding lasts the session; a unit's port id survives unplugging, so a replugged unit keeps its deck and gets its colours and rings again.
+
+**The map** (`MAP`, rows top to bottom; Deck B is a column mirror of Deck A, its row 4 inner knob MODE where Deck A has GLOBAL). Knobs are named by column A to D and row 1 to 4, on each unit.
+
+| Row | Deck A: A | B | C | D | Deck B: A | B | C | D |
+|---|---|---|---|---|---|---|---|---|
+| 1 | WF Cue | AMU Solo | Video Gain | Audio Gain | Audio Gain | Video Gain | AMU Solo | WF Cue |
+| 2 | VFX1 | AFX1 | VEQ BLUE | AEQ HIGH | AEQ HIGH | VEQ BLUE | AFX1 | VFX1 |
+| 3 | VFX2 | AFX2 | VEQ GREEN | AEQ MID | AEQ MID | VEQ GREEN | AFX2 | VFX2 |
+| 4 | Library | Global | VEQ RED | AEQ LOW | AEQ LOW | VEQ RED | Mode | Library |
+
+The EQ rows follow the EQ drawer's rows, top to bottom (V1.1.09d). GLOBAL and MODE are not mapped yet: those two knobs do nothing.
+
+**The registry.** Each PERFORM control offers itself to the units through `window.__mkReg(deck, name, {get, set, push})`, kept in `MK` by deck and map name: the mixer encoders, the EQ and RGB knobs and the FX knobs register where they are built (one code with the mouse and keys), so a turn calls the same `set` a drag does and a push the same kill as Enter. `get` and `set` use the knob's own 0 to 1 position (the EQ's centre detent at 64 included). A turn on an EQ or FX knob opens its drawer (`window.__pfOpen`; it never closes one), so the change can be seen.
+
+**Rings.** Every 50 ms each bound unit gets the value of each mapped control that changed since it was sent, so a mouse, key or reset move shows on the ring. A value that came from the unit is recorded as sent, so the app never answers a turning knob (the EQ's centre snap would otherwise hold the knob at 64).
+
+**Stepping knobs** (`rel`: LIBRARY, WF Cue, AMU Solo). They have no value of their own: the change between one value and the last moves a cursor, one stop per 8 counts of turn (`REL_STEP`; the remainder is kept, so a slow turn steps too), and the ring returns to 64 after 250 ms at rest, so the knob always turns both ways. A turn closes an open EQ, FX or MODE drawer where the cursor is under it.
+- **Library** (A4, D4): one cursor for both knobs over the LIBRARY header buttons (not CLEAR: one push would empty the library), then the list rows. Push: presses the button, or loads the row onto that knob's deck (`window.__libLoad`, as ← / →: a playing deck switches on QUANT); on a set row, applies or turns it off.
+- **WF Cue** (A1, D1): a cue cursor over the deck's structure SECTIONS lane; the first turn puts it on the playhead's section. An Orange Julius outline on the chip in the roll (4.4); the bar names it ("Deck A cue · section 2 of 26 · bar 9.1 (push = jump on QUANT)"). Push: `amuCue` on that section, as a chip click (on QUANT; LOOP on: loops it). The cursor stays on the section until the knob turns, so pushing again jumps back: a cue point. The playhead runs on; the cursor can be passed and still pushed.
+- **AMU Solo** (B1, C1): a cursor over the deck's AMU strip, left to right: each bus bar, then its lane chips; an Orange Julius outline. Push: solo or unsolo it, as its click; a double push (0.4 s) clears the deck's solos, as SOLO.
 ---
 
 # 9. Node: Authoring (the template the app carries)
@@ -712,7 +761,7 @@ The full keyboard table is E 10 (Keyboard index); every control's help, with its
 - **CUE (every deck):** back to the start of the track; on QUANT while playing (plays on), at once while paused.
 - **PERFORM deck:** header (mouse only) KEY LOCK · MASTER (lit = tempo master; click = master by hand) · `</> Code` · Settings (shown while the shader declares settings); row PLAY / PAUSE · CUE · LOOP · zoom field · orientation · position ........ SOLO.
 - **Code view (AUTHORING, CREATE, each PERFORM deck):** Apply · Copy · Export (the next version to Downloads, the current settings as its defaults) · the editor. Clicks in it stay off the stage.
-- **Settings drawer (every stage):** number encoder drag = value (its range in 150 px, snapped to its step) · double-tap = default; number field: click, then ↑ / ↓ = ± step, or type + Enter · double-click = default · Escape leaves. Colour encoder: tap = colour wheel · drag = hue · double-tap = default; colour field: a hex + Enter · double-click = default.
+- **Settings drawer (every stage):** W A S D / arrows between its knobs · Shift+↑ / ↓ ±1 step · Shift+← / → ±5 steps (colour: hue 5° / 30°; Enter = colour wheel) · number encoder drag = value (its range in 150 px, snapped to its step) · double-tap = default; number field: click, then ↑ / ↓ = ± step, or type + Enter · double-click = default · Escape leaves. Colour encoder: tap = colour wheel · drag = hue · double-tap = default; colour field: a hex + Enter · double-click = default.
 - **PERFORM panel strip:** EQ · FX · MODE: click or Enter = open / close its drawer · Tab (a drawer open) = into the drawer.
 - **FX (PERFORM drawer, CREATE drawer):** knob drag = amount · Shift+↑ / ↓ ±1 % · Shift+← / → ±5 % · click = select · Enter = kill / restore on QUANT · double-click = reset to the default · Tab / Shift+Tab = next / previous; effect box: click, then Shift+arrows = previous / next effect.
 - **EQ drawer (PERFORM):** TRIM, EQ and RGB knobs: drag = level · Shift+↑ / ↓ fine · Shift+← / → coarse · click = select · Enter = kill / restore, at once (EQ −26 dB, RGB 0, audio TRIM −15 dB, visual TRIM off) · double-click = 0 dB / ×1.00.
@@ -721,7 +770,7 @@ The full keyboard table is E 10 (Keyboard index); every control's help, with its
 - **DSP panel (PERFORM):** preset box (click, then Shift+↑ / ↓: Off · Gentle · Medium · Aggressive · Limiter) · THRESH · RATIO · OUTPUT knobs (drag, Shift+arrows, double-click = default) · GR bar · DSP again or Escape = close.
 - **LIBRARY:** click = select · ↑ / ↓ or W / S select · A / ← = Deck A · D / → = Deck B (CREATE: both = its deck) · Delete = remove · drag onto a deck = load · CREATE: double-click, double tap or Enter = load and play; header ALL · MUSIC · VISUALS · SETS ........ X (clear); sort header: click a heading = sort by it, again = reverse; set row: double-click or Enter = apply / turn off.
 - **Visuals header (CREATE) / Visual header (AUTHORING):** `</> Code` · Settings (shown while the shader declares settings) · Pop Out · orientation · REC. Stage: drop or double tap = `.wgsl`.
-- **Power light (main app):** tap = retype the header for the session (Enter = keep · Esc = cancel · empty = ONEMANSHYO).
+- **Power light (main app):** tap = retype the header name and the tagline for the session, up to 75 characters each (Enter = keep · Esc = cancel · empty = the default).
 - **Zoom field:** click in, Shift+↑ / ↓ = 0 / 25 / 50 / 75 / 100.
 - **Music Understanding (every surface):** chips: click = solo. Bus bars: click = group solo. SOLO clears.
 - **Mixer encoders:** drag = level (VID %, AUD dB, in the message bar) · Shift+↑ / ↓ fine · Shift+← / → coarse · click = select · Enter = kill / restore · double-click = the default (VID 0 %, AUD silence), restored. **LINK** (the chain between a deck's two encoders): click or Enter = link / unlink (on at open; moving VID unlinks).
@@ -729,6 +778,8 @@ The full keyboard table is E 10 (Keyboard index); every control's help, with its
 - **Keyboard:** SPACE = play / pause CREATE's deck on CREATE and AUTHORING, the master PLAY / PAUSE on PERFORM (ignored while typing). Esc no longer closes the song info (V0.9.05a).
 - **Keyboard flow (CREATE, PERFORM, AUTHORING)** (8.14): W A S D = arrows = the nearest stop that way · Tab / Shift+Tab = page order · Enter = on / off · Shift+arrows = the selected control's value · Shift+L = into the LIBRARY (CREATE and PERFORM) · Shift+A / Shift+B / Shift+M = into Deck A / Deck B / the mixer (PERFORM) · Escape in a drawer = its lit strip button · Tab from a strip button (a drawer open) = the drawer's first control. Ignored while typing or with Ctrl / Cmd / Alt.
 - **Pocket Rave:** see 7.4.
+- **Midi Fighter Twisters (PERFORM)** (8.15): first knob pushed = bind Deck A (left), then Deck B · gains, EQ, RGB, FX: turn = value, push = kill / cut / bypass · Library: turn = cursor, push = press / load to the knob's deck · WF Cue: turn = section cursor, push = jump on QUANT · AMU Solo: turn = cursor, push = solo, double push = release all.
+- **EQ and FX buttons (PERFORM):** Shift+click = reset (left third Deck A, centre both, right third Deck B) · Shift+Enter = both. **Settings button:** Shift+click (Shift+Enter on CREATE) = every setting to the shader default.
 
 ---
 
@@ -781,6 +832,8 @@ The shared OMS tokens and component language: the `.app` shell, `.header` (gradi
 - Messages: info cyan `#00d4ff`, state Orange Julius `#ffa500`, error Red Hots `#ff006e`. The DSP panel's GR bar is Orange Julius too (Dojo's). Red Hots also: the danger button (`.btn.mag`), GPU errors on a stage, the ONEMANSHYO gradient (cyan to Red Hots) and Pocket Rave's stage border while playing.
 - Active and recording: Barbie Pink `#E0218A` (SOLO on the CREATE panel, the roll and waveform playheads, all of REC).
 - Picked or rendered chip on the roll: Yellow Man; LIBRARY entry loaded on a deck: Yellow Man tint.
+- Cueing: a chip waiting for QUANT is filled Orange Julius; the Twister's cue and AMU Solo cursors are Orange Julius outlines (V1.1.09j, V1.1.09k).
+- Changed-from-default dots (EQ, FX, Settings buttons): the column's domain colour, dim or glowing.
 - Bus colours: RHYTHM Red Hots, STRUCTURE Orange Julius, KEY Yellow Man, PACE Green Slime, LOUDNESS blue `#00a8ff`, INSTRUMENTS Purple People Eater. **Every lane takes its bus colour**; beat is Goblin White.
 - Credits and PLUR (ABOUT, Pocket Rave) and the authoring overlay's anchor points: Purple People Eater.
 - Active state = border colour + tint + glow (toggle cyan, SOLO Barbie Pink, REC Barbie Pink pulse). Selected knob or box = a 2px ring in its domain colour; killed = dimmed (opacity 0.35).

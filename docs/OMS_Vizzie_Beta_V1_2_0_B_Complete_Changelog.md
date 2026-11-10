@@ -1,15 +1,37 @@
-# OMS Vizzie app [Beta V1.1.0] Complete Changelog
+# OMS Vizzie app [Beta V1.2.0] Complete Changelog
 
-**Run date:** 2026-11-09  
-**Current Unix Epoch:** 1794244147  
+**Run date:** 2026-11-10  
+**Current Unix Epoch:** 1794328405  
 **Document purpose:** The readable version of the PM backlog: the BLOGs each release packaged, grouped by release, newest first, with the builds that carried them.  
-**Filename:** OMS_Vizzie_Beta_V1_1_0_B_Complete_Changelog.md  
+**Filename:** OMS_Vizzie_Beta_V1_2_0_B_Complete_Changelog.md  
 
 ## About this document
 
-Vizzie Beta V1.1.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
+Vizzie Beta V1.2.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
 
 Versions are major.minor.iteration; a full package rolls the minor, and the iteration line before it becomes that release's iterations. Letters are revisions of the same piece of work.
+
+---
+
+## V1.2.0
+
+Packages the V1.1 iteration line (V1.1.01 to V1.1.09k). Baseline V1.1.09k. The audio core is checked and fixed (KEY LOCK phase lock and sound, load thump) with five calibration tests written down; PERFORM gets changed-from-default dots and Shift+click resets, the Settings drawer joins the keyboard flow, and two Midi Fighter Twisters play the PERFORM mixer by the Hardware Perform Map. V1.1.01 to V1.1.05 carry no letter; the line is lettered from V1.1.06a.
+
+- **KEY LOCK: phase lock to the grid** (BLOG0226 · V1.1.01, 02): The time-stretch worklet reports its real read position every 8 blocks and the deck's pull to its clock works from that report, not from a prediction; a late start begins in place. KEY LOCK decks no longer drift.
+- **Load thump** (BLOG0227 · V1.1.02): A new audio path starts at the deck's volume (one function, `deckVol`, at load and every frame), so a load onto a deck with its AUD down or killed is silent.
+- **KEY LOCK sound** (BLOG0228 · V1.1.03): The splice match is normalised cross-correlation over 1024 samples, searched ±512; the echo and muddy kicks are gone, and it costs less CPU.
+- **Audio calibration tests** (BLOG0229 · V1.2.0 documentation): Drift, two-deck phase, load thump (six cases), KEY LOCK kick fidelity and CPU, written as one spec and reported in every audio build's notes (C 3.6).
+- **Header name: 75 characters** (BLOG0224 · V1.1.04): Typing stops at 75, a paste is trimmed, Enter keeps what is shown; the bar counts while typing.
+- **Tagline** (BLOG0231 · V1.1.05): The power light makes the name and the tagline editable; the tagline follows the name's rules. Default "Music makes magic!".
+- **EQ and FX: changed-from-default dots** (BLOG0232 · V1.1.06a): Four dots per button in the drawer's column order, dim at default, a steady glow when changed.
+- **EQ and FX: Shift+click reset** (BLOG0234 · V1.1.06b): Left third Deck A, centre both, right third Deck B; Shift+Enter both; the drawer stays as it is.
+- **Settings drawer: keyboard** (BLOG0236 · V1.1.07a): Every rack knob is a stop; the keys stay in the open drawer; Shift+arrows step a value (colour: the hue); Enter opens a colour wheel.
+- **Settings button: dot and reset** (BLOG0237 · V1.1.08a): Wider, one purple dot that glows while a setting is off its default, Shift+click resets them all (not on Pocket Rave).
+- **Midi Fighter Twisters on PERFORM** (BLOG0238 · V1.1.09a to 09k): Two Twisters on factory settings, bound by a knob push (left Deck A, right Deck B), every MIDI input read, not by name; rings set and coloured by the app, so the knobs carry on from its values. The Hardware Perform Map is blueprint sheet 12.
+  - **Gains, EQ and FX** (BLOG0240 · V1.1.09a to 09d): Turn and push as the knobs on screen; an EQ or FX knob opens its drawer; the EQ rows follow the drawer (HIGH / BLUE, MID / GREEN, LOW / RED).
+  - **Library** (BLOG0241 · V1.1.09e, 09f): One cursor for both knobs over the LIBRARY buttons and rows; push presses or loads to the knob's deck; one stop per 8 counts.
+  - **WF Cue** (BLOG0242 · V1.1.09g to 09j): A section cursor in Orange Julius; push jumps on QUANT and the cursor stays as a cue point; a chip waiting for QUANT is filled Orange Julius (was a cyan outline).
+  - **AMU Solo** (BLOG0243 · V1.1.09k): A cursor over the deck's buses and lanes; push solos, a double push clears.
 
 ---
 
