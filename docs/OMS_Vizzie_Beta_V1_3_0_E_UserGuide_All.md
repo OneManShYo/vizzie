@@ -1,13 +1,13 @@
-# OMS Vizzie app [Beta V1.2.0] User Guide
+# OMS Vizzie app [Beta V1.3.0] User Guide
 
-**Run date:** 2026-11-10  
-**Current Unix Epoch:** 1794328405  
+**Run date:** 2026-11-12  
+**Current Unix Epoch:** 1794532317  
 **Document purpose:** How to use Vizzie.  
-**Filename:** OMS_Vizzie_Beta_V1_2_0_E_UserGuide_All.md  
+**Filename:** OMS_Vizzie_Beta_V1_3_0_E_UserGuide_All.md  
 
 ## About this document
 
-Vizzie Beta V1.2.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
+Vizzie Beta V1.3.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
 
 ---
 
@@ -88,10 +88,11 @@ Music and visuals: one deck, its shader on the stage, the LIBRARY, effects, and 
 - **Music Understanding** across the bottom, full width, filling the window down to the message bar.
 
 ### 4.2 Global strip
-The thin strip under the GLOBAL header: settings you set and leave. **TEMPO · QUANT · position.**
+The thin strip under the GLOBAL header: settings you set and leave. **TEMPO · QUANT · position · Shaka.**
 - **TEMPO.** Click it, then Shift+↑ / ↓ for one BPM, Shift+← / → for a hundredth of a BPM, or type a value and press Enter. Double-click goes back to the track's own tempo. The audio, the visual and the piano roll all follow, locked to the beat. The range is half to one and a half times the track's tempo.
-- **QUANT.** The same value as on PERFORM (5.6): cues, PLAY, CUE, shader loads and song switches wait for the next step while the music plays. Click it, then Shift+↑ / ↓ or scroll; double-click = 1/4.
+- **QUANT.** The same value as on PERFORM (5.6): cues, PLAY, CUE and shader loads wait for the next step while the music plays. Click it, then Shift+↑ / ↓ or scroll; double-click = 1/4.
 - **Position.** Where you are in the track, in bars.beats.sixteenths. It turns pink while REC records.
+- **Shaka** (SHOUT OUT): click it to show the credits bottom left of the picture: "Music: title · artist" and "Visual: title · author". They stay while it is lit; click again to hide them. One switch for CREATE, AUTHORING and PERFORM, off when you open the app. On PERFORM each deck shows its own credits, and OUT shows a Music line for every deck with its AUD up and a Visual line for every deck with its VID up.
 
 ### 4.3 Music
 
@@ -124,7 +125,7 @@ A dropped cover image must be square. It replaces the MP3's own art until anothe
 - **PLAY / PAUSE** starts and stops. **Spacebar** does the same.
 - **CUE**, right of PLAY / PAUSE: back to the start of the track. While the track plays it jumps on the next QUANT step and plays on, as a chip click; paused, at once. A chip loop is released.
 - **LOOP**, off when you open the app. On, the whole track loops. Click a piano roll block while LOOP is on and that block loops instead (the jump lands on QUANT); click the lit block again to go back to the whole track. Off, the track stops at its end and the playhead goes back to the start.
-- **KEY LOCK**, on when you open the app: the pitch stays put as you change the tempo, and drum hits keep their snap. Off, the pitch moves with the tempo, like a turntable.
+- **KEY LOCK**, off when you open the app. On, the pitch stays put as you change the tempo, and drum hits keep their snap. Off, the pitch moves with the tempo, like a turntable.
 - **Orientation**: the piano roll vertical or horizontal.
 - **PLAY NEXT** (next-track icon): the next track in the LIBRARY list, as it is shown, plays from the start now. After the last track it goes back to the first.
 - **CONTINUOUS PLAY** (playlist icon): on, when a track ends (LOOP off) the next track in the list plays from the start.
@@ -136,7 +137,7 @@ CONTINUOUS PLAY and SHUFFLE light cyan while on. The piano roll zoom and SOLO ar
 ### 4.5 LIBRARY
 The same LIBRARY as PERFORM's (5.10), always open under the controls row. On the website it lists the demo sets (5.11) and opens with the first set applied.
 - **Header:** ALL · MUSIC · VISUALS · SETS ........ X (5.10).
-- **Double-click** (or double-tap) a track, or select it and press **Enter**: it loads and plays from the start. A shader loads onto the stage. While the track plays, a new track switches on QUANT (5.6) and a shader swaps on QUANT.
+- **Double-click** (or double-tap) a track, or select it and press **Enter**: it loads and plays from the start. A shader loads onto the stage. While a track plays, a new track stops it and loads stopped at the start (press PLAY to start it); a shader swaps on QUANT.
 - **Click** an entry to select it; then ↑ / ↓ (or W / S) move the selection, ← / → (or A / D) load it, Delete removes it from the library.
 - **Drag** an entry onto the deck to load it.
 - **Add files** by dropping them anywhere (4.3.3).
@@ -257,6 +258,8 @@ Off the website only: the same deck, arranged for building shaders. The Visual o
 - **Music row:** the cover and the waveform, 40 px high, as on CREATE.
 - **Music Understanding:** the same chips as CREATE and PERFORM (4.8.2): click a chip to solo the lane, click a group's colour bar to solo the group, SOLO clears. Every lane drives the shader at full unless solos mute it, as on CREATE and PERFORM, so a shader gets the same values on every tab.
 - **Piano roll:** as on CREATE (4.8.3), with 4 bars in view at the closest zoom. It opens horizontal at 0 %, 120 px high; the orientation button switches it to vertical and back.
+- **Opens on Yobot Squint**, an asset built to the asset standard: a 3D shader of one thing, seen front on, on a grey background. Its Settings add VIEW (front, right, back, left, top, bottom, or free with ORBIT and TILT), LENS (0 = flat, no perspective) and SPIN after the standard ones. CREATE and PERFORM keep the default scene; a shader you load stays loaded.
+- **GRID** follows the asset in metres (lines every metre and every 10 cm), with the ground line through the asset's base: the side-to-side axis in pink, the depth axis in green. **REF**, next to POINTS, shows a 1.8 m person standing on the ground line, to check the asset's size.
 
 ## 5. PERFORM
 
@@ -266,11 +269,12 @@ Two decks and a mixer, for playing visuals live to music. Shown only when the ap
 **DECK A · MIXER column · DECK B**, side by side, fitted to the window, under the global strip. The MIXER column holds three modules, top to bottom: the MIXER, the panel strip (EQ · FX · MODE) and the LIBRARY. PERFORM's Deck A and Deck B are its own, separate from CREATE's deck (3): a track, PLAY, shader or effect on one tab is not on the other. Opening PERFORM pauses CREATE, and leaving it pauses both decks.
 
 ### 5.2 Global strip
-**TEMPO · QUANT · PLAY · master position · MASTER · DSP.**
+**TEMPO · QUANT · PLAY · master position · Shaka · MASTER · DSP.**
 - **TEMPO**: as on CREATE (4.2). Double-click goes back to the tempo of the deck that is MASTER.
 - **QUANT**: click it, then Shift+↑ / ↓ (or scroll) through None, 1/4, 1/2, 1 Bar, 2 Bars, 4 Bars, 8 Bars. Double-click = 1/4. The same value as CREATE's. See 5.6.
 - **PLAY** (master): pauses every playing deck at once; press again and they carry on from the same spot, in time. With nothing paused, it starts every deck from its playhead. No QUANT wait. **Spacebar** does the same on PERFORM. A deck's own PLAY clears what the master PLAY remembered.
 - **Master position**: the session, in bars.beats.sixteenths. It starts at 1.1.1 with the first PLAY, counts while any deck plays, and holds while every deck is stopped. Double-click to go back to 1.1.1.
+- **Shaka**: SHOUT OUT, as on CREATE (4.2).
 - **MASTER**: the output level of the whole mix, after the ISOLATOR (5.7), before DSP. Click it, then Shift+↑ / ↓ for 1 dB, Shift+← / → for 0.1 dB, or scroll; double-click = 0 dB. From off (−∞) to +6 dB; it opens at 0 dB.
 - **DSP**: the master compressor / limiter. DSP opens its panel, which slides down out of the strip's right end over the top of Deck B; DSP again or Escape closes it. Inside:
   - **Preset box**: click it, then Shift+↑ / ↓ through Off · Gentle · Medium · Aggressive · Limiter. It opens on Limiter, which acts only near clipping.
@@ -281,7 +285,8 @@ The deck audio runs through one master bus: ISOLATOR, then MASTER, then DSP. The
 
 ### 5.3 A deck
 Top to bottom:
-1. **Header:** the deck name, **KEY LOCK**, **MASTER**, which lights while this deck sets the tempo (click it to make this deck MASTER, 5.5), **</> Code** and **Settings**. The header's buttons are mouse only: the keyboard passes them by.
+1. **Header:** the deck name, the **lock**, **KEY LOCK**, **MASTER**, which lights while this deck sets the tempo (click it to make this deck MASTER, 5.5), **</> Code** and **Settings**. The header's buttons are mouse only: the keyboard passes them by.
+   - **Lock** (DECK LOCK), right of the deck name: click to lock (closed shackle) or unlock (open). Locked, no track can be loaded onto the deck while it plays, from the LIBRARY, a drag or a Twister; the message bar says so. A stopped deck loads as usual, and shaders still load. It stays as you set it.
    - **</> Code** opens the deck's shader code over its stage: Apply · Copy · Export and the editor, as on CREATE (4.7.1). Apply compiles the edited code on this deck's stage. A new shader loaded on the deck shows in the open Code view. Code lights while open.
    - **Settings** shows only while the deck's shader declares settings, and opens its Settings drawer (4.7.6). Each deck has its own settings.
 2. **Stage:** the deck's own shader, with its visual FX (5.9) and RGB (5.12). **Double-click** it to pick a `.wgsl`.
@@ -295,7 +300,7 @@ There is no REC or Pop Out on PERFORM.
 - From the LIBRARY: drag an entry onto a deck (the deck shows "Drop to load"), or select it and press A or ← (Deck A), D or → (Deck B). See 5.10.
 - The double-clicks in 5.3.
 
-Files dropped on PERFORM go into the LIBRARY only (4.3.3); load them from there. A track loaded onto a playing deck switches on QUANT (5.6).
+Files dropped on PERFORM go into the LIBRARY only (4.3.3); load them from there. A track loaded onto a playing deck stops it and loads stopped at the start (1.1.1), ready to play, unless the deck is locked (5.3).
 
 Deck A and Deck B start with the reference track and the default shader.
 
@@ -313,10 +318,10 @@ The tempo never changes on a handover, so nothing jumps. A track loaded on a dec
 - **PLAY** on a deck, while the other deck is playing, waits for the next QUANT step of the master grid, then starts this deck from the matching place in its own track, so the two land together. PLAY blinks while it waits; press it again to cancel.
 - **A cue** on a playing deck (a click on a piano roll block or on the waveform, or CUE) waits for the next QUANT step, then jumps. A cued block fills orange while it waits.
 - **A shader load** (from the LIBRARY, the picker or a drop) waits for the next QUANT step while music plays, then swaps. A second load while one waits replaces it. Apply in the Code view is immediate.
-- **A song switch:** a LIBRARY track loaded onto a playing deck does not stop it. The playing song carries on while the new one loads; then, on the next QUANT step, the old song stops and the new one starts from its bar 1, at the master tempo. The message bar says "Loading … (switches on QUANT)", then "on the next 1/4", then "Playing …". A second load while one waits replaces it; PLAY while it waits cancels it and the song plays on. If the new track fails to load, the playing song carries on.
+- **A track** loaded onto a playing deck does not wait: the deck stops and the new track loads stopped at 1.1.1 (5.4). Press PLAY to start it; with the other deck playing it lands on the next QUANT step.
 - **FX kills** (5.9) land on the next QUANT step while anything plays. EQ, RGB, TRIM, ISOLATOR and mixer kills happen at once.
 
-With QUANT at None, PLAY, cues, shader loads and song switches happen at once. QUANT works the same on CREATE and PERFORM.
+With QUANT at None, PLAY, cues and shader loads happen at once. QUANT works the same on CREATE and PERFORM.
 
 ### 5.7 Mixer
 - **OUT**: the two decks' visuals, with their visual FX and RGB, combined at their VID levels in the video mix mode (5.13).
@@ -324,7 +329,8 @@ With QUANT at None, PLAY, cues, shader loads and song switches happen at once. Q
   - **VID** is the deck's strength in OUT, 0 to 100 %. It opens at 0 %, so OUT is black until you bring a deck up.
   - **AUD** is the deck's volume, in dB: full left is silence (−∞ dB), full right 0 dB. It turns as the ear hears: 12 o'clock is −12 dB. It opens at silence. AUD acts on PERFORM; CREATE plays its deck at full.
   - Drag up or down for the level. Click selects the encoder (a purple ring on VID, cyan on AUD), then Shift+↑ / ↓ (fine) or Shift+← / → (coarse). **Enter** kills it (VID: the deck out of OUT; AUD: silence), Enter again restores it; a killed encoder dims and keeps its level. **Double-click** = the default (VID 0 %, AUD silence), restored.
-- **LINK**, the chain icon between each deck's two encoders (between A VID and A AUD, and between B AUD and B VID). On (white) when you open the app; click it, or Enter, to turn it off (grey) or on. Linked, AUD leads: VID stays where it is until AUD reaches its level, then follows AUD exactly. Moving VID unlinks, so the picture can go its own way mid mix. Each encoder keeps its own kill.
+- **LINK**, the chain icon between each deck's two encoders (between A VID and A AUD, and between B AUD and B VID). On (white) when you open the app; click it, or Enter, to turn it off (grey) or on. Linked, VID follows AUD exactly. Turning LINK on while VID is somewhere else glides VID to AUD over one beat, on the next QUANT step; AUD never moves, so the volume never jumps. Moving VID unlinks, so the picture can go its own way mid mix. Each encoder keeps its own kill.
+- **Meters**, two thin bars between the two AUD knobs: Deck A left, Deck B right. Each shows its deck's sound after AUD and its kill: green, yellow when loud, red at the top. Empty means the deck is sending no sound.
 - **ISOLATOR**, at the right end of the MIXER header: **LOW · MID · HIGH** knobs on the whole mix (split at 250 Hz and 2.5 kHz). Each runs from a full kill (left) through 0 dB (centre, the default) to +6 dB (right). Drag, Shift+arrows, click = select, **Enter** = kill / restore (true silence), double-click = 0 dB. PERFORM only.
 - **Shift+M** selects deck A's VID from anywhere on PERFORM; W A S D then move on through the MIXER column (5.8).
 
@@ -388,7 +394,7 @@ One message in the bar sums up what was added, skipped and ignored. Dropping the
 
 **Names:** a track shows its MP3 tags: title and artist. Without a title tag, the file name; other formats (WAV, M4A and so on), the file name. BPM and KEY come from the track's Music Understanding; KEY is the key the song spends longest in (Em, F#m, C). A shader shows its `@title`, `@author`, version and `@type` (4.7.7). The same names show in the deck's song info and the message bar.
 
-**Entries:** click to select (cyan border); the list then takes the keys: ↑ / ↓ (or W / S) move the selection and show its name in the message bar, A or ← loads it on Deck A, D or → on Deck B, Delete removes it from the library (a deck keeps what it has). ↑ or W on the top row goes up to the header's lit button; on the header, A / D (or ← / →) move along it and S (or ↓) goes down into the list. Or drag an entry onto a deck. An entry on a deck is tinted yellow.
+**Entries:** click to select (cyan border); the list then takes the keys: ↑ / ↓ (or W / S) move the selection and show its name in the message bar, A or ← loads it on Deck A, D or → on Deck B, Delete removes it from the library (a deck keeps what it has). ↑ or W on the top row goes up to the header's lit button; on the header, A / D (or ← / →) move along it and S (or ↓) goes down into the list. Or drag an entry onto a deck. A track loaded onto a playing deck stops it and loads stopped (5.4). An entry on a deck is tinted yellow.
 
 The LIBRARY is what you dropped this session. Nothing is saved.
 
@@ -446,23 +452,25 @@ The MODE drawer: sixteen video mix modes for OUT, four rows of four. Click one, 
 MIX and ADD look the same while the two VIDs add up to 100 % or less; past that, MIX shows the average and ADD the sum. With both decks on the same shader the modes look alike: load another shader on one deck to see them.
 
 ### 5.14 Midi Fighter Twisters
-PERFORM plays from two DJ TechTools Midi Fighter Twisters, one per deck, straight out of the box: no setup tool. Use Chrome (it has Web MIDI). Plug both in, open PERFORM, then **press any knob on the LEFT Twister**: it becomes Deck A. Then press a knob on the RIGHT one for Deck B. The message bar asks for each. They stay bound until you reload the page, also if you unplug one and plug it back in.
+PERFORM plays from two DJ TechTools Midi Fighter Twisters, one per deck, straight out of the box: no setup tool. Use Chrome (it has Web MIDI); the website has no PERFORM and asks for no MIDI. Plug both in, open PERFORM, then **press any knob on the LEFT Twister**: it becomes Deck A (MFA). Then press a knob on the RIGHT one for Deck B (MFB). The message bar asks for each. They stay paired until you reload the page, also if you unplug one and plug it back in.
 
-The knobs are named by column A to D, left to right, and row 1 to 4, top to bottom, on each Twister. Deck B is the mirror of Deck A, so the gains meet in the middle:
+The knobs are named by column A to D, left to right, and row 1 to 4, top to bottom, on each Twister. MFB is the mirror of MFA, so each deck's controls sit on the outside and the gains meet in the middle:
 
-| Row | Deck A: A | B | C | D | Deck B: A | B | C | D |
+| Row | MFA (Deck A): A | B | C | D | MFB (Deck B): A | B | C | D |
 |---|---|---|---|---|---|---|---|---|
-| 1 | WF Cue | AMU Solo | Video Gain | Audio Gain | Audio Gain | Video Gain | AMU Solo | WF Cue |
+| 1 | Library | WF Cue | Video Gain | Audio Gain | Audio Gain | Video Gain | WF Cue | Library |
 | 2 | VFX1 | AFX1 | BLUE | HIGH | HIGH | BLUE | AFX1 | VFX1 |
 | 3 | VFX2 | AFX2 | GREEN | MID | MID | GREEN | AFX2 | VFX2 |
-| 4 | Library | (not used) | RED | LOW | LOW | RED | (not used) | Library |
+| 4 | Settings | AMU | RED | LOW | LOW | RED | AMU | Settings |
 
-- **Gains, EQ and FX:** turn = the level, as the knob on screen; push = kill or restore (FX on QUANT, as on screen). Turning an EQ or FX knob opens its drawer, so you see what changes. The rings show the app's values, cyan for sound and purple for picture, and follow any change you make on screen; the knob carries on from there.
-- **Library** (A4 left, D4 right): turn to move through the LIBRARY's buttons (ALL, MUSIC, VISUALS, SETS), then down the list; push to press the button, or to load the selected track or shader onto that Twister's deck. Both knobs move the same selection. A turn closes an open EQ, FX or MODE drawer so the LIBRARY shows.
-- **WF Cue** (A1 left, D1 right): turn to pick a section of the song: an orange outline on its block in the piano roll, and the message bar says which ("Deck A cue · section 2 of 26 · bar 9.1"). The first turn starts at the section playing. Push to jump there on the next QUANT step; the block fills orange while it waits. The outline stays on that section until you turn again, so pushing again jumps back to it, like a cue point. It works after the playhead has passed it too.
-- **AMU Solo** (B1 left, C1 right): turn to move an orange outline along the deck's Music Understanding groups and lanes, left to right; push to solo or unsolo it. Push twice quickly to clear all the deck's solos.
+- **Library** (MFA A1, MFB D1): turn to move down the LIBRARY list (the rows showing). Push to load the selected track onto that Twister's deck, stopped (a playing deck stops first). Push twice quickly on a stopped deck to load and play: it starts on the next QUANT step once the track is ready. On a playing deck a double push also just stops it and loads. Hold the knob down and turn to change the master tempo, 0.1 BPM per click, as far as you like; hold it for 1 s without turning to put the tempo back to the master deck's. Both Library knobs move the same selection, and turning one closes an open EQ, FX or MODE drawer so the LIBRARY shows.
+- **WF Cue** (MFA B1, MFB C1): turn to pick a block of the song in the current lane: an orange outline on it in the piano roll, and the message bar says which ("Deck A cue · section 2 of 26 · bar 9.1"). Push to jump there on the next QUANT step; the block fills orange while it waits. The outline stays, so pushing again jumps back, like a cue point. Hold the knob down and turn to switch lane: sections, segments, phrases. Loading another track drops the outline.
+- **Video Gain** (MFA C1, MFB B1) and **Audio Gain** (MFA D1, MFB A1): turn = the level; push = kill or restore. Push Video Gain twice quickly to turn LINK on (VID glides to AUD, 5.7).
+- **EQ and FX** knobs: turn = the level, and the drawer opens so you see it. With the drawer closed, a push only opens it; with it open, push = kill or restore (FX on QUANT, as on screen).
+- **Settings** (MFA A4, MFB D4): turn to open the deck's Settings drawer and move along its settings (an orange outline); turn back past the first to reach the Settings button. Push on a setting to change it (turn sets its value, push again to stop); push twice quickly to put that setting back to its default. On the Settings button, push closes the drawer and two quick pushes reset every setting.
+- **AMU** (MFA B4, MFB C4): turn to move an orange outline along the deck's Music Understanding groups and lanes; push to solo or unsolo it. It closes the deck's Settings drawer, which covers the chips.
 
-The library, cue and solo knobs move one step for a short turn, so small lists stay easy to work. The Twisters' side buttons are not used; two of them switch the Twister to its second bank, where the knobs do nothing in Vizzie, so press them again to come back.
+The rings show the app's values, cyan for sound and purple for picture, and follow any change you make on screen; the knob carries on from there. The side buttons do nothing. If a Twister slips to another bank (a middle side button pressed), Vizzie puts it straight back on bank 1. If the two Twisters report the same name and get crossed, the first turn fixes it ("turn again").
 
 ## 6. HELP, ABOUT and LEARN
 
@@ -534,6 +542,7 @@ Every message the bar shows, as worded in this release. NAME stands for a file, 
 | 9.1.2.7 | DSP preset box | DSP preset Limiter (click, then Shift+↑↓: Off · Gentle · Medium · Aggressive · Limiter) |
 | 9.1.2.8 | THRESH, RATIO, OUTPUT and their values | DSP THRESH -3.0 dB (drag · Shift+↑↓ ←→ · click = select · double-click = 0 dB) / DSP RATIO 20.0:1 (… double-click = 1.0:1) / DSP OUTPUT 0 dB (… double-click = 0 dB) |
 | 9.1.2.9 | GR | DSP gain reduction: how hard the compressor is working now |
+| 9.1.2.10 | Shaka (PERFORM, CREATE and AUTHORING strips) | SHOUT OUT: music and visual credits (on / off) |
 
 #### 9.1.3 PERFORM: deck
 
@@ -562,6 +571,7 @@ Every message the bar shows, as worded in this release. NAME stands for a file, 
 | 9.1.3.21 | Copy (Code view) | Deck A: Copy the shader code |
 | 9.1.3.22 | Export (Code view) | Deck A: Export: NAME_V12.wgsl to Downloads, the code with these settings as its defaults |
 | 9.1.3.23 | Code editor | Deck A: Shader code (edit, then Apply) |
+| 9.1.3.24 | Lock | Deck A LOCK on: no track loads while it plays (click = on / off) / Deck A LOCK off (click = on / off) |
 
 Lane values: BEAT beat, beatPhase · BAR bar, barPhase · SECTION section n/N, progress · SEGMENT segment progress · PHRASE phrase n/N, progress · KEY mode, tonic · PACE pace · LOUDNESS momentary LUFS · DRUM, BASS, VOCAL, OTHER activity. Buses: RHYTHM, STRUCTURE, KEY, PACE, LOUDNESS, INSTRUMENTS.
 
@@ -768,9 +778,16 @@ The help after the value is the shader's own, from its declaration; without it t
 | 9.2.66 | Settings reset | Settings reset: every setting to the shader default (PERFORM: "Deck A: " first) |
 | 9.2.67 | Twister not bound | MIDI: press a knob on the LEFT Twister (Deck A) / MIDI: press a knob on the RIGHT Twister (Deck B) |
 | 9.2.68 | Twister bound | MIDI: Twister bound to Deck A · now press a knob on the RIGHT Twister (Deck B) / MIDI: Twister bound to Deck B |
-| 9.2.69 | Twister WF Cue | Deck A cue · section 2 of 26 · bar 9.1 (push = jump on QUANT) |
-| 9.2.70 | Twister Library | the button's or row's help, then " (Twister LIBRARY: push = press)" on a button |
-| 9.2.71 | Twister AMU Solo | the group's or lane's help, then " · Twister: push = solo, double push = release all" |
+| 9.2.69 | Twister WF Cue | Deck A cue · section 2 of 26 · bar 9.1 (push = jump on QUANT); SEGMENT or PHRASE in place of section after a lane switch |
+| 9.2.70 | Twister Library | the row's help |
+| 9.2.71 | Twister AMU | the group's or lane's help, then " · Twister: push = solo, double push = release all" |
+| 9.2.72 | SHOUT OUT | SHOUT OUT on: music and visual credits / SHOUT OUT off |
+| 9.2.73 | LINK glide | Deck A LINK on · VID glides to AUD N% on the next 1/4, over one beat (at once: no "on the next" part) |
+| 9.2.74 | Twister bank | MIDI: MFB slipped to bank 2 · back on bank 1 |
+| 9.2.75 | Twister outputs crossed | MIDI: the two Twisters' outputs were crossed (same port name) · fixed, turn again |
+| 9.2.76 | Twister EQ / FX push, drawer closed | EQ open · push again to kill / restore / FX open · push again to kill / restore |
+| 9.2.77 | Twister tempo reset | MIDI: tempo reset to N (Library held 1 s) |
+| 9.2.78 | Twister Settings, no settings | Deck A: no settings in this shader |
 
 ### 9.3 Errors
 
@@ -791,7 +808,7 @@ The help after the value is the shader's own, from its declaration; without it t
 | 9.3.13 | GPU (on the stage) | WebGPU unavailable. Desktop needs a current Chrome, Edge, or Safari. / WebGPU unavailable (no adapter). / GPU device lost: reason / GPU error: reason / WGSL error line N: message |
 | 9.3.14 | Settings line skipped | Settings: line N · NAME: reason, for each line that does not fit, joined by " · " ("Deck B: " in front on PERFORM). Reasons: name; settings[N].c; N is 0 to 15; a number is .x, .y, .z or .w; a colour is .xyz or .yzw; min max step default; color r g b; min below max; step above 0; default from min to max; name used twice; place used twice |
 | 9.3.15 | Settings over the rack | Settings: N beyond the 32 slots not shown |
-| 9.3.16 | Song switch failed | Deck A: Could not load NAME · the playing song carries on |
+| 9.3.16 | DECK LOCK | Deck A is LOCKED while it plays: unlock it (lock icon) to load a track |
 
 ## 10. Keyboard index
 

@@ -1,13 +1,28 @@
-# OMS Vizzie app [Beta V1.2.0] Release Notes
+# OMS Vizzie app [Beta V1.3.0] Release Notes
 
-**Run date:** 2026-11-10  
-**Current Unix Epoch:** 1794328405  
+**Run date:** 2026-11-12  
+**Current Unix Epoch:** 1794532317  
 **Document purpose:** User enhancements since V0.2.18c, newest first.  
-**Filename:** OMS_Vizzie_Beta_V1_2_0_D_Release_Notes.md  
+**Filename:** OMS_Vizzie_Beta_V1_3_0_D_Release_Notes.md  
 
 ## About this document
 
-Vizzie Beta V1.2.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
+Vizzie Beta V1.3.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
+
+---
+
+## V1.3.0
+
+- SHOUT OUT: the Shaka button in the GLOBAL bar puts the song and the visual's credits bottom left of the picture, on CREATE, AUTHORING, each PERFORM deck and OUT, for as long as it is on.
+- PERFORM: two small level meters between the AUD knobs show each deck is sending sound.
+- PERFORM: a lock icon next to each deck's name. Locked, no track can be loaded onto that deck while it plays.
+- PERFORM and CREATE: loading a track onto a playing deck stops it and loads the new track stopped at the start, ready to play.
+- LINK: turning LINK on glides VID to AUD over one beat, on QUANT. AUD never moves, so the volume never jumps.
+- KEY LOCK is off when you open the app.
+- Midi Fighter Twisters, remapped and finished: Library on the top outer knob (turn = the list, push = load stopped, double push = load and play on QUANT, push and turn = master tempo, hold = tempo reset), WF Cue next to the gains (push and turn = section, segment or phrase), Video Gain double push = LINK on, Settings and AMU on the bottom row, Settings double push resets a setting. EQ and FX open with a push, without a kill. The side buttons do nothing; a Twister that slips to another bank comes straight back.
+- Twisters: knobs no longer jump on fast turns or when both units report the same name.
+- The website no longer asks for MIDI access.
+- AUTHORING opens on Yobot Squint, an asset built to the new asset standard: front view, ORBIT, TILT, LENS and SPIN, grey background, a grid in metres with the ground line, REF (a 1.8 m person) for size.
 
 ---
 

@@ -1,15 +1,44 @@
-# OMS Vizzie app [Beta V1.2.0] Complete Changelog
+# OMS Vizzie app [Beta V1.3.0] Complete Changelog
 
-**Run date:** 2026-11-10  
-**Current Unix Epoch:** 1794328405  
+**Run date:** 2026-11-12  
+**Current Unix Epoch:** 1794532317  
 **Document purpose:** The readable version of the PM backlog: the BLOGs each release packaged, grouped by release, newest first, with the builds that carried them.  
-**Filename:** OMS_Vizzie_Beta_V1_2_0_B_Complete_Changelog.md  
+**Filename:** OMS_Vizzie_Beta_V1_3_0_B_Complete_Changelog.md  
 
 ## About this document
 
-Vizzie Beta V1.2.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
+Vizzie Beta V1.3.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
 
 Versions are major.minor.iteration; a full package rolls the minor, and the iteration line before it becomes that release's iterations. Letters are revisions of the same piece of work.
+
+---
+
+## V1.3.0
+
+Packages the V1.2 iteration line (V1.2.01a to V1.2.33a). Baseline V1.2.33a. The two Midi Fighter Twisters are remapped and finished on the hardware: Library on the top outer knob with master tempo on push and turn, Settings and AMU on the bottom row, every side button off, single and double push settled per knob, and the hardware-only bugs found and fixed (fast turns, crossed outputs, late AMU). SHOUT OUT shows song and shader credits on every stage. PERFORM gets deck level meters and DECK LOCK. A load onto a playing deck now stops it and loads the track stopped at 1.1.1. The authoring template gets the asset standard and the pipeline (asset, visualizer, scene, story) with Yobot Squint as its worked example.
+
+- **Website: no MIDI request** (BLOG0245 · V1.2.01a): The MIDI layer starts only off the website, where PERFORM exists; the website never asks for MIDI access.
+- **SHOUT OUT** (BLOG0251 · V1.2.06a to 06d): A Shaka button in the GLOBAL bar (CREATE, AUTHORING and PERFORM, one state) shows two credit lines bottom left of the stage, "Music: title · artist" and "Visual: title · author", one font, one colour, white at 70 %, fading over one beat. Off by default, not saved, no MIDI.
+  - **On the PERFORM decks; OUT stacks** (BLOG0260 · V1.2.14a): Each deck canvas shows its own two lines; OUT lists a Music line for every deck with AUD up and a Visual line for every deck with VID up.
+- **Deck level meters** (BLOG0264 · V1.2.20a): Two thin meters between the AUD knobs, Deck A left, Deck B right, no labels: the deck's level after AUD and its kill, green, yellow above −6 dB, red at 0 dB.
+- **DECK LOCK** (BLOG0275 · V1.2.31a): A lock icon right of each PERFORM deck title, off by default, kept until clicked again. On, no track loads onto that deck while it plays (Twister, LIBRARY row, drag); shaders still load.
+- **Loading onto a playing deck** (BLOG0277 · V1.2.33a): The deck stops and the new track loads stopped at 1.1.1, from any source. The song switch on QUANT (V1.0.21a) is no longer used: hot loading a playing deck could not be made reliable in the HTML app (BLOG0198 and BLOG0278 dropped).
+- **LINK glides** (BLOG0256 · V1.2.11a): LINK on no longer waits for AUD to pass VID: VID glides to AUD on the next QUANT step over one beat, and AUD never moves.
+- **KEY LOCK off by default** (BLOG0254 · V1.2.09a): Every deck opens with KEY LOCK off.
+- **Midi Fighter Twisters** (BLOG0238 · V1.2.02a to 33a): signed off on the hardware.
+  - **Map** (BLOG0246, 0247, 0254 · V1.2.02b, 03a, 09a): Library on MFA A1 / MFB D1, WF Cue beside the gains, Settings on MFA A4 / MFB D4, AMU on MFA B4 / MFB C4; MFB mirrors MFA.
+  - **Drawers left alone** (BLOG0248, 0255 · V1.2.04a, 10a): Only the Library knob closes a mixer drawer; AMU and WF Cue close that deck's Settings drawer.
+  - **Library** (BLOG0252, 0257, 0261, 0265, 0272, 0274 · V1.2.07a, 12a, 15a, 16a, 21a, 28a, 30a): The cursor moves over the list rows only; single push loads the track stopped; double push on a stopped deck loads and plays on the QUANT grid once the AMU and audio are in; push and turn rides the master tempo, 0.1 BPM per stop, endless; a 1 s hold resets the tempo.
+  - **Settings knob** (BLOG0253, 0262, 0263, 0269, 0270 · V1.2.08a, 17a, 18a, 19a, 25a, 26a): A push opens the drawer with the cursor only; push arms a setting; double push resets the setting under the cursor, or all of them on the Settings button.
+  - **EQ and FX** (BLOG0266 · V1.2.22a): A push on a closed drawer opens it without a kill.
+  - **WF Cue** (BLOG0268, 0273 · V1.2.24a, 29a): Push and turn switches lane (section, segment, phrase); a cursor from the previous track is dropped on load.
+  - **Video Gain** (BLOG0256 · V1.2.11a): Double push turns LINK on.
+  - **Side buttons and banks** (BLOG0258, 0268 · V1.2.13a, 24a): Every side button does nothing; a unit slipped to bank 2 to 4 is sent back to bank 1 with its colours and rings.
+  - **Knob position** (BLOG0267, 0271 · V1.2.23a, 27a): A knob back in stepping mode counts from its real position, and a fast turn no longer jumps after the recentre.
+  - **Crossed outputs** (BLOG0276 · V1.2.32a): Two units with the same port name could get each other's output; the app sees it from the knob values and swaps them.
+- **Asset shader standard** (BLOG0249 · V1.2.05a to 05f): Template rules R14, R15, R17, R18: the source decides 2D or 3D; one asset, one shader; a 3D asset's VIEW, ORBIT, TILT, LENS and SPIN on row 3 through `stdCam`; ASSET_BG #404040; the app flags background settings and missing ASSET_BG. AUTHORING opens on Yobot Squint, the worked example, with OBJECTS TOGGLE and CRYPTOMATTE wired; the grid follows the asset's camera in metres.
+- **Pipeline: asset, visualizer, scene, story** (BLOG0250 · V1.2.05g to 05j): Rules R16 and R19 to R22; six views, origin at the bottom centre, metres, LENS 0 (orthographic) by default, ASSET_SUN; GRID draws the X axis in Barbie Pink and depth in Green Slime; REF shows a 1.8 m person; every asset opens at 50 % of the frame on a ground line 25 % up.
+- **Documentation V1.3.0** (BLOG0279 · V1.3.0): The doc changes of this roll are listed in BLOG0279.
 
 ---
 

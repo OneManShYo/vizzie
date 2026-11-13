@@ -1,13 +1,13 @@
-# OMS Vizzie app [Beta V1.2.0] Claude Project Instructions
+# OMS Vizzie app [Beta V1.3.0] Claude Project Instructions
 
-**Run date:** 2026-11-10  
-**Current Unix Epoch:** 1794328405  
+**Run date:** 2026-11-12  
+**Current Unix Epoch:** 1794532317  
 **Document purpose:** Instructions to Claude for working on the Vizzie project.  
-**Filename:** OMS_Vizzie_Beta_V1_2_0_Z_ClaudeProject_Instructions.md  
+**Filename:** OMS_Vizzie_Beta_V1_3_0_Z_ClaudeProject_Instructions.md  
 
 ## About this document
 
-Vizzie Beta V1.2.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
+Vizzie Beta V1.3.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
 
 ---
 
@@ -41,6 +41,9 @@ You are working on Vizzie, a single self-contained HTML app (Web Audio, WebGPU, 
 - The uniform contract changes only through its reserved slots, never by renaming or reshuffling.
 - Deck controls are one shared code for every deck. Fix the component, never a copy.
 - One behaviour, one code path: before adding a special case for one surface, source or loader, route it through the code that already does it. If it cannot be shared, the notes say why.
+- Everything starts in Vizzie (public, GPL) unless it cannot be built there; Mezcla is the native version and ports from Vizzie. Bugs Mezcla finds come back through Wes.
+- Hardware (two Midi Fighter Twisters, C 8.15, F sheet 12): MIDI carries frequent performance actions; a push that opens a drawer changes nothing; no double push where the first push would cause a dropout; MFB mirrors MFA. A hardware report is reproduced on the build it was found in, with a test shaped like the device, before it is fixed. Twister changes are drawn on a grid with MFA / MFB column-row names.
+- A load onto a playing deck stops it and loads stopped at 1.1.1; Vizzie does no hot load (an HTML limit; Mezcla does it).
 - Three decks, one global, as Ableton's channels: CREATE's deck (CREATE, AUTHORING, Pocket Rave), PERFORM Deck A and PERFORM Deck B each have their own track, audio, play state, shader and FX; tempo, clock, QUANT and the master bus are global. Nothing passes between decks except through the global layer.
 
 # 3. Music time
@@ -72,14 +75,17 @@ You are working on Vizzie, a single self-contained HTML app (Web Audio, WebGPU, 
 # 6. PM
 
 - All work goes through the backlog as BLOGs (epic → story → task, linked). Write them as work happens, with Wes's words and test results in the notes, and list every build that carried them.
-- Only Wes closes a BLOG. Status words are open, closed and parked; nothing else (no 'later', no 'optional').
+- Only Wes closes a BLOG. Status words are open, closed and parked; nothing else (no 'later', no 'optional', no 'waiting on', no 'new'). When BLOGs are put to Wes, each shows its number, title and a one-line description of what it is.
 - Show backlog work as a hierarchy grouped by module, and always write a BLOG as its number followed by its name.
 - The PM JSON is the record of the product. Never delete a version of it: every rebuild writes a new file beside the old one, the old one stays, and the new bundle is handed to Wes as soon as it is written. Chain commands with `set -o pipefail` so a failed step stops the chain.
 - Every release follows the OMS suite packaging workflow, `OMS#Suite#PM#PackagingWorkflow#<date>#<epoch>.md` (the newest one): versioning, filing, deliverables, blueprints, PM bundles, git and deployment. Follow it as written; do not re-derive it.
 - A release does every pre-packaging step (the workflow's §4A, blueprints included) before Wes reviews anything, then one review, one item at a time, before the push. File and bundle names come only from the workflow's templates; never invent one.
 - "Push" alone never means the fast push (the workflow's §6.5). When features changed since the last tag, or Wes asks for the deliverable with the push, it is the full roll as the next minor.
-- The packaging workflow and the PM bundle are never published or pushed.
-- Never change Wes's system (workflow rules, naming, numbering, folders) unasked. Anything that slips through is recorded in the PM JSON's `claude_changes`. Every full build opens a documentation BLOG listing what changed in the docs.
+- Never published or pushed, by name (two kinds):
+  1. Suite PM docs: `OMS#Suite#PM#<Name>#<date>#<epoch>.md`, any `<Name>` (the packaging workflow, `OMS#Suite#PM#PackagingWorkflow#<date>#<epoch>.md`, is one).
+  2. The app's PM bundle: `OMS_<App>_PM_JSON_Bundle_<date>_<epoch>.zip`, the same pattern for every app; for Vizzie `OMS_Vizzie_PM_JSON_Bundle_<date>_<epoch>.zip`, with `OMS_Vizzie_PM_JSON_<date>_<epoch>.json` and `OMS_Vizzie_PM_rebuild.py` inside it.
+  Only the release bundle goes to the Pub: the app as `index.html` and the Deliverables (A to F, Y, Z) in `docs/`.
+- Never change Wes's system (workflow rules, naming, numbering, folders) unasked. When something slips through, it is fixed going forward and written into the PM JSON rules as a rule, so it is not done again; there is no change log. Every full build opens a documentation BLOG listing what changed in the docs.
 
 # 7. Talking to Wes
 
