@@ -1,0 +1,51 @@
+{
+  "oms": 1,
+  "type": "set",
+  "app": "OMS Vizzie",
+  "version": "yodega_drop",
+  "saved": "2026-11-17T14:30:01+00:00",
+  "vizzie": {
+    "set": {
+      "name": "YoBombs",
+      "tracks": [
+        {
+          "file": "BeatsAndGirls_JNO_202402P03V2_128BPM.mp3"
+        },
+        {
+          "file": "Fever_WesSmith-Velzy_JNO_202305P05V3_128BPM.mp3"
+        },
+        {
+          "file": "HoldOutGal_JNO_202309P03V2_124BPM.mp3"
+        },
+        {
+          "file": "MoveYaButt_WesSmith-YoVV_JNO_202407P02V3_126BPM.mp3"
+        },
+        {
+          "file": "MusicaDeLaCasa_JNO_202303P04_128BPM.mp3"
+        }
+      ]
+    },
+    "pairs": [
+      {
+        "song": "BeatsAndGirls_JNO_202402P03V2_128BPM.mp3",
+        "shader": "OMS_Vizzie_Shader_SevenShaderArmy_V02.wgsl"
+      },
+      {
+        "song": "Fever_WesSmith-Velzy_JNO_202305P05V3_128BPM.mp3",
+        "shader": "OMS_Vizzie_Shader_TunnelDot_V12.wgsl"
+      },
+      {
+        "song": "HoldOutGal_JNO_202309P03V2_124BPM.mp3",
+        "shader": "OMS_Vizzie_Shader_TunnelFunOne_V04.wgsl"
+      },
+      {
+        "song": "MoveYaButt_WesSmith-YoVV_JNO_202407P02V3_126BPM.mp3",
+        "shader": "OMS_Vizzie_Shader_TunnelOfOz_Shadertoy_V14.wgsl"
+      },
+      {
+        "song": "MusicaDeLaCasa_JNO_202303P04_128BPM.mp3",
+        "shader": "OMS_Vizzie_Shader_TunnelTubes_Shadertoy_V13.wgsl"
+      }
+    ]
+  }
+}

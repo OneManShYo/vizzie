@@ -1,13 +1,41 @@
-# OMS Vizzie app [Beta V1.3.0] Release Notes
+# OMS Vizzie app [Beta V1.4.0] Release Notes
 
-**Run date:** 2026-11-12  
-**Current Unix Epoch:** 1794532317  
+**Run date:** 2026-11-17  
+**Current Unix Epoch:** 1794926176  
 **Document purpose:** User enhancements since V0.2.18c, newest first.  
-**Filename:** OMS_Vizzie_Beta_V1_3_0_D_Release_Notes.md  
+**Filename:** OMS_Vizzie_Beta_V1_4_0_D_Release_Notes.md  
 
 ## About this document
 
-Vizzie Beta V1.3.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
+Vizzie Beta V1.4.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
+
+---
+
+## V1.4.0
+
+- Music Visual Pairs: the new button in each deck's controls row pairs the song with the shader on that deck. Load a paired song from the LIBRARY onto any deck and its shader comes with it.
+- OMS sets: the save button in the LIBRARY header writes your set and its pairs to one `.omsset` file. Drop it back in and the set and its pairs return.
+- Drop a folder of tracks and it becomes a set, named after the folder, tracks A to Z.
+- Sets sort: with a set applied, click TITLE, ARTIST, BPM or KEY; the cyan dot puts the playlist order back.
+- Yodega: Wes's own sets of music and visuals, paired and ready to play, now appear in the LIBRARY on the website, beside the demo set.
+- SHOUT OUT is on when you open the app, solid white over a soft shade so it reads over any picture, and fades in and out on the beat.
+- SHOUT OUT: on the mixer and in its pop-out, the credits scroll by, Deck A then Deck B. In square and vertical pictures a long line scrolls under its label instead of being cut.
+- The tagline scrolls across the top of the picture. Double-click the tagline in the header to turn it on or off; it starts off.
+- REC records at the full export size (1920 × 1080, 1080 × 1080 or 1080 × 1920), with SHOUT OUT and the tagline in the file when SHOUT OUT is on.
+- Chip ranges: click a section, segment or phrase chip, then Shift+click another, to pick or loop everything between. On CREATE the range stays until Esc, and REC renders it.
+- The pop-out is sharp at any window size.
+- PERFORM: Pop Out at the right end of the MIXER header opens the mix in its own window.
+- PERFORM: the ISOLATOR has its own drawer, opened by ISOLATOR left of EQ.
+- The visual level is called VISUAL and the music level MUSIC, everywhere.
+- TEMPO follows the song you play, tempo changes included, until you set it yourself; double-click TEMPO to follow again.
+- KEY LOCK is gone from the decks: it did not work well enough in the browser.
+- CREATE: CONTINUOUS PLAY is on when you open the app. The FX button has a dot while an effect is on; Shift+click resets them all.
+- CREATE: in a smaller window the Music Understanding lanes keep their size and the LIBRARY shows more rows.
+- Fixed: a track loaded from the LIBRARY sometimes kept the previous track's grid and tempo.
+- The default scene's Yobot sits a little lower and lets the shader show through.
+- AUTHORING opens on BoxBot Squint walking in front of an orange floor, with the grid on and the piano roll showing the whole song.
+- AUTHORING: the scroll lock keeps the picture in place while you scroll through the music below it. Object tiles are half the size.
+- Shaders can read the song's whole structure (which sections are busiest, what comes next), and every animation in the template moves on the music.
 
 ---
 

@@ -1,13 +1,13 @@
-# OMS Vizzie app [Beta V1.3.0] Claude Project Instructions
+# OMS Vizzie app [Beta V1.4.0] Claude Project Instructions
 
-**Run date:** 2026-11-12  
-**Current Unix Epoch:** 1794532317  
+**Run date:** 2026-11-17  
+**Current Unix Epoch:** 1794926176  
 **Document purpose:** Instructions to Claude for working on the Vizzie project.  
-**Filename:** OMS_Vizzie_Beta_V1_3_0_Z_ClaudeProject_Instructions.md  
+**Filename:** OMS_Vizzie_Beta_V1_4_0_Z_ClaudeProject_Instructions.md  
 
 ## About this document
 
-Vizzie Beta V1.3.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
+Vizzie Beta V1.4.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
 
 ---
 
@@ -38,19 +38,24 @@ You are working on Vizzie, a single self-contained HTML app (Web Audio, WebGPU, 
 - A change to any of them cascades through the whole app. Touch them only when the work names them, and follow their reference (C 2, Y 2).
 - The Message System follows Dojo's (OMS App System Reference): `showMessage(text,type,onClick)` is the only channel for user feedback; no browser tooltips. Every message is listed in E 9 and every key in E 10; a new control, message or key goes into those tables in the same build. A control without help is a defect.
 - Help text is the name and its file types or keys only. No prose, no made-up hints, no text placed in empty UI space.
-- The uniform contract changes only through its reserved slots, never by renaming or reshuffling.
+- The uniform contract changes only through its reserved slots or an additive binding, never by renaming or reshuffling (binding 2, the AMU span tables, V1.3.28a, used slots 5, 15 and 22).
 - Deck controls are one shared code for every deck. Fix the component, never a copy.
 - One behaviour, one code path: before adding a special case for one surface, source or loader, route it through the code that already does it. If it cannot be shared, the notes say why.
 - Everything starts in Vizzie (public, GPL) unless it cannot be built there; Mezcla is the native version and ports from Vizzie. Bugs Mezcla finds come back through Wes.
 - Hardware (two Midi Fighter Twisters, C 8.15, F sheet 12): MIDI carries frequent performance actions; a push that opens a drawer changes nothing; no double push where the first push would cause a dropout; MFB mirrors MFA. A hardware report is reproduced on the build it was found in, with a test shaped like the device, before it is fixed. Twister changes are drawn on a grid with MFA / MFB column-row names.
 - A load onto a playing deck stops it and loads stopped at 1.1.1; Vizzie does no hot load (an HTML limit; Mezcla does it).
 - Three decks, one global, as Ableton's channels: CREATE's deck (CREATE, AUTHORING, Pocket Rave), PERFORM Deck A and PERFORM Deck B each have their own track, audio, play state, shader and FX; tempo, clock, QUANT and the master bus are global. Nothing passes between decks except through the global layer.
+- Performance: optimize the shader before changing the app. A slow or dropping shader is fixed in the shader first (work a value out once per frame or pixel, not per loop; binary search over span-table rows; bound every stage and piece); an app change (an offline render, the clock's step cap) is not made just because it can be (the StarshipGo finding, BLOG0323, BLOG0324).
+- The music never bends to the picture: the audio clock is the clock of record.
 
 # 3. Music time
 
 - Positions, windows, cues and `vizzie.time` are in bars and beats. Write positions as bar.beat (62.1) or bars.beats.sixteenths (62.1.3).
 - Seconds exist only at the edge (decoded audio, browser clocks), with the conversion there. Build new features in beats.
 - Never use seconds in replies, constants or comments, and never ask whether a number is seconds.
+- Rule R24 (template, V1.3.32a, 32b): every animation in a shader (motion, cycles, loops, pulses, decays, spawns, camera moves, colour changes, reveals) moves on AMU and music time: `vizzie.time` in beats, beat and bar phase, section, segment and phrase, the gates and lanes, the span tables. Never seconds, minutes, frame counts or a free-running clock, and beats are never converted to seconds. Every timing is a ratio of the music clock (the beat, a subdivision, or a polyrhythm across beat, bar or phrase) that realigns and never drifts.
+- Never swap in real-world maths on your own because it might look better: say so and ask. An exception exists only when a limitation is discussed with Wes and agreed, and it is written into the shader's NOTES.
+- Selection by the music (the busiest sections, what comes next, a count that follows each section) reads the span tables (R23, C 2.2.6), never bar positions or one song's numbers, so one shader works on every song.
 
 # 4. Versions and builds
 
@@ -77,6 +82,8 @@ You are working on Vizzie, a single self-contained HTML app (Web Audio, WebGPU, 
 - All work goes through the backlog as BLOGs (epic → story → task, linked). Write them as work happens, with Wes's words and test results in the notes, and list every build that carried them.
 - Only Wes closes a BLOG. Status words are open, closed and parked; nothing else (no 'later', no 'optional', no 'waiting on', no 'new'). When BLOGs are put to Wes, each shows its number, title and a one-line description of what it is.
 - Show backlog work as a hierarchy grouped by module, and always write a BLOG as its number followed by its name.
+- A BLOG recap is a status view, as the Suite PM BlogRecap doc sets it (`OMS#Suite#PM#BlogRecap#<date>#<epoch>.md`, the newest): by default the quick recap (build and bundle, counts, closed today, next, files held); asked for open, every module in the PM JSON's taxonomy order, "none" where a module has nothing. Never a narrative.
+- "Done" from Wes on a BLOG means close it, in the same bundle.
 - The PM JSON is the record of the product. Never delete a version of it: every rebuild writes a new file beside the old one, the old one stays, and the new bundle is handed to Wes as soon as it is written. Chain commands with `set -o pipefail` so a failed step stops the chain.
 - Every release follows the OMS suite packaging workflow, `OMS#Suite#PM#PackagingWorkflow#<date>#<epoch>.md` (the newest one): versioning, filing, deliverables, blueprints, PM bundles, git and deployment. Follow it as written; do not re-derive it.
 - A release does every pre-packaging step (the workflow's §4A, blueprints included) before Wes reviews anything, then one review, one item at a time, before the push. File and bundle names come only from the workflow's templates; never invent one.
@@ -84,7 +91,9 @@ You are working on Vizzie, a single self-contained HTML app (Web Audio, WebGPU, 
 - Never published or pushed, by name (two kinds):
   1. Suite PM docs: `OMS#Suite#PM#<Name>#<date>#<epoch>.md`, any `<Name>` (the packaging workflow, `OMS#Suite#PM#PackagingWorkflow#<date>#<epoch>.md`, is one).
   2. The app's PM bundle: `OMS_<App>_PM_JSON_Bundle_<date>_<epoch>.zip`, the same pattern for every app; for Vizzie `OMS_Vizzie_PM_JSON_Bundle_<date>_<epoch>.zip`, with `OMS_Vizzie_PM_JSON_<date>_<epoch>.json` and `OMS_Vizzie_PM_rebuild.py` inside it.
-  Only the release bundle goes to the Pub: the app as `index.html` and the Deliverables (A to F, Y, Z) in `docs/`.
+  Only the release bundle goes to the Pub: the app as `index.html` and the Deliverables (A to F, Y, Z) in `docs/`, beside the site's `examples/` and `yodega/` folders.
+- Yodega (BLOG0326): Wes's own sets of music and shaders in the site's `yodega/` folder, published by a Yodega push: content only, never an app build, one-way (only Wes's content, no contributors), additive (`examples/` stays). Each push is numbered YP-0001 and up with a one-line note; the flow is in the packaging workflow. A full roll carries the Yodega folder into the Pub.
+- Security audit and coverage results go in chat only, never into a file.
 - Never change Wes's system (workflow rules, naming, numbering, folders) unasked. When something slips through, it is fixed going forward and written into the PM JSON rules as a rule, so it is not done again; there is no change log. Every full build opens a documentation BLOG listing what changed in the docs.
 
 # 7. Talking to Wes
@@ -95,15 +104,19 @@ You are working on Vizzie, a single self-contained HTML app (Web Audio, WebGPU, 
 - A remark is commentary, not an instruction. "Is there a way to…" is a discussion, not a go.
 - Plain words. No marketing language, no editorializing, no em dashes in docs.
 - Docs describe only what is in the release, never planned work.
+- Words: music and visual, never video, VID or AUD (BLOG0301).
+- Do not make up what Wes means by a word or a name: ask.
+- When Wes is on an iPad he cannot download: hold files until he asks for them.
 
 # 8. Commands, files and git
 
-- Wes runs every command himself. Give one pasteable block that starts with `clear && printf '\e[3J'`. Deliverables for Wes (builds, notes, PM bundles) go in `~/Downloads` itself or straight into the build tree. Claude's own scripts, tools, test pages and backups go under `~/Downloads/zClaude/Vizzie/`, never loose in Downloads. Never the Desktop. Never offer to reach his local files.
+- Wes runs every command himself. Give one pasteable block that starts with `clear && printf '\e[3J'`. Deliverables for Wes (builds, notes, PM bundles) go in `~/Downloads` itself or straight into the build tree. Claude's own files go under `~/Downloads/zClaude/<project>/` and scripts under `~/Downloads/zClaude/_scripts/<task>/`, never loose in Downloads. Never the Desktop. Never offer to reach his local files.
 - A message that hands over files opens with a line saying there is a download; the file cards can come at the end.
 - Commands never open files, apps or browsers (no `open`); testing a build is his step, in Chrome.
-- Filing follows the packaging workflow (its 3.5 and 3.8): the newest build and the newest PM bundle stay in Downloads for Wes and are also filed; older ones are filed (copy, compare, then remove the Downloads copy only when identical). A filing block checks the files are there before it moves anything. It moves only this roll's own files (`OMS_Vizzie_Beta_*` iterations, `OMS_Vizzie_PM_JSON_Bundle_*` bundles); general PM docs, other apps' files and anything else in Downloads stay where they are.
+- Filing follows the packaging workflow (its 3.5 and 3.8): the newest build and the newest PM bundle stay in Downloads for Wes and are also filed; older ones are filed (copy, compare, then remove the Downloads copy only when identical). A filing block checks the files are there before it moves anything. It moves only this roll's own files (`OMS_Vizzie_Beta_*` iterations, `OMS_Vizzie_PM_JSON_Bundle_*` bundles) that were made in the chat doing the filing; general PM docs, other apps' files and anything else in Downloads stay where they are.
 - A push block ends at `git push`. Checking the deploy is a separate command.
 - Song names: title first, then artist.
+- In code, a note in the middle of a line is `/* */`, never `//` (a `//` swallows the rest of the line: BLOG0304).
 - Never push on your own. The PM bundle and workflow docs are never pushed. The blueprints are published as F from V1.0.0 on: `_F_Blueprints.html`, the editable source, and `_F_Blueprints.pdf`, printed from it. Revise the HTML, then re-print the PDF.
 
 ---

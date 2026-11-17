@@ -1,15 +1,75 @@
-# OMS Vizzie app [Beta V1.3.0] Complete Changelog
+# OMS Vizzie app [Beta V1.4.0] Complete Changelog
 
-**Run date:** 2026-11-12  
-**Current Unix Epoch:** 1794532317  
+**Run date:** 2026-11-17  
+**Current Unix Epoch:** 1794926176  
 **Document purpose:** The readable version of the PM backlog: the BLOGs each release packaged, grouped by release, newest first, with the builds that carried them.  
-**Filename:** OMS_Vizzie_Beta_V1_3_0_B_Complete_Changelog.md  
+**Filename:** OMS_Vizzie_Beta_V1_4_0_B_Complete_Changelog.md  
 
 ## About this document
 
-Vizzie Beta V1.3.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
+Vizzie Beta V1.4.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
 
 Versions are major.minor.iteration; a full package rolls the minor, and the iteration line before it becomes that release's iterations. Letters are revisions of the same piece of work.
+
+---
+
+## V1.4.0
+
+Packages the V1.3 iteration line (V1.3.01a to V1.3.38a). Baseline V1.3.38a. Music and visuals pair: a song brings its shader, sets save as OMS set files with their pairs, and a dropped folder becomes a set; Wes's own sets reach the site as Yodega. SHOUT OUT is on by default, scrolls on the mixer and in square and vertical pictures, adds the tagline line, reads over a soft scrim and is recorded with the picture. REC records at the export size and the pop-out renders sharp at any size. Shaders read the AMU span tables (binding 2), and every animation moves on the music (R24). KEY LOCK leaves the interface; the visual level is named VISUAL, never video.
+
+- **Music Visual Pairing** (BLOG0294 · V1.3.05a, 06a): Songs paired with shaders, so a song brings its visual.
+  - **Music Visual Pair** (BLOG0295 · V1.3.05a): A button in each deck's controls row pairs the deck's song with its shader; loading a paired song onto any deck loads its shader too; session only.
+  - **OMS set** (BLOG0296 · V1.3.06a): An `.omsset` holds one set (name, tracks in order with their `#EXTINF`) and the pairs of its songs; saved from the LIBRARY header, dropped to bring the set and the pairs back.
+- **Folder drop makes a set** (BLOG0299 · V1.3.10a): A dropped folder of tracks with no `.m3u8` becomes a set named after the folder, tracks A to Z by file name.
+- **LIBRARY sets sort** (BLOG0223 · V1.3.13a): With a set applied, the sort header sorts its tracks; a cyan dot puts the playlist order back.
+- **Yodega** (BLOG0326 · open): Wes's sets of music and shaders on the site, published by push, no app build.
+  - **Site reads `./yodega/`** (BLOG0327 · V1.3.38a): The website loader reads `./yodega/library.json` beside `./examples/`; paths may include the drop's subfolder.
+  - **Drop script** (BLOG0328 · yodega_drop.py): Builds a drop's `.omsset` and the Yodega `library.json` from a drop folder; nothing copied or moved.
+  - **Push flow** (BLOG0329): Written into the packaging workflow.
+- **SHOUT OUT**
+  - **On by default** (BLOG0285 · V1.3.01b): The Shaka opens on.
+  - **Mixer OUT scrolls** (BLOG0286 · V1.3.01e to 01j): One strip at the bottom of OUT and its pop-out, right to left: Deck A and its two lines, then Deck B; a deck with both levels at 0 is left out.
+  - **The tagline line** (BLOG0288 · V1.3.01c to 07a): The header's tagline scrolls right to left across the top of the CREATE stage, the mixer OUT and both pop-outs.
+  - **Square and vertical** (BLOG0297 · V1.3.08a): On CREATE the labels stay fixed and a long line scrolls under them.
+  - **Tagline on and off** (BLOG0302, 0305 · V1.3.14a, 17a): Double-click the header tagline to turn the line on or off; it starts off on every load (grey off, Orange Julius on).
+  - **Readable over any picture** (BLOG0314 · V1.3.27a): Solid white text over a soft dark scrim, bottom with the credits and top with the tagline, fading with SHOUT OUT over one beat.
+- **PERFORM**
+  - **Pop Out for OUT** (BLOG0284 · V1.3.01c to 01j): A Pop Out button at the MIXER header's far right opens the mix in its own window, SHOUT OUT and the tagline included.
+  - **ISOLATOR drawer** (BLOG0291 · V1.3.01g, 01k, 02a): The isolator moves out of the MIXER header into its own drawer, opened by ISOLATOR left of EQ.
+  - **DECK LOCK** (BLOG0283): Closed by Wes without a build; the lock is unchanged.
+  - **Meter red** (BLOG0282 · V1.3.11a): 0 dB shows Red Hots `#FF006E`.
+- **CREATE**
+  - **Music Understanding keeps its size** (BLOG0289 · V1.3.01a): In a smaller window the lanes keep their full-screen height and the LIBRARY gets the rest.
+  - **FX dot and reset** (BLOG0292 · V1.3.03a): One dot lit while an effect is off neutral; Shift+click resets every effect.
+  - **CONTINUOUS PLAY on by default** (BLOG0298 · V1.3.09a).
+- **KEY LOCK removed from the interface** (BLOG0293 · V1.3.04a): The button goes from CREATE, AUTHORING and the PERFORM decks; every deck plays with KEY LOCK off.
+- **VISUAL, never video** (BLOG0301 · V1.3.12a): The visual level knob is VISUAL (was VID) and the music level MUSIC (was AUD), in the app, messages, help, the Twister map (Visual Gain) and the docs.
+- **TEMPO follows the song** (BLOG0303 · V1.3.16a): On CREATE the TEMPO follows the song's own tempo, on PERFORM the MASTER deck's tempo changes in proportion, until set by hand; a tempo-change song starts at its main tempo.
+- **Bug: LIBRARY load kept the previous AMU** (BLOG0304 · V1.3.15a): A `//` note hid the AMU read for LIBRARY loads from V1.2.30a; the deck now takes the track's grid, chips and BPM.
+- **Default scenes**
+  - **Yobot position** (BLOG0306 · V1.3.18a to 18d, 21a): In the CREATE default scene the centre of the Yobot's head circle sits at 0, −0.12.
+  - **Yobot at 75 %** (BLOG0309 · V1.3.22a): The Yobot is blended back at 75 % as one layer, so the shader shows through it.
+  - **AUTHORING default** (BLOG0310 · V1.3.23a to 23c): BoxBot Squint V08 walking in front of an Orange Julius floor filling the bottom third.
+- **REC and the pop-out**
+  - **Export size** (BLOG0307 · V1.3.19a): REC records at the orientation's export size (1920 × 1080, 1080 × 1080 or 1080 × 1920), 16 Mbps.
+  - **Chip ranges** (BLOG0308, 0311 · V1.3.20a, 24a): Click a structure chip, Shift+click another: the span between is picked, rendered or looped; on CREATE it lasts until Esc or a plain chip click.
+  - **SHOUT OUT in the recording** (BLOG0312 · V1.3.25a): With SHOUT OUT on, REC records the credits and the tagline as they show on the stage.
+  - **Sharp pop-out** (BLOG0313 · V1.3.26a): While the pop-out is open the picture renders at the pop-out picture's size.
+  - **Read-back gate** (BLOG0322 · V1.3.36a): The authoring overlay's GPU read-back runs only in AUTHORING and never while recording.
+  - **Credit spacing in the recording** (BLOG0325 · V1.3.37a): Each recorded credit line is one run of text, single spaces at any export size.
+- **AMU span tables** (BLOG0203 · V1.3.28a): The app works out a table per lane (section, segment, phrase, bar, pace) from the loaded AMU, for shaders to read at group 0 binding 2; the current bar, pace and segment index fill slots 5, 15 and 22. Rule R23.
+- **AUTHORING**
+  - **REF help** (BLOG0281 · V1.3.29a): REF gets its message-bar help.
+  - **Roll at 100 %** (BLOG0316 · V1.3.30a): The roll opens on the whole song and keeps its % across track loads.
+  - **Half-size tiles** (BLOG0317 · V1.3.31a): 24 object tiles across on a desktop, 12 on iPad.
+  - **Rule R24** (BLOG0318 · V1.3.32a, 32b; open): Every animation moves on AMU and music time; exceptions only when agreed with Wes and written into NOTES.
+  - **Scroll lock** (BLOG0319 · V1.3.33a, 33b): A lock on the Visual : Authoring row keeps the picture in place while MUSIC and below scroll.
+  - **Overlay above SHOUT OUT** (BLOG0320 · V1.3.34a): Grid, guides, points, REF and the size key draw above the scrim and the credits.
+  - **GRID on by default** (BLOG0321 · V1.3.35a): The overlay draws only in AUTHORING.
+- **Template skills discussion** (BLOG0287): Closed; the work moves to a Suite PM doc outside the Vizzie backlog.
+- **Documentation V1.4.0** (BLOG0330 · V1.4.0): The doc changes of this roll are listed in BLOG0330.
+
+Parked in this line: BLOG0290 (Q-chips, the name for AMU cue points), BLOG0300 (browser compatibility), BLOG0315 (Shadertoy interoperability), BLOG0323 (RENDER, offline export), BLOG0324 (a slow frame bends the music: a finding; the first fix is in the shader).
 
 ---
 
