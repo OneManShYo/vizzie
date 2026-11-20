@@ -1,0 +1,51 @@
+{
+  "oms": 1,
+  "type": "set",
+  "app": "OMS Vizzie",
+  "version": "yodega_drop",
+  "saved": "2026-11-20T16:57:25+00:00",
+  "vizzie": {
+    "set": {
+      "name": "YoBombs 02",
+      "tracks": [
+        {
+          "file": "JNO-SR001_SayWhutWesSmithPlaystationToo_126BPM.mp3"
+        },
+        {
+          "file": "JNO-SR002_StutterJamWesSmithSolMasheen_126BPM.mp3"
+        },
+        {
+          "file": "JNO-SR008_ReelLoveWesSmithVelzy_126BPM.mp3"
+        },
+        {
+          "file": "JNO-SR010_WhenLamboWesSmithFeatSidechain&Chill_126BPM.mp3"
+        },
+        {
+          "file": "JNO-SR024_WeDoiItBigWesSmithYoVV_126BPM.mp3"
+        }
+      ]
+    },
+    "pairs": [
+      {
+        "song": "JNO-SR001_SayWhutWesSmithPlaystationToo_126BPM.mp3",
+        "shader": "OMS_Vizzie_Shader_TunnelTubes_Comet_V01.wgsl"
+      },
+      {
+        "song": "JNO-SR002_StutterJamWesSmithSolMasheen_126BPM.mp3",
+        "shader": "OMS_Vizzie_Shader_TunnelTubes_Dash_V01.wgsl"
+      },
+      {
+        "song": "JNO-SR008_ReelLoveWesSmithVelzy_126BPM.mp3",
+        "shader": "OMS_Vizzie_Shader_TunnelTubes_Breathe_V01.wgsl"
+      },
+      {
+        "song": "JNO-SR010_WhenLamboWesSmithFeatSidechain&Chill_126BPM.mp3",
+        "shader": "OMS_Vizzie_Shader_TunnelTubes_Atom_V01.wgsl"
+      },
+      {
+        "song": "JNO-SR024_WeDoiItBigWesSmithYoVV_126BPM.mp3",
+        "shader": "OMS_Vizzie_Shader_TunnelTubes_Shadertoy_V13.wgsl"
+      }
+    ]
+  }
+}
