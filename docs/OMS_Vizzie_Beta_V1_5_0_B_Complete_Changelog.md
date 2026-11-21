@@ -1,28 +1,72 @@
-# OMS Vizzie app [Beta V1.4.0] Complete Changelog
+# OMS Vizzie app [Beta V1.5.0] Complete Changelog
 
-**Run date:** 2026-11-17  
-**Current Unix Epoch:** 1794926176  
+**Run date:** 2026-11-21  
+**Current Unix Epoch:** 1795293744  
 **Document purpose:** The readable version of the PM backlog: the BLOGs each release packaged, grouped by release, newest first, with the builds that carried them.  
-**Filename:** OMS_Vizzie_Beta_V1_4_0_B_Complete_Changelog.md  
+**Filename:** OMS_Vizzie_Beta_V1_5_0_B_Complete_Changelog.md  
 
 ## About this document
 
-Vizzie Beta V1.4.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
+Vizzie Beta V1.5.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
 
 Versions are major.minor.iteration; a full package rolls the minor, and the iteration line before it becomes that release's iterations. Letters are revisions of the same piece of work.
 
 ---
 
+## V1.5.0
+
+Packages the V1.4 iteration line (V1.4.01a to V1.4.28b). Baseline V1.4.28b. The tabs are renamed PLAY · CREATE · PERFORM. PLAY gains AUTO MIX: each song mixes into the next at its last full section, by a SELECTA profile (SELECTA 1, house club), shaded on the waveform, with the tempo held through the mix and both decks locked to the audio clock. PLAY also gets EQ and Settings beside FX, sets that play from a double-click, and set links; Pocket Rave carries PLAY's list controls and plays its EQ and FX. Drops take zip files; PERFORM's strip becomes ISO · EQ · FX · MODE · gear, with the decks' Settings docked there; DECK LOCK decides whether a playing deck takes a song.
+
+- **PLAY**
+  - **Sets play from a double-click** (BLOG0333 · V1.4.01a): A set row's double-click, double tap or Enter applies the set, loads its first song with its pair and plays it, CONTINUOUS PLAY on; PERFORM unchanged.
+  - **Cover placeholder** (BLOG0335 · V1.4.03a): Every load sets the cover from that song (a dropped cover, the MP3's art, else the Yobot Squint placeholder), as PERFORM's decks do.
+  - **EQ · FX · Settings drawers** (BLOG0349 · V1.4.17a; open): EQ and a gear join FX at the controls row's right end, one drawer window; the EQ plays and the RGB colours the picture on PLAY; Settings leaves the VISUALS header.
+  - **AUTO MIX** (BLOG0354 · V1.4.20a, 21a): A blender button after SHUFFLE: each song mixes into the next at its last full section on AUTO MIX's own hidden deck and mix strips; PLAY's deck takes the next song over at the end with no gap. SELECTA profiles (code); SELECTA 1, house club: two sections, the incoming song up with its bass out, the bass swapped on the EQ, the outgoing song out in the last bar.
+  - **Mix zone on the waveform** (BLOG0356 · V1.4.23a, 23b; open): An Orange Julius zone and section lines, and the SELECTA's envelopes (incoming Green Slime, outgoing Goblin White; solid volume, dashed bass), on PLAY's and Pocket Rave's waveform.
+  - **Tempo held during the mix** (BLOG0360 · V1.4.23c; open): The playing tempo holds through the mix; after it, a 16-bar glide to the new song's tempo; no beat mix when the incoming song would play more than 5 % off its own tempo.
+  - **SELECTA button and picker** (BLOG0362 · V1.4.25a, 25b, 28a, 28b; open): A record button, leading the row's right group, opens the SELECTA picker in the drawer window. The AMU Nudge's sneaker button, added beside it, went with the AMU Nudge (28a, 28b).
+  - **AUTO MIX Lock; AMU Nudge removed** (BLOG0357 · V1.4.24a, 26a, 26b, 27a, 28a, 28b; open): 24a measured each pair's kick offset and shifted the incoming song (the AMU Nudge); by ear it did more harm than good, and it was removed in 28a / 28b. 26a starts both decks on one audio-clock instant at fixed AMU speeds, with Steering off for them during the mix; 26b pulls the visuals smoothly to the audio during it. 27a (a clock change, below) was pulled. 28b = 26b without the AMU Nudge.
+  - **Set name shown** (BLOG0358; open): Where to show the playing set's name is still to be decided.
+- **Tabs renamed** (BLOG0355 · V1.4.22a; open): PLAY (was CREATE) · CREATE (was AUTHORING, mode AUTHOR) · PERFORM; the app text naming them follows; code names unchanged.
+- **Pocket Rave**
+  - **MUSIC and VISUAL headers** (BLOG0351 · V1.4.19a; open): MUSIC carries PLAY NEXT · CONTINUOUS · SHUFFLE · EQ · FX · gear, VISUAL orientation and REC, each running PLAY's control; EQ and FX play on Pocket Rave.
+- **Drops**
+  - **Drag and drop while playing** (BLOG0336 · V1.4.04a to 07a): Something playing = the LIBRARY only, on every tab; nothing playing = PLAY loads, PERFORM the LIBRARY only. On PERFORM, DECK LOCK decides whether a playing deck takes a song from the LIBRARY, a Twister or its pickers; shaders load any time.
+  - **Zip files** (BLOG0340 · V1.4.08a): A dropped zip is opened in the browser and its files go through the folder intake; one line of counts.
+- **PERFORM**
+  - **Settings drawer in the mixer strip** (BLOG0341 · V1.4.09a): The strip becomes ISO · EQ · FX · MODE · gear (ISO and the gear as icons); the decks' Settings open from the gear, Deck A | Deck B.
+  - **VFX switch on QUANT** (BLOG0342 · V1.4.10a): Switching a visual effect keeps its amount and lands on the next QUANT step.
+  - **ISO drawer** (BLOG0343 · V1.4.11a, 11b): Large LOW · MID · HIGH knobs with the band curves behind them and ISOLATOR over them.
+  - **SHOUT OUT in OUT on and off** (BLOG0344 · V1.4.12a): A Shaka in the MIXER header turns the credits off OUT and its pop-out only.
+  - **Twister ports** (BLOG0339 · V1.4.15a): Only ports named Twister bind; other MIDI ports are ignored.
+  - **QUANT audit** (BLOG0346): A read-only audit of what waits for QUANT and what acts at once.
+- **LIBRARY**
+  - **Save to X spacing** (BLOG0332 · V1.4.13a): The save button and X are 8 px apart.
+  - **Focus outline** (BLOG0337 · V1.4.14a): No cyan border or glow on the list when it takes the keyboard.
+  - **Playlist order after a sort** (BLOG0338): the product owner decided the look; no change.
+- **Pop-out in full screen** (BLOG0348 · V1.4.16a; open): A pop-out's own timer runs the clock and the drawing when the main window's timer stops.
+- **Yodega**
+  - **Set link** (BLOG0334 · V1.4.02a): `?set=Name` opens the website with that set applied; the drop script writes a forwarding page per pack.
+  - **Set link title and description** (BLOG0350 · V1.4.18a; open): The app takes the pack page's title and description.
+  - **YoPacks layout and drop script v4** (BLOG0347): The Yodega folder mirrors the site; every pack rebuilt each run.
+  - **Big Wheel Energy set removed from the website** (BLOG0361; open): `examples/` holds ANT only.
+- **A slow frame bends the music** (BLOG0324 · V1.4.27a; parked): 27a removed the 0.1 s step cap on the audio clock, read the clock smoothly and pulled the music only past 8 ms; headless it passed, on the product owner's Mac the visuals were worse; pulled the same day.
+- **Documentation V1.5.0** (BLOG0363 · V1.5.0): The doc changes of this roll are listed in BLOG0363.
+
+Parked in this line: BLOG0345 (save a set as a zip), BLOG0359 (drag the mix zone), BLOG0324.
+
+---
+
 ## V1.4.0
 
-Packages the V1.3 iteration line (V1.3.01a to V1.3.38a). Baseline V1.3.38a. Music and visuals pair: a song brings its shader, sets save as OMS set files with their pairs, and a dropped folder becomes a set; Wes's own sets reach the site as Yodega. SHOUT OUT is on by default, scrolls on the mixer and in square and vertical pictures, adds the tagline line, reads over a soft scrim and is recorded with the picture. REC records at the export size and the pop-out renders sharp at any size. Shaders read the AMU span tables (binding 2), and every animation moves on the music (R24). KEY LOCK leaves the interface; the visual level is named VISUAL, never video.
+Packages the V1.3 iteration line (V1.3.01a to V1.3.38a). Baseline V1.3.38a. Music and visuals pair: a song brings its shader, sets save as OMS set files with their pairs, and a dropped folder becomes a set; the artist's own sets reach the site as Yodega. SHOUT OUT is on by default, scrolls on the mixer and in square and vertical pictures, adds the tagline line, reads over a soft scrim and is recorded with the picture. REC records at the export size and the pop-out renders sharp at any size. Shaders read the AMU span tables (binding 2), and every animation moves on the music (R24). KEY LOCK leaves the interface; the visual level is named VISUAL, never video.
 
 - **Music Visual Pairing** (BLOG0294 · V1.3.05a, 06a): Songs paired with shaders, so a song brings its visual.
   - **Music Visual Pair** (BLOG0295 · V1.3.05a): A button in each deck's controls row pairs the deck's song with its shader; loading a paired song onto any deck loads its shader too; session only.
   - **OMS set** (BLOG0296 · V1.3.06a): An `.omsset` holds one set (name, tracks in order with their `#EXTINF`) and the pairs of its songs; saved from the LIBRARY header, dropped to bring the set and the pairs back.
 - **Folder drop makes a set** (BLOG0299 · V1.3.10a): A dropped folder of tracks with no `.m3u8` becomes a set named after the folder, tracks A to Z by file name.
 - **LIBRARY sets sort** (BLOG0223 · V1.3.13a): With a set applied, the sort header sorts its tracks; a cyan dot puts the playlist order back.
-- **Yodega** (BLOG0326 · open): Wes's sets of music and shaders on the site, published by push, no app build.
+- **Yodega** (BLOG0326 · open): the product owner's sets of music and shaders on the site, published by push, no app build.
   - **Site reads `./yodega/`** (BLOG0327 · V1.3.38a): The website loader reads `./yodega/library.json` beside `./examples/`; paths may include the drop's subfolder.
   - **Drop script** (BLOG0328 · yodega_drop.py): Builds a drop's `.omsset` and the Yodega `library.json` from a drop folder; nothing copied or moved.
   - **Push flow** (BLOG0329): Written into the packaging workflow.
@@ -36,7 +80,7 @@ Packages the V1.3 iteration line (V1.3.01a to V1.3.38a). Baseline V1.3.38a. Musi
 - **PERFORM**
   - **Pop Out for OUT** (BLOG0284 · V1.3.01c to 01j): A Pop Out button at the MIXER header's far right opens the mix in its own window, SHOUT OUT and the tagline included.
   - **ISOLATOR drawer** (BLOG0291 · V1.3.01g, 01k, 02a): The isolator moves out of the MIXER header into its own drawer, opened by ISOLATOR left of EQ.
-  - **DECK LOCK** (BLOG0283): Closed by Wes without a build; the lock is unchanged.
+  - **DECK LOCK** (BLOG0283): Closed by the product owner without a build; the lock is unchanged.
   - **Meter red** (BLOG0282 · V1.3.11a): 0 dB shows Red Hots `#FF006E`.
 - **CREATE**
   - **Music Understanding keeps its size** (BLOG0289 · V1.3.01a): In a smaller window the lanes keep their full-screen height and the LIBRARY gets the rest.
@@ -62,7 +106,7 @@ Packages the V1.3 iteration line (V1.3.01a to V1.3.38a). Baseline V1.3.38a. Musi
   - **REF help** (BLOG0281 · V1.3.29a): REF gets its message-bar help.
   - **Roll at 100 %** (BLOG0316 · V1.3.30a): The roll opens on the whole song and keeps its % across track loads.
   - **Half-size tiles** (BLOG0317 · V1.3.31a): 24 object tiles across on a desktop, 12 on iPad.
-  - **Rule R24** (BLOG0318 · V1.3.32a, 32b; open): Every animation moves on AMU and music time; exceptions only when agreed with Wes and written into NOTES.
+  - **Rule R24** (BLOG0318 · V1.3.32a, 32b; open): Every animation moves on AMU and music time; exceptions only when agreed with the product owner and written into NOTES.
   - **Scroll lock** (BLOG0319 · V1.3.33a, 33b): A lock on the Visual : Authoring row keeps the picture in place while MUSIC and below scroll.
   - **Overlay above SHOUT OUT** (BLOG0320 · V1.3.34a): Grid, guides, points, REF and the size key draw above the scrim and the credits.
   - **GRID on by default** (BLOG0321 · V1.3.35a): The overlay draws only in AUTHORING.
@@ -183,7 +227,7 @@ Packages the V0.11 iteration line (V0.11.01a to V0.11.21e). Baseline V0.11.21e. 
 
 ## V0.11.0
 
-Packages the V0.10 iteration line (V0.10.01a to V0.10.12b). Baseline V0.10.12b. CREATE becomes the music-and-visuals surface: the LIBRARY always open with the website's demo playlists, FX with music and visual effects, PLAY NEXT, CONTINUOUS PLAY and SHUFFLE, and a full-width Music Understanding. Authoring moves to its own tab and LET'S DO THIS to a HELP tab. The music plays on iPhone and iPad. The Moogerfooger strip frames the main app, and the app takes Wes's key colours.
+Packages the V0.10 iteration line (V0.10.01a to V0.10.12b). Baseline V0.10.12b. CREATE becomes the music-and-visuals surface: the LIBRARY always open with the website's demo playlists, FX with music and visual effects, PLAY NEXT, CONTINUOUS PLAY and SHUFFLE, and a full-width Music Understanding. Authoring moves to its own tab and LET'S DO THIS to a HELP tab. The music plays on iPhone and iPad. The Moogerfooger strip frames the main app, and the app takes the product owner's key colours.
 
 - **CREATE: music FX** (BLOG0144 · V0.10.01a, 01b, 07b, 07c): An FX button in the controls row opens a drawer that slides down out of the row; AFX1 over AFX2 as on the mixer (01b); deck A's slots, shared with PERFORM; the music FX play on CREATE, AUTHORING plays dry; a mode or surface switch closes the drawer (01a). Hover help on the drawer's knobs and labels (07b). Click = kill, double-click = reset to the default, on CREATE and PERFORM (07c).
 - **CREATE: visual FX** (BLOG0145 · V0.10.02a, 07b, 07c): VFX1 / VFX2 to the right of AFX1 / AFX2; the effect shows on CREATE's stage, in Pop Out and in REC; one visual FX chain shared with PERFORM.
@@ -191,7 +235,7 @@ Packages the V0.10 iteration line (V0.10.01a to V0.10.12b). Baseline V0.10.12b. 
 - **Demo Playlists** (BLOG0147 · V0.10.04a, 05b, 07g): `./examples/library.json` lists the website's playlists; each is a filter button after SHADERS in capitals (BIG WHEEL ENERGY), showing its tracks in its order and naming them from its `#EXTINF` lines (04a); 'Title · Artist', title first (05b). The website's AMU files are fetched only when their track loads, which fixed the slow page on iPad (07g). The Big Wheel Energy set (12 tracks with AMU) is published in `examples/`.
 - **CREATE headers: MUSIC and VISUALS** (BLOG0148 · V0.10.05a): The left header reads MUSIC; a VISUALS header over the stage holds Code, Pop Out, orientation and REC; the large piano roll is gone from CREATE; the word PUBLIC is gone.
 - **CREATE: PLAY NEXT, CONTINUOUS PLAY and SHUFFLE** (BLOG0149 · V0.10.06a, 06b): Three icons after the roll orientation button, help on hover. PLAY NEXT plays the next track in the LIBRARY list now; CONTINUOUS PLAY plays the next at a track's end; SHUFFLE puts the list in a random order, the playing track first, and play follows it (06b).
-- **LET'S DO THIS** (BLOG0150 · V0.10.07a, 07e, 07f): The large Music Understanding section is gone from CREATE (07a); Wes's lines in two outlined modules, 15px (07e, 07f); moved to the HELP tab in V0.10.10a (BLOG0154).
+- **LET'S DO THIS** (BLOG0150 · V0.10.07a, 07e, 07f): The large Music Understanding section is gone from CREATE (07a); the product owner's lines in two outlined modules, 15px (07e, 07f); moved to the HELP tab in V0.10.10a (BLOG0154).
 - **iPhone and iPad: music plays on tap** (BLOG0151 · V0.10.07d): Safari's audio session set to playback, so silent mode does not mute it; the first tap plays a silent sample, which unlocks the audio.
 - **AUTHORING tab; GLOBAL header** (BLOG0152 · V0.10.08a, 08b): Tabs CREATE, PERFORM, AUTHORING, ABOUT, LEARN (08b); AUTHORING is the authoring surface, off-site only, opening first off-site; the header over the global strip reads GLOBAL and switches nothing (08a).
 - **CREATE: LIBRARY always open; Music Understanding full width** (BLOG0153 · V0.10.09a, 09b, 10a, 10b): The LIBRARY is its own module under the controls row with a 'Library' header (09b); Music Understanding (chips and roll) is a full-width section (09a) filling the page down to the bottom, at least 160 px, with no page scroll (10a); the LIBRARY's surround matches PERFORM's (10b).
@@ -200,7 +244,7 @@ Packages the V0.10 iteration line (V0.10.01a to V0.10.12b). Baseline V0.10.12b. 
 - **Code review loose ends** (BLOG0156 · V0.10.10e): A drop on CREATE's LIBRARY adds to the LIBRARY (the deck's drop zone had taken it since 09b); the hidden LIBRARY button and drawer removed; CREATE no longer paints the hidden large Music Understanding; stale header-switch CSS and comments removed.
 - **The Moogerfooger strip on the main app** (BLOG0157 · V0.10.11a): The strip (red power light, five jacks) frames the main app on every tab, on the website and off it; a tap on it does nothing there.
 - **Power light: rename the header** (BLOG0158 · V0.10.11b, 11c): A tap on the power light retypes the ONEMANSHYO header for the session: Enter keeps, Esc cancels, empty restores, 24 characters (11b was a long press; 11c a tap).
-- **Design System colours** (BLOG0159 · V0.10.12a, 12b): Wes's key colours: Purple People Eater, Barbie Pink, Green Slime, Yellow Man, Orange Julius, Goblin White, Red Hots; one shade of each in the app (12a). Buses RHYTHM Red Hots, STRUCTURE Orange Julius, KEY Yellow Man, PACE Green Slime, INSTRUMENTS Purple People Eater; every lane takes its bus colour, beat Goblin White (12b).
+- **Design System colours** (BLOG0159 · V0.10.12a, 12b): the product owner's key colours: Purple People Eater, Barbie Pink, Green Slime, Yellow Man, Orange Julius, Goblin White, Red Hots; one shade of each in the app (12a). Buses RHYTHM Red Hots, STRUCTURE Orange Julius, KEY Yellow Man, PACE Green Slime, INSTRUMENTS Purple People Eater; every lane takes its bus colour, beat Goblin White (12b).
 
 ---
 

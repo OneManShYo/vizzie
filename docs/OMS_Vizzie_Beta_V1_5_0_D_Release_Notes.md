@@ -1,13 +1,36 @@
-# OMS Vizzie app [Beta V1.4.0] Release Notes
+# OMS Vizzie app [Beta V1.5.0] Release Notes
 
-**Run date:** 2026-11-17  
-**Current Unix Epoch:** 1794926176  
+**Run date:** 2026-11-21  
+**Current Unix Epoch:** 1795293744  
 **Document purpose:** User enhancements since V0.2.18c, newest first.  
-**Filename:** OMS_Vizzie_Beta_V1_4_0_D_Release_Notes.md  
+**Filename:** OMS_Vizzie_Beta_V1_5_0_D_Release_Notes.md  
 
 ## About this document
 
-Vizzie Beta V1.4.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
+Vizzie Beta V1.5.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
+
+---
+
+## V1.5.0
+
+- The tabs have new names: **PLAY** (music with visuals, the old CREATE), **CREATE** (authoring shaders, the old AUTHORING) and **PERFORM**.
+- **AUTO MIX** on PLAY: turn on the blender and each song mixes into the next at the end of its last full section, beat to beat, like a house DJ: the next song comes up with its bass out, the bass swaps, the first song goes out. The tempo holds during the mix and moves to the new song's afterwards. The mix is shaded on the waveform, with curves for each song.
+- **SELECTA** (the record button) picks AUTO MIX's style. SELECTA 1, house club, is the first; more to come.
+- PLAY: **EQ** and **Settings** sit beside FX at the right end of the controls row. The EQ plays on PLAY and the RGB colours the picture.
+- PLAY: **double-click a set** and it plays through from its first song, each song with its visual.
+- **Set links**: each Yodega pack has its own address on the website, opening the set ready to play; bookmarks and shared links show its name.
+- Pocket Rave: PLAY NEXT, CONTINUOUS, SHUFFLE, EQ, FX and Settings on the MUSIC header; orientation and REC on the VISUAL header. The EQ and effects now play on Pocket Rave.
+- Drop a **zip** of a set or a pack and it comes in as if you had dropped its files.
+- A song with no artwork shows the Yobot placeholder instead of the previous song's art.
+- Something playing? A drop goes into the LIBRARY only, on every tab, and nothing on the deck changes.
+- PERFORM: the panel strip is **ISO · EQ · FX · MODE · Settings**; both decks' Settings open from its gear. The ISO drawer has big knobs with the bands drawn behind them.
+- PERFORM: the lock on each deck decides whether a playing deck takes a new song (locked: refused; unlocked: it stops and loads). Shaders load any time.
+- PERFORM: switching a visual effect keeps its amount and comes in on the next QUANT step.
+- PERFORM: a Shaka on the MIXER header takes the credits off OUT for the audience; the decks keep theirs.
+- PERFORM: only Midi Fighter Twisters are listened to; other MIDI devices are ignored.
+- A pop-out in full screen no longer freezes the picture.
+- LIBRARY: no blue outline when you click in the list; save and X are evenly spaced.
+- The website's demo album has gone for now; the YoPacks are the sets, and the reference song is the default.
 
 ---
 
@@ -17,7 +40,7 @@ Vizzie Beta V1.4.0. License: GPL-3.0 (software); embedded assets, see the ABOUT 
 - OMS sets: the save button in the LIBRARY header writes your set and its pairs to one `.omsset` file. Drop it back in and the set and its pairs return.
 - Drop a folder of tracks and it becomes a set, named after the folder, tracks A to Z.
 - Sets sort: with a set applied, click TITLE, ARTIST, BPM or KEY; the cyan dot puts the playlist order back.
-- Yodega: Wes's own sets of music and visuals, paired and ready to play, now appear in the LIBRARY on the website, beside the demo set.
+- Yodega: the artist's own sets of music and visuals, paired and ready to play, now appear in the LIBRARY on the website, beside the demo set.
 - SHOUT OUT is on when you open the app, solid white over a soft shade so it reads over any picture, and fades in and out on the beat.
 - SHOUT OUT: on the mixer and in its pop-out, the credits scroll by, Deck A then Deck B. In square and vertical pictures a long line scrolls under its label instead of being cut.
 - The tagline scrolls across the top of the picture. Double-click the tagline in the header to turn it on or off; it starts off.
