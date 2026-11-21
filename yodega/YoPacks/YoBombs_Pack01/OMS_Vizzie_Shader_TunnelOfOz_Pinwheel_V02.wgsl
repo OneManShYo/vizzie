@@ -1,4 +1,4 @@
-// OMS_Vizzie_Shader_TunnelOfOz_Pinwheel_V01 · visualizer
+// OMS_Vizzie_Shader_TunnelOfOz_Pinwheel_V02 · visualizer
 // @title Tunnel of Oz Pinwheel
 // @author ItsWesSmithYo, Claude
 // @type visualizer
@@ -6,8 +6,9 @@
 // Spawned from OMS_Vizzie_Shader_TunnelOfOz_Shadertoy_V14 (Wes Smith): one of four (Twin, Rings, Pinwheel, Zigzag), Claude's styling on the same palette and parts (bands_01, bands_02, dot_01, dot_02, dust_01, dot_01_clone), Wes 2026-11-19.
 // Loop: 32 bars
 // Size: 2 m frame height (the source frame, 1 unit high, taken as 2 m); spiral turns 0.17 m apart; dot_01 0.23 m across, extruded 5 cm, split in half; dot_02 0.044 m across
-// Run date: 2026-11-19
-// Current Unix Epoch: 1795103649
+// V02 (2026-11-21): Seam fix (Wes 2026-11-21, iPad Safari: 'the horizontal line that cuts through these two shaders'): the arms' one-pixel edge width came from fwidth() of a value built on atan2, which jumps by a full turn on the negative x axis, so a one-pixel line ran from the left edge to the centre. The width is now worked out from the formula (the angle's width per pixel = one pixel / the distance from the centre), which has no jump. Nothing else changed.
+// Run date: 2026-11-21
+// Current Unix Epoch: 1795287569
 // Built from: OMS_Vizzie_Shader_TunnelOfOz_Shadertoy_V14, on OMS_Vizzie_Beta_V1_4_03a (template carried by the app)
 // Vizzie uniform contract (V0.5.0A): binding 0 = 9 x vec4 (36 floats); binding 1 = settings, 16 x vec4: the template's standard fourteen (settings[0] to settings[3]). No image bindings.
 struct U { v: array<vec4<f32>, 9>, };
@@ -147,7 +148,7 @@ fn oz_viz(c: vec2<f32>, ph: f32, aa: f32, drum: f32, sec: vec3<f32>) -> vec3<f32
   var spiral = a / TAU * 12. + d * OZ_SWEEP - ph * OZ_PIN_TURNS;                   // Pinwheel: twelve arms, swept back, turning
   let rip = sin(a * OZ_RIPPLE_ARMS + d * OZ_RIPPLE_RINGS - ph * OZ_RIPPLE_PER_LOOP * TAU) * OZ_RIPPLE_AMT * drum;   // the drum ripple, as V14
   let bf1 = fract(spiral + rip);
-  let b01 = clamp((0.25 - abs(bf1 - 0.25)) / max(fwidth(spiral), 1e-5) + 0.5, 0., 1.);   // the arms' hard edges, one pixel
+  let b01 = clamp((0.25 - abs(bf1 - 0.25)) / max(aa * (12. / (TAU * max(d, 1e-4)) + OZ_SWEEP), 1e-5) + 0.5, 0., 1.);   // the arms' hard edges, one pixel
   let bands = 1. - b01;                                                            // bands_02 fills the rest, so its edges follow the ripple
   let b1 = OZ_BANDS_01_COL;                                                        // bands_01: Barbie Pink, flat (V06)
   let b2 = OZ_BANDS_02_COL;                                                        // bands_02: Green Slime, flat (V06)

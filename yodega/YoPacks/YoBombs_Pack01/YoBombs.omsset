@@ -28,7 +28,7 @@
     "pairs": [
       {
         "song": "BeatsAndGirls_JNO_202402P03V2_128BPM.mp3",
-        "shader": "OMS_Vizzie_Shader_TunnelOfOz_Pinwheel_V01.wgsl"
+        "shader": "OMS_Vizzie_Shader_TunnelOfOz_Pinwheel_V02.wgsl"
       },
       {
         "song": "Fever_WesSmith-Velzy_JNO_202305P05V3_128BPM.mp3",
@@ -36,7 +36,7 @@
       },
       {
         "song": "HoldOutGal_JNO_202309P03V2_124BPM.mp3",
-        "shader": "OMS_Vizzie_Shader_TunnelOfOz_Twin_V01.wgsl"
+        "shader": "OMS_Vizzie_Shader_TunnelOfOz_Twin_V02.wgsl"
       },
       {
         "song": "MoveYaButt_WesSmith-YoVV_JNO_202407P02V3_126BPM.mp3",
