@@ -1,15 +1,40 @@
-# OMS Vizzie app [Beta V1.5.0] Complete Changelog
+# OMS Vizzie app [Beta V1.6.0] Complete Changelog
 
-**Run date:** 2026-11-21  
-**Current Unix Epoch:** 1795293744  
+**Run date:** 2026-11-22  
+**Current Unix Epoch:** 1795349176  
 **Document purpose:** The readable version of the PM backlog: the BLOGs each release packaged, grouped by release, newest first, with the builds that carried them.  
-**Filename:** OMS_Vizzie_Beta_V1_5_0_B_Complete_Changelog.md  
+**Filename:** OMS_Vizzie_Beta_V1_6_0_B_Complete_Changelog.md  
 
 ## About this document
 
-Vizzie Beta V1.5.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
+Vizzie Beta V1.6.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
 
 Versions are major.minor.iteration; a full package rolls the minor, and the iteration line before it becomes that release's iterations. Letters are revisions of the same piece of work.
+
+---
+
+## V1.6.0
+
+Packages the V1.5 iteration line (V1.5.01a to V1.5.20a). Baseline V1.5.20a. AUTO MIX and SELECTA V2: AUTO MIX runs the mix and makes no mixing choices of its own; each SELECTA is a set of numbered parameters (1 Zone, 2 Music Mix, 3 Visual Mix, 4 Tempo), keyed by numeric ID, with SELECTA ID 1 always present and supplying any parameter another SELECTA leaves out. The visuals mix with the music, by the SELECTA's Visual Mix. The SELECTA drawer becomes a knob panel (POINT · LENGTH · TEMPO · MODE). PLAY's headers are rearranged: what plays next sits on the MUSIC header, the VISUALS header gets FOLLOW and the visual list controls, the LIBRARY gets expand and add files. The four PLAY drawers follow the knob module; the PLAY row fits the stage in every window shape; knobs turn under a finger on touch. The AUTO MIX audio core is locked as Cortex.
+
+- **AUTO MIX and SELECTA**
+  - **SELECTA 1's tempo setting is not an app rule** (BLOG0365 · V1.5.01a, 01b): The V1.5.0 statement 'no beat mix past 5 %' was one setting of one SELECTA, built as a refusal for every mix. The refusal is removed; every transition mixes; the setting became SELECTA ID 1's tempo parameters (below).
+  - **AUTOMIX & Selecta V2** (BLOG0366 · V1.5.01b, 01c, 01e): AUTO MIX makes no mixing choices: it runs the mix (button, preload, AUTO MIX Lock, handover, what ends a mix, waveform shading) and applies the selected SELECTA's parameters. SELECTAs keyed by numeric ID; name and style are labels. Parameter groups: 1 Zone (1.1 last full section minimum bars, 1.2 sections in the mix, 1.3 bars per section max, 1.4 mix point), 2 Music Mix (2.1 volume, 2.2 EQ low, 2.3 EQ mid, 2.4 EQ high, 2.5 isolator, 2.6 filter, 2.7 AFX, 2.8 TRIM), 3 Visual Mix (3.1 mode, 3.2 strength, 3.3 VFX, 3.4 RGB, 3.5 visual TRIM, 3.6 shader settings), 4 Tempo (4.1 in-mix tempo change, 4.2 post-mix adjustment duration, 4.3 post-mix maximum change, 4.4 post-mix tempo target). Built: 1.1 to 1.4, 2.1, 2.2, 2.5, 3.1, 3.2, 4.1 to 4.4. Visual Mix (01c): the incoming song's paired shader runs on AUTO MIX's hidden deck and mixes with the playing one through PERFORM's mix shader; the deck takes it at the handover. Tempo (01e): SELECTA ID 1 = 4.1 0 %, 4.2 16 bars, 4.3 not set, 4.4 the playing track's BPM; a 4.3 cap no longer freezes later mixes (TEMPO held as 'selecta', not as by hand).
+  - **The AUTO MIX audio core is Cortex** (BLOG0368 · V1.5.01d): the AMU grid, Steering in normal play, the AUTO MIX Lock, no AMU Nudge, the hidden deck, preload and the no-gap handover are locked; a change needs the product owner's go on a written spec and passes the regression baseline (handover, sync, tempo, load errors).
+  - **SELECTA knobs** (BLOG0369 · V1.5.17a, 18a, 19a): the SELECTA drawer is a knob panel: POINT (1.4: last · 2nd to last · 3rd to last), LENGTH (1.3: 4 · 8 · 16 · 32 bars), TEMPO (4.2: 1 · 4 · 16 bars), MODE (3.1: PERFORM's modes). Each knob sets the selected SELECTA's parameter for the session, from the next mix; the zone redraws at once. TEMPO IN MIX (4.1) shown inactive in 17a, removed from the panel in 19a (not built; held at 0). Full names in the message bar.
+- **PLAY**
+  - **VISUALS header: FOLLOW and the visual list controls** (BLOG0367 · V1.5.01d, 07a): FOLLOW · visual PLAY NEXT · visual CONTINUOUS · visual SHUFFLE, left of Code. FOLLOW on = the visuals follow the song pairs; a visual button turns it off and the visuals use their own list; FOLLOW again follows from the next song. The piano roll orientation moves to the Music Understanding header.
+  - **Music Visual Pair in the LIBRARY filter row** (BLOG0370 · V1.5.01f, 10a): beside save, right of the filters.
+  - **MUSIC header** (BLOG0371 · V1.5.08a): PLAY NEXT · CONTINUOUS · SHUFFLE · AUTO MIX · SELECTA on the MUSIC header, mirroring VISUALS; under the waveform PLAY · CUE · LOOP ........ EQ · FX · gear.
+  - **Settings 8 across** (BLOG0372 · V1.5.09a, 11a): PLAY's Settings at the drawer's full width, 8 across; the shader's own settings follow with no empty slots; no scrollbar in PLAY's drawer.
+  - **LIBRARY expand** (BLOG0373 · V1.5.12a, 13a, 15a): a bulleted-list button right of SETS slides the list down over Music Understanding's left half; Esc, the button or a drawer brings it back. The roll orientation icon becomes a cascade of 1, 2 and 4 bars (13a, 15a).
+  - **LIBRARY add files** (BLOG0374 · V1.5.14a, 16a): a folder-plus button beside expand opens the system file picker into the same intake as a drop (iPad and touch).
+  - **Drawers to the knob module** (BLOG0379 · V1.5.19a): EQ, FX, Settings and SELECTA each one outlined knob module per column, 6 px apart.
+  - **Row fits the stage** (BLOG0380 · V1.5.20a): the MUSIC | VISUALS row is the stage's 16:9 height in every window shape; Music Understanding takes the rest (no maximum, at least 160 px); the LIBRARY list ends on a whole row.
+- **Touch: a finger turns a knob** (BLOG0375 · V1.5.18a): a drag that starts on any knob turns it and never scrolls the page (iPad); SELECTA knobs drag, tap = next, double-tap = default.
+- **Documentation V1.6.0** (BLOG0381 · V1.6.0): The doc changes of this roll are listed in BLOG0381.
+
+Parked in this line: BLOG0376 (an OMS set carries its SELECTA values), BLOG0377 (SELECTA control API), BLOG0378 (AUTO MIX follows the set's mix points). Still open: BLOG0358 (set name shown).
 
 ---
 

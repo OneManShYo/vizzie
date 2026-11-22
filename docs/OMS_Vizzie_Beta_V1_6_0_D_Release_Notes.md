@@ -1,13 +1,30 @@
-# OMS Vizzie app [Beta V1.5.0] Release Notes
+# OMS Vizzie app [Beta V1.6.0] Release Notes
 
-**Run date:** 2026-11-21  
-**Current Unix Epoch:** 1795293744  
+**Run date:** 2026-11-22  
+**Current Unix Epoch:** 1795349176  
 **Document purpose:** User enhancements since V0.2.18c, newest first.  
-**Filename:** OMS_Vizzie_Beta_V1_5_0_D_Release_Notes.md  
+**Filename:** OMS_Vizzie_Beta_V1_6_0_D_Release_Notes.md  
 
 ## About this document
 
-Vizzie Beta V1.5.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
+Vizzie Beta V1.6.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
+
+---
+
+## V1.6.0
+
+- **AUTO MIX and SELECTA, version 2.** AUTO MIX runs the mix; the SELECTA decides how it sounds and looks, from a list of numbered settings: where the mix sits and how long it is, how the volumes and bass move, how the visuals blend, and what the tempo does. SELECTA ID 1 (house club) is the one built in.
+- **The visuals mix too.** During an AUTO MIX the next song's paired visual comes up as the music does and takes over at the end, blended in the SELECTA's mode.
+- **SELECTA knobs.** The SELECTA button opens four knobs: **POINT** (mix at the last section, or one or two sections earlier), **LENGTH** (4 to 32 bars), **TEMPO** (how long the tempo takes to reach the new song after the mix) and **MODE** (how the visuals blend). Turn them for a hot radio-style mix or a long house blend; they apply from the next mix.
+- Every mix happens: the old 'no beat mix past 5 %' refusal is gone. After the mix the tempo moves to the new song's own.
+- PLAY's **MUSIC header** holds what plays next: PLAY NEXT · CONTINUOUS · SHUFFLE · AUTO MIX · SELECTA. Under the waveform: PLAY · CUE · LOOP, then EQ · FX · Settings.
+- PLAY's **VISUALS header** gets **FOLLOW** and its own PLAY NEXT, CONTINUOUS and SHUFFLE: the visuals follow the song pairs, or run their own list.
+- **LIBRARY:** expand the list down over Music Understanding for more rows; **add files** from a picker (iPad); Music Visual Pair sits beside save.
+- **Settings** on PLAY: eight across, the full width.
+- EQ, FX, Settings and SELECTA drawers all look alike: each column in its own outlined box.
+- The PLAY layout fits any window shape: no gap under the picture; Music Understanding fills the rest.
+- **Touch:** drag a knob with a finger and it turns; the page no longer scrolls.
+- The piano roll orientation button moves to the Music Understanding header, as a little cascade of bars.
 
 ---
 

@@ -1,13 +1,13 @@
-# OMS Vizzie app [Beta V1.5.0] User Guide
+# OMS Vizzie app [Beta V1.6.0] User Guide
 
-**Run date:** 2026-11-21  
-**Current Unix Epoch:** 1795293744  
+**Run date:** 2026-11-22  
+**Current Unix Epoch:** 1795349176  
 **Document purpose:** How to use Vizzie.  
-**Filename:** OMS_Vizzie_Beta_V1_5_0_E_UserGuide_All.md  
+**Filename:** OMS_Vizzie_Beta_V1_6_0_E_UserGuide_All.md  
 
 ## About this document
 
-Vizzie Beta V1.5.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
+Vizzie Beta V1.6.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
 
 ---
 
@@ -27,7 +27,7 @@ Vizzie Beta V1.5.0. License: GPL-3.0 (software); embedded assets, see the ABOUT 
 &emsp;4.8 Music Understanding  
 &emsp;4.9 Another track's Music Understanding  
 &emsp;4.10 CREATE  
-&emsp;4.11 AUTO MIX  
+&emsp;4.11 AUTO MIX and SELECTA  
 **5** PERFORM  
 &emsp;5.1 Layout  
 &emsp;5.2 Global strip  
@@ -84,9 +84,9 @@ Music and visuals: one deck, its shader on the stage, the LIBRARY, effects, and 
 
 ### 4.1 Layout
 - **GLOBAL** on top: the global strip (4.2).
-- **MUSIC** on the left: the cover and waveform, the controls row, and the LIBRARY below them.
-- **VISUALS** on the right: the stage, with Code, Pop Out, orientation and REC on its header.
-- **Music Understanding** across the bottom, full width, filling the window down to the message bar.
+- **MUSIC** on the left: on its header what plays next (PLAY NEXT · CONTINUOUS · SHUFFLE · AUTO MIX · SELECTA); then the cover and waveform, the controls row, and the LIBRARY below them.
+- **VISUALS** on the right: the stage, with FOLLOW, the visual PLAY NEXT, CONTINUOUS and SHUFFLE (4.7), then Code, Pop Out, orientation and REC on its header.
+- **Music Understanding** across the bottom, full width, filling the window down to the message bar. The MUSIC and VISUALS row is always as tall as the picture, in any window shape; Music Understanding takes all the room below it.
 
 ### 4.2 Global strip
 The thin strip under the GLOBAL header: settings you set and leave. **TEMPO · QUANT · position · Shaka.**
@@ -125,30 +125,34 @@ A drop applies no set (5.11).
 A dropped cover image must be square. It replaces the MP3's own art until another track loads.
 
 ### 4.4 Controls row
-**PLAY · CUE · LOOP · Music Visual Pair · orientation · PLAY NEXT · CONTINUOUS PLAY · SHUFFLE · AUTO MIX ........ SELECTA · EQ · FX · Settings**
+**MUSIC header:** **PLAY NEXT · CONTINUOUS PLAY · SHUFFLE · AUTO MIX · SELECTA**. **Under the waveform:** **PLAY · CUE · LOOP ........ EQ · FX · Settings**.
 - **PLAY / PAUSE** starts and stops. **Spacebar** does the same.
 - **CUE**, right of PLAY / PAUSE: back to the start of the track. While the track plays it jumps on the next QUANT step and plays on, as a chip click; paused, at once. A chip loop is released.
 - **LOOP**, off when you open the app. On, the whole track loops. Click a piano roll block while LOOP is on and that block loops instead (the jump lands on QUANT); click the lit block again to go back to the whole track. Off, the track stops at its end and the playhead goes back to the start.
-- **Music Visual Pair** (speaker, link, camera): pairs the song on the deck with the shader on the stage. Lit = paired. Load a paired song from the LIBRARY, onto any deck, and its shader comes with it. Click the lit button to unpair. One shader per song; a shader can pair with many songs. Pairs last for the session, on PLAY and PERFORM; to keep them, save an OMS set (5.11). The pitch always moves with the tempo, like a turntable (KEY LOCK is no longer offered).
-- **Orientation**: the piano roll vertical or horizontal.
 - **PLAY NEXT** (next-track icon): the next track in the LIBRARY list, as it is shown, plays from the start now. After the last track it goes back to the first.
 - **CONTINUOUS PLAY** (playlist icon), on when you open the app: when a track ends (LOOP off) the next track in the list plays from the start.
 - **SHUFFLE** (crossed arrows): on, the LIBRARY list is put in a random order, with the playing track first and still playing; PLAY NEXT and CONTINUOUS PLAY then follow that order, as streaming players do. Off, the list goes back to its own order.
 - **AUTO MIX** (blender): each song mixes into the next (4.11).
-- **SELECTA** (record): picks the mixing style AUTO MIX uses (4.11).
+- **SELECTA** (record): opens the SELECTA knobs, how AUTO MIX mixes (4.11).
 - **EQ** opens the deck's EQ and RGB (4.6).
 - **FX** opens the effects (4.6). Its dot lights while any effect is turned; **Shift+click** puts every effect back to neutral.
 - **Settings** (gear) opens the shader's settings (4.7.6).
 
-CONTINUOUS PLAY, SHUFFLE and AUTO MIX light cyan while on. EQ, FX, Settings and SELECTA open one at a time, in one panel over the LIBRARY; click the lit button again to close it. The piano roll zoom and SOLO are on the Music Understanding header (4.8).
+CONTINUOUS PLAY, SHUFFLE and AUTO MIX light cyan while on. EQ, FX, Settings and SELECTA open one at a time, in one panel over the LIBRARY, each column of knobs in its own outlined box; click the lit button again to close it. The piano roll orientation, zoom and SOLO are on the Music Understanding header (4.8). **Music Visual Pair** is in the LIBRARY header (4.5).
+
+**Touch:** on an iPad or a phone, put a finger on any knob and drag up or down to turn it; the page does not scroll.
 
 ### 4.5 LIBRARY
 The same LIBRARY as PERFORM's (5.10), always open under the controls row. On the website it lists the demo sets and Yodega, the artist's own sets of music and visuals, paired and ready to play (5.11), and opens with the first set applied.
-- **Header:** ALL · MUSIC · VISUALS · SETS ........ X (5.10).
+- **Header:** ALL · MUSIC · VISUALS · SETS · expand · add files ........ Music Visual Pair · save · X (5.10).
+- **Expand** (bulleted list, right of SETS): the list slides down over the left half of Music Understanding, to its bottom, so more rows show (for example while pairing songs and shaders); the filter buttons stay where they are. Press it again, press **Escape**, or open EQ, FX, Settings or SELECTA to bring it back. Not on phones or in CREATE.
+- **Add files** (folder with a plus): opens your device's file picker; the files come in exactly as a drop (4.3.3): songs, their `.json`, shaders, covers, playlists, `.omsset` and `.zip` files. On an iPad, where nothing can be dropped, this is how a pack gets in.
+- **Music Visual Pair** (speaker, link, camera), beside save: pairs the song on the deck with the shader on the stage. Lit = paired. Load a paired song from the LIBRARY, onto any deck, and its shader comes with it. Click the lit button to unpair. One shader per song; a shader can pair with many songs. Pairs last for the session, on PLAY and PERFORM; to keep them, save an OMS set (5.11). The pitch always moves with the tempo, like a turntable (KEY LOCK is no longer offered).
+- The list always ends on a whole row.
 - **Double-click** (or double-tap) a track, or select it and press **Enter**: it loads and plays from the start. A shader loads onto the stage. While a track plays, a new track stops it and loads stopped at the start (press PLAY to start it); a shader swaps on QUANT.
 - **Click** an entry to select it; then ↑ / ↓ (or W / S) move the selection, ← / → (or A / D) load it, Delete removes it from the library.
 - **Drag** an entry onto the deck to load it.
-- **Add files** by dropping them anywhere (4.3.3).
+- **Add files** by dropping them anywhere (4.3.3), or with the add files button.
 - **Play a set:** double-click (or double-tap) a set, or select it and press Enter: the set is applied, its first song loads with its paired shader and plays from the start, and CONTINUOUS PLAY turns on, so the set plays through. A song playing stops first. On PERFORM a double-click on a set only applies it (5.11).
 - **Set links:** on the website, an address like `vizzie.onemanshyo.com/?set=YoBombs` (or a pack's own page, such as `vizzie.onemanshyo.com/yodega/YoPacks/YoBombs_Pack01/`) opens with that set applied and its first song loaded; the first tap plays it (a browser rule). Bookmarks and shared links show the set's name.
 
@@ -157,14 +161,22 @@ An entry on the deck is tinted yellow. Website tracks are fetched when you load 
 ### 4.6 FX
 **EQ** slides a panel down over the LIBRARY with the deck's RGB (TRIM · BLUE · GREEN · RED, on the picture) and EQ (TRIM · HIGH · MID · LOW, on the music), the same controls as a PERFORM deck's (5.12). The EQ plays on PLAY and on Pocket Rave, and the RGB colours the picture. Its dot lights while anything is off its default; **Shift+click** resets it.
 
-**FX** slides a panel down over the LIBRARY; click FX again to close it. Four knobs: **AFX1** over **AFX2** (music, cyan) and **VFX1** over **VFX2** (visual, purple) to the right. They are PLAY's deck's own effects; PERFORM's decks have theirs (5.9).
+**FX** slides a panel down over the LIBRARY; click FX again to close it. Four knobs in two boxes: **AFX1** over **AFX2** (music, cyan), then **VFX1** over **VFX2** (visual, purple). They are PLAY's deck's own effects; PERFORM's decks have theirs (5.9).
 - **Knob:** drag up or down for the amount. Click it to select it (a ring: cyan on a music knob, purple on a visual one), then Shift+↑ / ↓ (fine) or Shift+← / → (coarse). **Enter** kills the effect; Enter again restores it. Kills land on the next QUANT step while the track plays. A killed knob dims. **Double-click** resets the effect to its default.
 - **Effect box** (under the knob): click it, then Shift+arrows step through the bank.
 
 The music effects play on PLAY and Pocket Rave; the visual effects show on the stage, in Pop Out and in REC. CREATE plays without effects.
 
 ### 4.7 Visuals
-The live shader on the stage. The buttons sit on the right of the VISUALS header.
+The live shader on the stage. The buttons sit on the right of the VISUALS header: **FOLLOW · PLAY NEXT · CONTINUOUS · SHUFFLE**, then Code, Pop Out, orientation and REC.
+
+#### 4.7.0 FOLLOW and the visual list
+- **FOLLOW** (a dot and an arrow), lit when you open the app: the visuals follow the music. Each song brings its paired shader, and in an AUTO MIX the next song's visual blends in with the music (4.11). While FOLLOW is on, the visual CONTINUOUS and SHUFFLE buttons show the music's, dimmed.
+- **Press a visual button** and FOLLOW turns off: the visuals run their own list, the LIBRARY's shaders in their order (or shuffled):
+  - **PLAY NEXT** (visual): the next shader in the list, now (on QUANT while music plays).
+  - **CONTINUOUS** (visual): on, each song change brings the list's next shader (blended in during an AUTO MIX); off, the visual stays.
+  - **SHUFFLE** (visual): the visual list in its own random order.
+- **Press FOLLOW again** and the visuals follow the song pairs again from the next song.
 
 #### 4.7.1 </> Code
 Opens the shader code over the stage: **Apply · Copy · Export** and the editor. Edit or paste a complete shader, then **Apply**. **Copy** copies the code.
@@ -200,11 +212,11 @@ Drop a `.wgsl` file anywhere (4.3.3), load it from the LIBRARY, or **double-clic
 
 #### 4.7.6 Settings
 A shader can declare settings: the values that tune its look (size, speed, colours). **Settings**, after Code on the header, shows only while the loaded shader declares settings. It opens the Settings drawer; Settings lights while it is open; click it again to close. The purple dot on the button glows while any setting is off the shader's default. **Shift+click** the button to put every setting back to the shader's default, without opening the drawer (on PLAY, Shift+Enter does the same from the keyboard).
-- **On PLAY** it opens from the gear at the right end of the controls row, in the panel over the LIBRARY, two settings across, more scrolling below. The VISUALS header has no Settings button on PLAY.
+- **On PLAY** it opens from the gear at the right end of the controls row, in the panel over the LIBRARY: the panel's full width, eight settings across, each column in its own outlined box, only as many rows as the shader uses. The VISUALS header has no Settings button on PLAY.
 - **On CREATE** it slides down out of the Visual module.
 - **On PERFORM** both decks' settings open from the gear in the panel strip (5.8): Deck A on the left, Deck B on the right, two across, four rows in view, more scrolling below.
 
-**The rack.** 32 slots, 4 rows of 8, always drawn, the same on every stage. The standard settings fill the first rows; the shader's own settings start on a fresh row. A shader with no standard settings fills from slot 1. Unused slots show a dashed, dim knob and an empty value box. Each slot: a purple knob, the name (cut with "…" when it is long; the full name shows in the message bar) and the value box.
+**The rack.** 32 slots, 4 rows of 8, drawn on CREATE (on PLAY only the rows in use; on PERFORM two across). The standard settings fill the first rows; the shader's own settings start on a fresh row. A shader with no standard settings fills from slot 1. Unused slots show a dashed, dim knob and an empty value box. Each slot: a purple knob, the name (cut with "…" when it is long; the full name shows in the message bar) and the value box.
 
 **Keys:** W A S D and the arrows move between the knobs and stay in the open drawer; W off its top row leaves. From the Settings button, with the drawer open, the next W A S D or arrow goes to its first knob.
 
@@ -263,13 +275,14 @@ Each lane's music data moving through the centre playhead, counted in beats, at 
 - **LOOP on:** the clicked block loops (4.4).
 - **Stopped:** the clicked block is picked: the playhead moves to its start, the block lights, and REC records exactly that block (4.7.4). Moving the playhead any other way, or PLAY, clears the pick.
 - **A range:** click a section, segment or phrase block, then **Shift+click** another (in the same lane or another structure lane, before or after it): everything from the earlier start to the later end is picked. While playing with LOOP on, it loops at once. On PLAY the range stays, lit cyan across all three structure lanes, through scrubbing, PLAY and LOOP; REC renders it; Escape or a plain block click clears it.
+- **Orientation** (a little cascade of bars on the Music Understanding header, left of the %): the piano roll horizontal or vertical.
 - **Zoom** (the % field on the Music Understanding header, left of SOLO): click it, then Shift+↑ / ↓ through 0, 25, 50, 75 and 100. 0 is the closest view, 100 the whole song. Pinch, or ctrl + wheel on the roll, zooms too.
 
 ### 4.9 Another track's Music Understanding
 Each track has its own Music Understanding file, a `.json` made by the Sozo sidecar. Drop it anywhere while nothing plays (or double-click the cover or waveform and pick it): the piano roll, readout, cue points and visuals switch to that track, and TEMPO goes to its BPM. Load the track's MP3 the same way, before or after. If the audio and the `.json` are different lengths, the message bar tells you, so you can check they belong together.
 
 ### 4.10 CREATE
-Off the website only: the same deck, arranged for building shaders. The Visual on top (the header reads **Visual : Author**), with **Code** and **Settings** on its header (4.7.1, 4.7.6), then the music, the controls row **PLAY · CUE · LOOP · Music Visual Pair · zoom · orientation ........ SOLO**, the Music Understanding chips, the piano roll and the authoring sections. The track and solos are the same as on PLAY. There is no LIBRARY, EQ, FX, PLAY NEXT, CONTINUOUS PLAY, SHUFFLE, AUTO MIX or SELECTA, and the deck plays without effects.
+Off the website only: the same deck, arranged for building shaders. The Visual on top (the header reads **Visual : Author**), with **Code** and **Settings** on its header (4.7.1, 4.7.6), then the music, the controls row **PLAY · CUE · LOOP · Music Visual Pair · zoom · orientation ........ SOLO**, the Music Understanding chips, the piano roll and the authoring sections. The track and solos are the same as on PLAY. There is no LIBRARY, EQ, FX, PLAY NEXT, CONTINUOUS PLAY, SHUFFLE, AUTO MIX, SELECTA or FOLLOW, and the deck plays without effects.
 - **Compact CREATE** (a portrait window, one 500 px tall or less, or compact picked by hand): the stage box stays 16:9 of its width (at most 60 % of the window's height) in every orientation; 1:1 and 9:16 sit centred in it, so nothing under the stage moves when you switch.
 - **Music row:** the cover and the waveform, 40 px high, as on PLAY.
 - **Music Understanding:** the same chips as PLAY and PERFORM (4.8.2): click a chip to solo the lane, click a group's colour bar to solo the group, SOLO clears. Every lane drives the shader at full unless solos mute it, as on PLAY and PERFORM, so a shader gets the same values on every tab.
@@ -279,14 +292,21 @@ Off the website only: the same deck, arranged for building shaders. The Visual o
 - **Objects toggle:** one small tile per object, 24 across (12 on an iPad); the full name shows in the message bar.
 - **GRID**, on when you open the app, follows the asset in metres (lines every metre and every 10 cm), with the ground line through the asset's base: the side-to-side axis in pink, the depth axis in green. **REF**, next to POINTS, shows a 1.8 m person standing on the ground line, to check the asset's size. GRID, GUIDES, POINTS and REF show only in CREATE, above the SHOUT OUT credits.
 
-### 4.11 AUTO MIX
-A party feature on PLAY: with **AUTO MIX** on, each song in the list mixes into the next, the way a DJ would, at the end of the song's last full section.
-- **Turn it on** with the blender button. It is off when you open the app. While it is on, the list plays on at the end of a song even with CONTINUOUS PLAY off.
-- **What happens:** about 30 seconds before the mix, the next song in the list loads (the one PLAY NEXT would play, SHUFFLE's order included); the message bar says when it comes in ('AUTO MIX (SELECTA 1): NAME comes in at bar 129'). At that bar the next song starts at its own bar 1, on the beat, and the two blend over the mix. At the end, the next song simply carries on as the song on the deck: its name, cover, waveform and Music Understanding, and its paired shader switches in on QUANT. The song before stops.
-- **Tempo:** during the mix the tempo holds where it is, and the next song is matched to it. After the mix the tempo moves to the new song's own tempo over 16 bars. If the next song would have to play more than 5 % faster or slower than its own tempo, there is no beat mix: the message bar says so and the song plays when the first one ends.
-- **On the waveform:** with AUTO MIX on, the mix is shaded orange where it will happen, with a line where each part starts, and two curves show how the songs move: the incoming song in green, the outgoing song in white; solid = volume, dashed = bass.
+### 4.11 AUTO MIX and SELECTA
+A party feature on PLAY: with **AUTO MIX** on, each song in the list mixes into the next, the way a DJ would. **AUTO MIX** runs the mix; the **SELECTA** decides how it sounds and looks.
+- **Turn it on** with the blender button on the MUSIC header. It is off when you open the app. While it is on, the list plays on at the end of a song even with CONTINUOUS PLAY off.
+- **What happens:** about 30 seconds before the mix, the next song in the list loads (the one PLAY NEXT would play, SHUFFLE's order included); the message bar says when it comes in ('AUTO MIX (SELECTA 1): NAME comes in at bar 129'). At that bar the next song starts at its own bar 1, on the beat, and the two blend over the mix. At the end, the next song simply carries on as the song on the deck: its name, cover, waveform and Music Understanding. The song before stops.
+- **The visuals mix too:** if the next song has a paired shader, it comes up on the stage as the music does and takes over at the end, blended in the SELECTA's mode. With FOLLOW off and the visual CONTINUOUS on, the visual list's next shader blends in instead (4.7.0).
+- **Every mix happens**, whatever the two tempos. During the mix the tempo holds where it is and the next song is matched to it; after the mix the tempo moves to the new song's own tempo, over the bars the SELECTA's TEMPO knob says. A TEMPO you typed yourself is left alone.
+- **On the waveform:** with AUTO MIX on, the mix is shaded orange where it will happen, with a line where each part starts, and two curves show how the songs move: the incoming song in green, the outgoing song in white; solid = volume, dashed = bass. It redraws as soon as you turn a SELECTA knob.
 - **Stopping a mix:** pause, a seek, loading a track, PLAY NEXT, leaving PLAY or turning AUTO MIX off during a mix ends it: the incoming song stops and the first one plays on as it was.
-- **SELECTA** (the record button) opens the SELECTA picker in the panel over the LIBRARY: the mixing styles, the one in use lit. **SELECTA 1** (house club), the only one so far: the mix takes the song's last two sections (up to 16 bars each). In the first, the next song comes up from silent with its bass out; in the second, the bass swaps from one song to the other; in the last bar the first song goes out. A pick applies from the next mix. More SELECTA styles are to come.
+- **SELECTA** (the record button) opens four knobs in the panel over the LIBRARY. Each sets how the next mix goes, for this session:
+  - **POINT** (MIX POINT): where the mix sits: at the last full section of the song, or one or two sections earlier (the song then hands over earlier, and its last bars are not played).
+  - **LENGTH** (MIX LENGTH): how long the mix is: 4, 8, 16 or 32 bars (half on each side of the section line; shorter where a section is shorter).
+  - **TEMPO** (TEMPO AFTER MIX): how long the tempo takes to reach the new song's own after the mix: 1, 4 or 16 bars.
+  - **MODE**: how the two visuals blend, from PERFORM's modes (MIX to COLOR).
+  - Drag a knob up or down (mouse or finger), or click / tap it for the next step (Shift+click goes back); the wheel and the arrow keys step too. **Double-click** (or double-tap) a knob for its default. The message bar names each knob in full. All at the minimum is a hot, radio-style mix; all at the maximum a long house blend.
+- **SELECTA 1** (house club) is the SELECTA built in, and its values are the knobs' defaults: the last full section and the one before it, up to 16 bars each. In the first part, the next song comes up from silent with its bass out; in the second, the bass swaps from one song to the other; in the last bar the first song goes out. The visuals blend in MIX across the last part. After the mix the tempo moves to the new song's over 16 bars.
 
 ## 5. PERFORM
 
@@ -685,7 +705,7 @@ Mode buttons (9.1.5.4):
 | 9.1.7.1 | MUSIC header | MUSIC: cover, waveform and transport (drop files anywhere: into the LIBRARY) |
 | 9.1.7.2 | VISUALS header | VISUALS: the shader on the stage |
 | 9.1.7.3 | MUSIC UNDERSTANDING header | MUSIC UNDERSTANDING: the AMU lanes and buses (click = solo) and the piano roll |
-| 9.1.7.4 | TEMPO | TEMPO follows the song (its own tempo, as recorded) / TEMPO set by hand: holds until a track loads (click, then Shift+↑↓ ±1 BPM, Shift+←→ ±0.01 BPM, or type + Enter · double-click = follow the song again) |
+| 9.1.7.4 | TEMPO | TEMPO follows the song (its own tempo, as recorded) / TEMPO held by the SELECTA (Post-mix maximum change), until a track loads or the next mix / TEMPO set by hand: holds until a track loads (click, then Shift+↑↓ ±1 BPM, Shift+←→ ±0.01 BPM, or type + Enter · double-click = follow the song again) |
 | 9.1.7.5 | QUANT | as 9.1.2.4 |
 | 9.1.7.6 | Position | Arrangement position (bar.beat.sixteenth) |
 | 9.1.7.7 | PLAY, CUE, LOOP, Music Visual Pair, SOLO | as 9.1.3.8 to 9.1.3.11, 9.1.3.4 |
@@ -708,7 +728,7 @@ Mode buttons (9.1.5.4):
 | 9.1.7.23 | CONTINUOUS PLAY | CONTINUOUS PLAY: the next track plays at the end |
 | 9.1.7.24 | SHUFFLE | SHUFFLE: the list in a random order |
 | 9.1.7.24a | AUTO MIX | AUTO MIX: each song mixes into the next (SELECTA 1: the last two sections, shaded on the waveform) |
-| 9.1.7.24b | SELECTA | SELECTA: the mixing style AUTO MIX uses |
+| 9.1.7.24b | SELECTA | SELECTA: the mixing style AUTO MIX uses (opens the SELECTA knobs) |
 | 9.1.7.25 | FX knob and its label | AFX1 · Filter N% (drag · Shift+↑↓ ←→ · click = select · Enter = kill / restore · double-click = reset); " · killed" while killed |
 | 9.1.7.26 | FX effect box | AFX1 effect · Filter (Shift+↑↓ ←→) |
 | 9.1.7.27 | LIBRARY header and list | as 9.1.6.1 |
@@ -716,6 +736,13 @@ Mode buttons (9.1.5.4):
 | 9.1.7.29 | Track entry | NAME (W S or ↑↓ · Enter, A D, ←→ or double-click load · Delete) |
 | 9.1.7.30 | Shader entry | title · author — description (W S or ↑↓ · Enter, A D, ←→ or double-click load · Delete) |
 | 9.1.7.31 | Settings (gear) | SETTINGS: the shader settings |
+| 9.1.7.32 | FOLLOW | FOLLOW: the visuals follow the song pairs; a visual button turns it off, FOLLOW again resumes from the next song |
+| 9.1.7.33 | Visual PLAY NEXT | Visual PLAY NEXT: the next shader now (on QUANT while music plays) |
+| 9.1.7.34 | Visual CONTINUOUS | Visual CONTINUOUS: the next shader at each song change (mixed in an audio AUTO MIX) |
+| 9.1.7.35 | Visual SHUFFLE | Visual SHUFFLE: the visual list in its own random order |
+| 9.1.7.36 | LIBRARY expand | LIBRARY: expand down over Music Understanding (more rows, e.g. for pairing) / LIBRARY: back to its place (or Esc) |
+| 9.1.7.37 | Add files | Add files: MP3, AMU .json, .wgsl, cover image, .m3u8 playlist, .omsset, .zip (the same as a drop) |
+| 9.1.7.38 | SELECTA knob | MIX POINT: which section line the mix sits on: before the last full section, or one or two sections earlier · drag up / down, or click = next, Shift+click = back, wheel or arrows step, double-click = default (MIX LENGTH, TEMPO AFTER MIX, MODE: each with its own line) |
 
 #### 9.1.8 CREATE
 
@@ -848,10 +875,19 @@ The help after the value is the shader's own, from its declaration; without it t
 | 9.2.90 | AUTO MIX coming | AUTO MIX (SELECTA 1): NAME comes in at bar N |
 | 9.2.91 | AUTO MIX start | AUTO MIX (SELECTA 1): into NAME over N bars |
 | 9.2.92 | AUTO MIX handover | AUTO MIX: NAME |
-| 9.2.93 | AUTO MIX no beat mix | AUTO MIX: NAME is N% off the playing tempo (more than 5%): no beat mix, it plays at the end |
+| 9.2.93 | AUTO MIX no beat mix | removed in V1.6.0 (every transition mixes) |
 | 9.2.94 | AUTO MIX stopped | AUTO MIX: mix stopped |
-| 9.2.95 | SELECTA picked | SELECTA: NAME (from the next mix) |
+| 9.2.95 | SELECTA picked | removed in V1.6.0 (the picker became the SELECTA knobs, 9.2.97) |
 | 9.2.96 | Shaka (MIXER) | SHOUT OUT on in OUT / SHOUT OUT off in OUT · the decks keep theirs / SHOUT OUT is off (GLOBAL Shaka) |
+| 9.2.97 | SELECTA knob | SELECTA · MIX LENGTH: 16 bars (from the next mix) |
+| 9.2.98 | LIBRARY expand | LIBRARY expanded / LIBRARY back |
+| 9.2.99 | Visuals on their own list | Visuals on their own list (LIBRARY order) / (LIBRARY order, shuffled) |
+| 9.2.100 | Visual PLAY NEXT | Visual PLAY NEXT: NAME / Visual PLAY NEXT: no other shader in the LIBRARY |
+| 9.2.101 | Visual CONTINUOUS | Visual CONTINUOUS on / Visual CONTINUOUS off |
+| 9.2.102 | Visual SHUFFLE | Visual SHUFFLE on / Visual SHUFFLE off |
+| 9.2.103 | FOLLOW again | Visuals FOLLOW the song pairs from the next song |
+
+A visual button pressed while FOLLOW is on adds 'Visuals on their own list · ' before its message.
 
 ### 9.3 Errors
 
@@ -932,7 +968,7 @@ The keys work on PLAY, PERFORM and CREATE, on the website and off it; Pocket Rav
 | 10.47 | Enter | LIBRARY list, PLAY | Load the row, as its double-click (a track plays from the start) |
 | 10.48 | Enter | LIBRARY set row | Apply the set / turn it off |
 | 10.49 | Delete (Mac: delete) | LIBRARY list | Remove the row from the library (not a set row) |
-| 10.50 | A / D or ← / → | LIBRARY header | Along the buttons (ALL, MUSIC, VISUALS, SETS, save, X) |
+| 10.50 | A / D or ← / → | LIBRARY header | Along the buttons (ALL, MUSIC, VISUALS, SETS, save, X; PLAY: ALL, MUSIC, VISUALS, SETS, expand, add files, Music Visual Pair, save, X) |
 | 10.51 | S or ↓ | LIBRARY header | Down into the list |
 | 10.52 | Enter | Header name or tagline (after a power light tap) | Keep it |
 | 10.53 | Escape | Header name or tagline | Cancel |
@@ -948,6 +984,8 @@ The keys work on PLAY, PERFORM and CREATE, on the website and off it; Pocket Rav
 | 10.63 | Escape | PLAY, a range picked | Clear the range (and its loop) |
 | 10.64 | Shift+click (mouse) | A section, segment or phrase block, after a click on another | Pick or loop the range between |
 | 10.65 | Shift+Enter | FX button (PLAY) | Every effect to neutral |
+| 10.66 | ↑ / → or ↓ / ← | SELECTA knob (PLAY) | Next / previous step, from the next mix |
+| 10.67 | Escape | PLAY, LIBRARY expanded | Bring the list back |
 
 PERFORM's deck headers (lock, MASTER, Code, Settings) are mouse only: the keys pass them by, but with a Settings drawer open the next key from its button goes into the drawer. On PLAY they are in the flow. The Settings drawer's value boxes are fields.
 

@@ -1,13 +1,13 @@
-# OMS Vizzie app [Beta V1.5.0] Claude Project Instructions
+# OMS Vizzie app [Beta V1.6.0] Claude Project Instructions
 
-**Run date:** 2026-11-21  
-**Current Unix Epoch:** 1795293744  
+**Run date:** 2026-11-22  
+**Current Unix Epoch:** 1795349176  
 **Document purpose:** Instructions to Claude for working on the Vizzie project.  
-**Filename:** OMS_Vizzie_Beta_V1_5_0_Z_ClaudeProject_Instructions.md  
+**Filename:** OMS_Vizzie_Beta_V1_6_0_Z_ClaudeProject_Instructions.md  
 
 ## About this document
 
-Vizzie Beta V1.5.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
+Vizzie Beta V1.6.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
 
 ---
 
@@ -34,7 +34,7 @@ You are working on Vizzie, a single self-contained HTML app (Web Audio, WebGPU, 
 
 # 2. Core systems
 
-- CORTEX: the master music clock and the Message System. Critical: the uniform contract and the WGSL runtime (C 1.2, Y 1.2).
+- CORTEX: the master music clock and the Message System; since V1.5.01d (BLOG0368) the AUTO MIX audio core is locked with the clock (C 2.1.3a): it changes only on the product owner's go on a written spec, after the regression baseline. Critical: the uniform contract and the WGSL runtime (C 1.2, Y 1.2).
 - A change to any of them cascades through the whole app. Touch them only when the work names them, and follow their reference (C 2, Y 2).
 - The Message System follows Dojo's (OMS App System Reference): `showMessage(text,type,onClick)` is the only channel for user feedback; no browser tooltips. Every message is listed in E 9 and every key in E 10; a new control, message or key goes into those tables in the same build. A control without help is a defect.
 - Help text is the name and its file types or keys only. No prose, no made-up hints, no text placed in empty UI space.
@@ -43,6 +43,7 @@ You are working on Vizzie, a single self-contained HTML app (Web Audio, WebGPU, 
 - One behaviour, one code path: before adding a special case for one surface, source or loader, route it through the code that already does it. If it cannot be shared, the notes say why.
 - Everything starts in Vizzie (public, GPL) unless it cannot be built there; Mezcla is the native version and ports from Vizzie. Bugs Mezcla finds come back through the product owner.
 - Hardware (two Midi Fighter Twisters, C 8.15, F sheet 12): MIDI carries frequent performance actions; a push that opens a drawer changes nothing; no double push where the first push would cause a dropout; MFB mirrors MFA. A hardware report is reproduced on the build it was found in, with a test shaped like the device, before it is fixed. Twister changes are drawn on a grid with MFA / MFB column-row names.
+- AUTO MIX runs the mix and makes no mixing choices; the SELECTA's numbered parameters decide it (C 7.10). A product owner statement about one SELECTA's value is that SELECTA's parameter, never an AUTO MIX, clock or app rule (BLOG0365). Parameter IDs are numbers with a fixed meaning: never renumber or reuse one; a new parameter takes a new ID. When proposing a change to a table of parameters or values, show the full current table first.
 - A load onto a playing deck stops it and loads stopped at 1.1.1; Vizzie does no hot load (an HTML limit; Mezcla does it).
 - Tab names (V1.4.22a): PLAY (was CREATE), CREATE (was AUTHORING, its mode AUTHOR), PERFORM. Code names are unchanged (`lab`, `author`, `public`, `authoring`), and older code comments use the old names.
 - Three decks, one global, as Ableton's channels: PLAY's deck (PLAY, CREATE, Pocket Rave), PERFORM Deck A and PERFORM Deck B each have their own track, audio, play state, shader and FX; tempo, clock, QUANT and the master bus are global. Nothing passes between decks except through the global layer.
@@ -71,7 +72,9 @@ You are working on Vizzie, a single self-contained HTML app (Web Audio, WebGPU, 
 
 # 5. Looks and the design system
 
-- The product owner decides every look. You do the technical part. When a look is not specified, ask how it should look before building.
+- The product owner decides every look. You do the technical part. When a look is not specified, ask how it should look before building; a new or changed UI is mocked first and built after the go.
+- A new or changed drawer, panel or control is checked against C 12 and Y 11 before it is handed over (knob modules, spacing, labels): the design system is Claude's to hold, not the product owner's to catch (BLOG0379).
+- Labels are short (four or five letters where they can be); the full name is in the message bar.
 - Change nothing that was not asked for: no new features, values, fills, colours, sizes, spacing, wording or styles. Colours have reasons.
 - A fix touches only what it names. End every build's notes with "Nothing else changed", and make it true.
 - If you had to make a technical call to finish a requested change, say so in the notes.
@@ -109,6 +112,8 @@ You are working on Vizzie, a single self-contained HTML app (Web Audio, WebGPU, 
 - Do not make up what the product owner means by a word or a name: ask.
 - When naming a part of the app in an explanation, give its code name and the BLOG and build that brought it in, and say whether it is existing or new; draw the structure (a tree, or a table of existing and new) before explaining a change to it.
 - When the product owner is on an iPad he cannot download: hold files until he asks for them.
+- A change is for PLAY only unless the product owner names another tab. 'Link' names PERFORM's mixer LINK and Ableton Link only.
+- A statement is not widened into a rule: one value for one case stays one value for one case.
 
 # 8. Commands, files and git
 
