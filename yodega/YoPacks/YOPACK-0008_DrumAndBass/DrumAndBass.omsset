@@ -1,0 +1,207 @@
+{
+  "type": "set",
+  "schemaVersion": 2,
+  "id": "YOPACK-0008",
+  "name": "Drum & Bass Rewind",
+  "setVersion": 2,
+  "changelog": [
+    {
+      "setVersion": 2,
+      "date": "2026-11-25",
+      "notes": "New shaders and pairings (Droste, 10)"
+    },
+    {
+      "setVersion": 1,
+      "date": "2026-11-25",
+      "notes": "First release"
+    }
+  ],
+  "author": "Claude",
+  "authorVersion": "Opus 5.5",
+  "saved": "2026-11-25T22:22:19Z",
+  "tracks": [
+    {
+      "file": "LikeYouDontKnow_DubleTime_170BPM_JRSR085.mp3",
+      "label": "Duble Time - Like You Don't Know",
+      "bpm": 170.0
+    },
+    {
+      "file": "Revolution_DubleTime_170BPM_JRSR098.mp3",
+      "label": "Duble Time - Revolution",
+      "bpm": 170.0
+    },
+    {
+      "file": "ForYourOwnSafety_DubleTime_170BPM_JRSR105.mp3",
+      "label": "Duble Time - For Your Own Safety",
+      "bpm": 170.0
+    },
+    {
+      "file": "PushThatSystem_WesSmith_170BPM_JRSR110.mp3",
+      "label": "Wes Smith, Duble Time - Push That System",
+      "bpm": 170.0
+    },
+    {
+      "file": "StopTheMusic_DubleTime_175BPM_JRSR130.mp3",
+      "label": "Duble Time - Stop The Music",
+      "bpm": 175.0
+    },
+    {
+      "file": "UppinThaGame_DubleTime_170BPM_JRSR137.mp3",
+      "label": "Duble Time - Uppin Tha Game",
+      "bpm": 170.0
+    },
+    {
+      "file": "LeanWithIt_WesSmith_170BPM_JRSR374.mp3",
+      "label": "Wes Smith, Duble Time - Lean With It (Blast Off Mix)",
+      "bpm": 170.0
+    },
+    {
+      "file": "GottaBelieve_WesSmith_170BPM_JRSR481.mp3",
+      "label": "Wes Smith, Duble Time - Gotta Believe",
+      "bpm": 170.0
+    },
+    {
+      "file": "IWantMore_WesSmith_174BPM_JRSR542.mp3",
+      "label": "Wes Smith, Zukie - I Want More",
+      "bpm": 174.0
+    },
+    {
+      "file": "FutureRetroCircus_WesSmith_174BPM_JRSR570.mp3",
+      "label": "Wes Smith, Default Cube - Future Retro Circus",
+      "bpm": 174.0
+    }
+  ],
+  "pairs": [
+    {
+      "song": "LikeYouDontKnow_DubleTime_170BPM_JRSR085.mp3",
+      "shader": "OMS_Vizzie_Shader_SphericalStereo_V02.wgsl"
+    },
+    {
+      "song": "Revolution_DubleTime_170BPM_JRSR098.mp3",
+      "shader": "OMS_Vizzie_Shader_HyperSphereOcto_V01.wgsl"
+    },
+    {
+      "song": "ForYourOwnSafety_DubleTime_170BPM_JRSR105.mp3",
+      "shader": "OMS_Vizzie_Shader_HyperSphereSpiral_V01.wgsl"
+    },
+    {
+      "song": "PushThatSystem_WesSmith_170BPM_JRSR110.mp3",
+      "shader": "OMS_Vizzie_Shader_SphericalOrthographic_V01.wgsl"
+    },
+    {
+      "song": "StopTheMusic_DubleTime_175BPM_JRSR130.mp3",
+      "shader": "OMS_Vizzie_Shader_HyperSphereGnomonic_V01.wgsl"
+    },
+    {
+      "song": "UppinThaGame_DubleTime_170BPM_JRSR137.mp3",
+      "shader": "OMS_Vizzie_Shader_SphericalGnomonic_V01.wgsl"
+    },
+    {
+      "song": "LeanWithIt_WesSmith_170BPM_JRSR374.mp3",
+      "shader": "OMS_Vizzie_Shader_HyperSphere_V02.wgsl"
+    },
+    {
+      "song": "GottaBelieve_WesSmith_170BPM_JRSR481.mp3",
+      "shader": "OMS_Vizzie_Shader_HyperbolicOrthographic_V01.wgsl"
+    },
+    {
+      "song": "IWantMore_WesSmith_174BPM_JRSR542.mp3",
+      "shader": "OMS_Vizzie_Shader_HyperSphereOrthographic_V01.wgsl"
+    },
+    {
+      "song": "FutureRetroCircus_WesSmith_174BPM_JRSR570.mp3",
+      "shader": "OMS_Vizzie_Shader_HyperbolicDisk_V03.wgsl"
+    }
+  ],
+  "pack": {
+    "publish": false,
+    "status": "NO PUB",
+    "attribution": [
+      {
+        "file": "LikeYouDontKnow_DubleTime_170BPM_JRSR085.mp3",
+        "title": "Like You Don't Know",
+        "artists": [
+          "Duble Time"
+        ],
+        "genre": "Drum & Bass"
+      },
+      {
+        "file": "Revolution_DubleTime_170BPM_JRSR098.mp3",
+        "title": "Revolution",
+        "artists": [
+          "Duble Time"
+        ],
+        "genre": "Drum & Bass"
+      },
+      {
+        "file": "ForYourOwnSafety_DubleTime_170BPM_JRSR105.mp3",
+        "title": "For Your Own Safety",
+        "artists": [
+          "Duble Time"
+        ],
+        "genre": "Drum & Bass"
+      },
+      {
+        "file": "PushThatSystem_WesSmith_170BPM_JRSR110.mp3",
+        "title": "Push That System",
+        "artists": [
+          "Wes Smith",
+          "Duble Time"
+        ],
+        "genre": "Drum & Bass"
+      },
+      {
+        "file": "StopTheMusic_DubleTime_175BPM_JRSR130.mp3",
+        "title": "Stop The Music",
+        "artists": [
+          "Duble Time"
+        ],
+        "genre": "Drum & Bass"
+      },
+      {
+        "file": "UppinThaGame_DubleTime_170BPM_JRSR137.mp3",
+        "title": "Uppin Tha Game",
+        "artists": [
+          "Duble Time"
+        ],
+        "genre": "Drum & Bass"
+      },
+      {
+        "file": "LeanWithIt_WesSmith_170BPM_JRSR374.mp3",
+        "title": "Lean With It (Blast Off Mix)",
+        "artists": [
+          "Wes Smith",
+          "Duble Time"
+        ],
+        "genre": "Drum & Bass"
+      },
+      {
+        "file": "GottaBelieve_WesSmith_170BPM_JRSR481.mp3",
+        "title": "Gotta Believe",
+        "artists": [
+          "Wes Smith",
+          "Duble Time"
+        ],
+        "genre": "Drum & Bass"
+      },
+      {
+        "file": "IWantMore_WesSmith_174BPM_JRSR542.mp3",
+        "title": "I Want More",
+        "artists": [
+          "Wes Smith",
+          "Zukie"
+        ],
+        "genre": "Drum & Bass"
+      },
+      {
+        "file": "FutureRetroCircus_WesSmith_174BPM_JRSR570.mp3",
+        "title": "Future Retro Circus",
+        "artists": [
+          "Wes Smith",
+          "Default Cube"
+        ],
+        "genre": "Drum & Bass"
+      }
+    ]
+  }
+}
