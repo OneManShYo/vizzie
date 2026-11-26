@@ -1,13 +1,28 @@
-# OMS Vizzie app [Beta V1.6.0] Release Notes
+# OMS Vizzie app [Beta V1.7.0] Release Notes
 
-**Run date:** 2026-11-22  
-**Current Unix Epoch:** 1795349176  
+**Run date:** 2026-11-26  
+**Current Unix Epoch:** 1795695763  
 **Document purpose:** User enhancements since V0.2.18c, newest first.  
-**Filename:** OMS_Vizzie_Beta_V1_6_0_D_Release_Notes.md  
+**Filename:** OMS_Vizzie_Beta_V1_7_0_D_Release_Notes.md  
 
 ## About this document
 
-Vizzie Beta V1.6.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
+Vizzie Beta V1.7.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
+
+---
+
+## V1.7.0
+
+- **Record your own mix.** With AUTO MIX on, the SELECTA panel records every mix and every knob or tempo change. Stop, and it is saved as a set and added to SETS.
+- **Sets play back their mixes.** A recorded set mixes each song in exactly as it was recorded, visuals and tempo included. A set made from an Ableton mix can carry its start points and its volume and bass moves.
+- **Six SELECTA knobs:** MIX PT (where the mix sits, up to 10 segments before the last section), MIX DUR (instant to 32 bars), TEMPO DUR (instant to 16 bars), VIS MODE, and two new ones: **VIS FREQ** (when the visual changes: at each mix, two, four or eight times a song, or chaos) and **VIS DUR** (how long the visual blend takes).
+- **LIBRARY:** a double-click on a set shows its songs without stopping the music; an imported set opens by itself; a dropped set loads its first song when nothing is playing.
+- **One set file format** (OMS set schema version 2) for every OMS tool. Older set files no longer load.
+- **No more clipping.** A safety limiter keeps the output under -1 dB on every screen, whatever the songs and the mix.
+- **Links for everything.** Beside a set's link, a song (`?song=`) or a shader (`?shader=`) now has its own link and page, from the content published with Beam Me Up.
+- **CREATE: CHIPPY.** A chiptune made from the loaded song's Music Understanding plays along while you author: same tempo, key and sections. The dice rolls a new tune over the same song.
+- The example song streams wherever Vizzie runs, with a backup source.
+- Pocket Rave's two views have names: the **Canvas view** and the **Controls view**.
 
 ---
 

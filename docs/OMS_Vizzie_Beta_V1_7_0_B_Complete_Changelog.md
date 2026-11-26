@@ -1,15 +1,43 @@
-# OMS Vizzie app [Beta V1.6.0] Complete Changelog
+# OMS Vizzie app [Beta V1.7.0] Complete Changelog
 
-**Run date:** 2026-11-22  
-**Current Unix Epoch:** 1795349176  
+**Run date:** 2026-11-26  
+**Current Unix Epoch:** 1795695763  
 **Document purpose:** The readable version of the PM backlog: the BLOGs each release packaged, grouped by release, newest first, with the builds that carried them.  
-**Filename:** OMS_Vizzie_Beta_V1_6_0_B_Complete_Changelog.md  
+**Filename:** OMS_Vizzie_Beta_V1_7_0_B_Complete_Changelog.md  
 
 ## About this document
 
-Vizzie Beta V1.6.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
+Vizzie Beta V1.7.0. License: GPL-3.0 (software); embedded assets, see the ABOUT menu.
 
 Versions are major.minor.iteration; a full package rolls the minor, and the iteration line before it becomes that release's iterations. Letters are revisions of the same piece of work.
+
+---
+
+## V1.7.0
+
+Packages the V1.6 iteration line (V1.6.01a to V1.6.10d). Baseline V1.6.10d. Sets become the way AUTO MIX plays: a set can be recorded from the SELECTA, carries each transition and the song's own changes, plays them back, and can carry the mixing data of a set made in Ableton (start bars, volume and low-band automation). The set file has one format, OMS set schema version 2. A safety limiter holds the output under -1 dB on every screen. User content reaches the website only through Beam Me Up, which checks every file against the app's rules, keeps the site equal to what is published and gives back a link for every set, song and shader. CREATE gains CHIPPY, a chiptune made from the loaded AMU.
+
+- **LIBRARY and sets** (BLOG0385, Punchlist V1.6.01)
+  - **A set row shows its tracks** (P1 · V1.6.01a): a double-click on a set shows its tracks and loads nothing; play carries on. The next song comes from the list that holds the playing song, else the list it was loaded from (`LIB.playRows`).
+  - **An import opens its set** (P2 · V1.6.02a, 02b): a drop or add files that adds a set opens it (the first alphabetically when several); a zipped pack opens its set too.
+  - **The example song streams** (P3 · V1.6.03a, 03b): Ain't No Trick streams from the website's address wherever the page runs, else from jsDelivr; the message bar says which. 03a was issued as V1.6.02c and not used.
+- **CREATE: CHIPPY** (BLOG0385 P3 · V1.6.03c to 03g): Chippy V1.16.0's composition core and chip voices as a component, driven by the loaded AMU (seed, key, beat grid, per-bar map of drum, bass, vocal and other activity and pace). A smiley in CREATE's controls row, on by default (03d); a dice rolls a new seed over the same AMU, landing on the next bar (03f); it mutes while the audio is taken and picks up where the deck is (03g).
+- **AUTO MIX and SELECTA**
+  - **SELECTA knobs relabelled and re-ranged** (BLOG0385 P4 · V1.6.04a, 04b): MIX PT (segment lines before the last full section, last section to 10 segments earlier), MIX DUR (instant, 1, 2, 4, 8, 16, 32 bars), TEMPO DUR (instant, 1, 2, 4, 8, 16 bars), VIS MODE.
+  - **SELECTA Automation Recording** (BLOG0387 · V1.6.05a to 05d): one SELECTA panel (header with record, the knobs, the tracker); record logs each mix with its knobs, each knob change and each tempo set; VIS FREQ (match, song/2, song/4, song/8, chaos) and VIS DUR (match, instant, 1 beat, 1 bar, 4 bars, 8 bars) join the knobs (05d); the panel opens only with AUTO MIX on (05c).
+  - **A set carries its mixing style** (BLOG0376 · V1.6.05b, 07b): a recorded set plays back each transition (MIX PT, MIX DUR, TEMPO DUR, VIS MODE, VIS FREQ, VIS DUR, tempo) and each song's recorded changes; the knobs keep their own values. A recorded transition applies only when the song before it in the set is the one playing (07b); a drop that opens a set on an idle deck loads the set's first song (07b).
+  - **Bar-pinned transitions and set mixing data** (BLOG0378, parked · V1.6.05c, 05d, 07a, 07b): a transition with no MIX PT is pinned to a bar of the outgoing song, up to 64 bars; a set can carry a start bar per song and volume and low-band automation, with a 24 or 48 dB/oct band split, followed in place of the SELECTA curve with AUTO MIX on.
+  - **SELECTA recording works like REC** (BLOG0397 · V1.6.07c, 07d): one button starts and stops; stop writes the set at once and adds it to SETS; AUTO MIX off while recording writes it too.
+  - **Fixes from the Mezcla runs** (BLOG0393 · V1.6.07c): AUTO MIX's incoming deck starts as playing (a `//` comment had hidden it); a set song's recorded changes replay when it loads again or jumps back.
+  - **Recorded sets log both tempos** (BLOG0398 · V1.6.07d): the playing tempo and the song's native BPM.
+- **OMS set schema version 2** (BLOG0401 · V1.6.08a; BLOG0399 closed into it): the one set file format for every OMS tool: `type`, `schemaVersion` 2, `id`, `name`, `setVersion`, `changelog`, `author`, `authorVersion`, `saved`, `tracks` (file, label, duration, bpm, startBar, automation: start, events, envelopes), `pairs`, `pack`. Only schema 2 loads; nothing is converted. A re-save raises `setVersion`, adds a changelog entry and keeps `pack`, automation and unknown fields.
+- **Master Output: a safety limiter** (BLOG0402 · V1.6.09a): the last stage before the speakers, always on, on every screen: a compressor at -2 dB, ratio 20, its makeup gain taken back off, then a hard clip at -1 dB.
+- **Beam Me Up** (BLOG0403 · V1.6.10a to 10d): the app reads the user's content folder (`BEAM_ME_UP`, `yodega/beammeup_index.json`) through the one intake (`intakeKind`); links open a song (`?song=`) or a shader (`?shader=`) beside a set (`?set=`); one AMU pairing rule everywhere (`amuKeys`: its own name or its `file` field). The Beam Me Up script (v7.6) checks every file against the app's rules, makes the site's folder equal to the published folder, writes the index and a page per set, song and shader, pushes and checks the live site. 10b was handed over and replaced by 10c before use.
+- **Nomenclature: code names follow the screen** (BLOG0391 · V1.6.06a): comments use PLAY and CREATE; `PLAY_BTNS`, `PLAY_LANES`, `PLAY_STRIP`, `DECK_DEFAULT_WGSL`; a naming key at the start of the code.
+- **Pocket Rave's two views named** (BLOG0394 · V1.6.07c): Canvas view and Controls view.
+- **Documentation V1.7.0** (BLOG0405 · V1.7.0): the doc changes of this roll are listed in BLOG0405.
+
+Parked in this line: BLOG0378 (AUTO MIX follows the set's mix points), BLOG0383 (download a pack), BLOG0384 (instant tempo change at the handover), BLOG0386 (SELECTA presets), BLOG0388 (epoch in the set name), BLOG0389 (asset file naming), BLOG0390 (more SELECTA encoders), BLOG0392 (Ableton sets made for Vizzie), BLOG0395 (the Yodega handler named Beam Me Up), BLOG0396 (GPU device lost). Still open: BLOG0400 (rulings from RUN0011), BLOG0403 (Beam Me Up), BLOG0404 (PM structure).
 
 ---
 
