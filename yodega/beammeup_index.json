@@ -55,5 +55,17 @@
     "YoPacks/YOPACK-0008_DrumAndBass/StopTheMusic_DubleTime_175BPM_JRSR130/index.html",
     "YoPacks/YOPACK-0008_DrumAndBass/UppinThaGame_DubleTime_170BPM_JRSR137/index.html",
     "YoPacks/YOPACK-0008_DrumAndBass/index.html"
-  ]
+  ],
+  "amu": {
+    "YoPacks/YOPACK-0008_DrumAndBass/ForYourOwnSafety_DubleTime_170BPM_JRSR105_sozo_v2_AMU.json": "YoPacks/YOPACK-0008_DrumAndBass/ForYourOwnSafety_DubleTime_170BPM_JRSR105.mp3",
+    "YoPacks/YOPACK-0008_DrumAndBass/FutureRetroCircus_WesSmith_174BPM_JRSR570_sozo_v2_AMU.json": "YoPacks/YOPACK-0008_DrumAndBass/FutureRetroCircus_WesSmith_174BPM_JRSR570.mp3",
+    "YoPacks/YOPACK-0008_DrumAndBass/GottaBelieve_WesSmith_170BPM_JRSR481_sozo_v2_AMU.json": "YoPacks/YOPACK-0008_DrumAndBass/GottaBelieve_WesSmith_170BPM_JRSR481.mp3",
+    "YoPacks/YOPACK-0008_DrumAndBass/IWantMore_WesSmith_174BPM_JRSR542_sozo_v2_AMU.json": "YoPacks/YOPACK-0008_DrumAndBass/IWantMore_WesSmith_174BPM_JRSR542.mp3",
+    "YoPacks/YOPACK-0008_DrumAndBass/LeanWithIt_WesSmith_170BPM_JRSR374_sozo_v2_AMU.json": "YoPacks/YOPACK-0008_DrumAndBass/LeanWithIt_WesSmith_170BPM_JRSR374.mp3",
+    "YoPacks/YOPACK-0008_DrumAndBass/LikeYouDontKnow_DubleTime_170BPM_JRSR085_sozo_v2_AMU.json": "YoPacks/YOPACK-0008_DrumAndBass/LikeYouDontKnow_DubleTime_170BPM_JRSR085.mp3",
+    "YoPacks/YOPACK-0008_DrumAndBass/PushThatSystem_WesSmith_170BPM_JRSR110_sozo_v2_AMU.json": "YoPacks/YOPACK-0008_DrumAndBass/PushThatSystem_WesSmith_170BPM_JRSR110.mp3",
+    "YoPacks/YOPACK-0008_DrumAndBass/Revolution_DubleTime_170BPM_JRSR098_sozo_v2_AMU.json": "YoPacks/YOPACK-0008_DrumAndBass/Revolution_DubleTime_170BPM_JRSR098.mp3",
+    "YoPacks/YOPACK-0008_DrumAndBass/StopTheMusic_DubleTime_175BPM_JRSR130_sozo_v2_AMU.json": "YoPacks/YOPACK-0008_DrumAndBass/StopTheMusic_DubleTime_175BPM_JRSR130.mp3",
+    "YoPacks/YOPACK-0008_DrumAndBass/UppinThaGame_DubleTime_170BPM_JRSR137_sozo_v2_AMU.json": "YoPacks/YOPACK-0008_DrumAndBass/UppinThaGame_DubleTime_170BPM_JRSR137.mp3"
+  }
 }
